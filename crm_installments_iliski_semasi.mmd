@@ -1,0 +1,11 @@
+%% Crm.Installments iliski semasi (1-hop FK)
+%% Uretim: 2026-02-12 12:35:35
+erDiagram
+    Crm_Installments {
+        uniqueidentifier Uid PK
+    }
+    Crm_PremiumItems {
+        uniqueidentifier Uid PK
+        uniqueidentifier InstallmentUid
+    }
+    Crm_Installments ||--|{ Crm_PremiumItems : "InstallmentUid_to_Uid"
