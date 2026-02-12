@@ -1,0 +1,196 @@
+%% CRM iliski semasi - Finans, Mortgage ve Tahsilat
+%% Modul ID: modul_05_finans_mortgage_tahsilat
+%% Uretim: 2026-02-12 11:23:30
+%% Not: Audit iliskileri filtrelendi (CreatedBy, DeletedBy, UpdatedBy)
+erDiagram
+    Crm_BankDetails {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+        uniqueidentifier BankUid
+    }
+    Crm_BankLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Banks {
+        uniqueidentifier Uid PK
+    }
+    Crm_CashPriceIntervalRates {
+        uniqueidentifier Uid PK
+        uniqueidentifier ProductUid
+    }
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers {
+        uniqueidentifier Uid PK
+    }
+    Crm_Debits {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+    }
+    Crm_Deliveries {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryPayments {
+        uniqueidentifier Uid PK
+    }
+    Crm_Files {
+        uniqueidentifier Uid PK
+    }
+    Crm_Guarantors {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Inventories {
+        uniqueidentifier Uid PK
+        uniqueidentifier InventoryTypeUid
+    }
+    Crm_InventoryDebits {
+        uniqueidentifier Uid PK
+        uniqueidentifier DebitUid
+        uniqueidentifier InventoryUid
+    }
+    Crm_InventoryTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_InvoiceLogoLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_LogoLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_LogoPayments {
+        uniqueidentifier Uid PK
+    }
+    Crm_ManuelPaymentRequests {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgageCosts {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgageUid
+    }
+    Crm_MortgageInsurances {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgageUid
+    }
+    Crm_MortgageLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgageUid
+    }
+    Crm_MortgagePledgeConsents {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePledgeRemovals {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePledges {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePledgeVehicleBrandModels {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgagePledgeVehicleBrandUid
+    }
+    Crm_MortgagePledgeVehicleBrands {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePledgeVehicleTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePrePledges {
+        uniqueidentifier Uid PK
+    }
+    Crm_Mortgages {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier ParentUid
+        uniqueidentifier MortgageTypeUid
+    }
+    Crm_MortgageTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_OffsetLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_OffsetProcessLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+    }
+    Crm_PosPayments {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier OrganizationUid
+    }
+    Crm_PostVirmanQueues {
+        uniqueidentifier Uid PK
+    }
+    Crm_Products {
+        uniqueidentifier Uid PK
+    }
+    Crm_RiskTrackingCosts {
+        uniqueidentifier Uid PK
+    }
+    Crm_RiskTrackingLawyers {
+        uniqueidentifier Uid PK
+    }
+    Crm_RiskTrackings {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+        uniqueidentifier RegionUid
+        uniqueidentifier RiskTrackingLawyerUid
+    }
+    Crm_SetOffLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_SetOffProcessLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_SustainabilityReports {
+        uniqueidentifier Uid PK
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+    }
+    Crm_VirtualPosCommisions {
+        uniqueidentifier Uid PK
+    }
+    Crm_VirtualPosLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Banks ||--o{ Crm_BankDetails : "BankUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_BankLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Guarantors : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_InvoiceLogoLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Mortgages : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_PosPayments : "ContractUid_to_Uid"
+    Crm_Customers ||--o{ Crm_OffsetLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_SetOffLogs : "CustomerUid_to_Uid"
+    Crm_Debits ||--o{ Crm_InventoryDebits : "DebitUid_to_Uid"
+    Crm_Inventories ||--o{ Crm_Files : "InventoryUid_to_Uid"
+    Crm_Inventories ||--o{ Crm_InventoryDebits : "InventoryUid_to_Uid"
+    Crm_InventoryTypes ||--o{ Crm_Inventories : "InventoryTypeUid_to_Uid"
+    Crm_MortgagePledges ||--o{ Crm_MortgagePrePledges : "MortgagePledgeUid_to_Uid"
+    Crm_MortgagePledges ||--o{ Crm_SustainabilityReports : "MortgagePledgeUid_to_Uid"
+    Crm_MortgagePledgeVehicleBrands ||--|{ Crm_MortgagePledgeVehicleBrandModels : "MortgagePledgeVehicleBrandUid_to_Uid"
+    Crm_Mortgages ||--o{ Crm_Files : "MortgageUid_to_Uid"
+    Crm_Mortgages ||--o{ Crm_MortgageCosts : "MortgageUid_to_Uid"
+    Crm_Mortgages ||--o{ Crm_MortgageInsurances : "MortgageUid_to_Uid"
+    Crm_Mortgages ||--|{ Crm_MortgageLogs : "MortgageUid_to_Uid"
+    Crm_Mortgages ||--o{ Crm_Mortgages : "ParentUid_to_Uid"
+    Crm_Mortgages ||--|{ Crm_SustainabilityReports : "MortgagesUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_Deliveries : "MortgageTypeUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_DeliveryPayments : "MortgageTypeUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_Mortgages : "MortgageTypeUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_SustainabilityReports : "MortgageTypeUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_BankDetails : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_PosPayments : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_RiskTrackings : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_RiskTrackings : "RegionUid_to_Uid"
+    Crm_Products ||--|{ Crm_CashPriceIntervalRates : "ProductUid_to_Uid"
+    Crm_RiskTrackingLawyers ||--o{ Crm_RiskTrackings : "RiskTrackingLawyerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Debits : "UserUid_to_Uid"

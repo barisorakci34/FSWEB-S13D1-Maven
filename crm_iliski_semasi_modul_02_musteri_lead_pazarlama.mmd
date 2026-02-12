@@ -1,0 +1,163 @@
+%% CRM iliski semasi - Musteri, Lead ve Pazarlama
+%% Modul ID: modul_02_musteri_lead_pazarlama
+%% Uretim: 2026-02-12 11:23:30
+%% Not: Audit iliskileri filtrelendi (CreatedBy, DeletedBy, UpdatedBy)
+erDiagram
+    Crm_Activities {
+        uniqueidentifier Uid PK
+    }
+    Crm_AdForms {
+        uniqueidentifier Uid PK
+    }
+    Crm_Advices {
+        uniqueidentifier Uid PK
+    }
+    Crm_AppointmentAssignments {
+        uniqueidentifier Uid PK
+        uniqueidentifier LeadUid
+        uniqueidentifier CustomerUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier OwnerUid
+    }
+    Crm_CampaignBranches {
+        uniqueidentifier Uid PK
+    }
+    Crm_CampaignItems {
+        uniqueidentifier Uid PK
+        uniqueidentifier CampaignSourceUid
+    }
+    Crm_CampaignName {
+        nvarchar_50 CampaignNameHome
+    }
+    Crm_Campaigns {
+        uniqueidentifier Uid PK
+    }
+    Crm_CampaignSources {
+        uniqueidentifier Uid PK
+        uniqueidentifier CampaignUid
+        uniqueidentifier SourceUid
+    }
+    Crm_Complaints {
+        uniqueidentifier Uid PK
+    }
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_CustomerLogins {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+        uniqueidentifier ReferanceUid
+        uniqueidentifier PortfolioUid
+    }
+    Crm_CustomerSources {
+        uniqueidentifier Uid PK
+    }
+    Crm_DataAnalysisLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_DrawCodes {
+        uniqueidentifier Uid PK
+        uniqueidentifier ActivityUid
+        uniqueidentifier DrawUid
+        uniqueidentifier ContractUid
+    }
+    Crm_Draws {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+    }
+    Crm_ETesisTerkinIntegrations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Files {
+        uniqueidentifier Uid PK
+    }
+    Crm_GroupsForBulkDrawQueues {
+        uniqueidentifier Uid PK
+    }
+    Crm_InternetSubeLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_LeadForms {
+        uniqueidentifier Uid PK
+        uniqueidentifier AdFormUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier ActivityUid
+    }
+    Crm_Leads {
+        uniqueidentifier Uid PK
+    }
+    Crm_ManuelLeadForCallCenterQueues {
+        uniqueidentifier Uid PK
+    }
+    Crm_MobilePhoneNumbers {
+        uniqueidentifier Uid PK
+        uniqueidentifier OwnerUid
+    }
+    Crm_OffsetLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Opportunities {
+        uniqueidentifier Uid PK
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Portfolios {
+        uniqueidentifier Uid PK
+    }
+    Crm_SetOffLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Simulations {
+        uniqueidentifier Uid PK
+    }
+    Crm_SmsLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_SmsVerificationCodes {
+        uniqueidentifier Uid PK
+        uniqueidentifier LeadUid
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+    }
+    Crm_Activities ||--o{ Crm_DrawCodes : "ActivityUid_to_Uid"
+    Crm_Activities ||--o{ Crm_LeadForms : "ActivityUid_to_Uid"
+    Crm_AdForms ||--o{ Crm_LeadForms : "AdFormUid_to_Uid"
+    Crm_Campaigns ||--|{ Crm_CampaignBranches : "CampaignUid_to_Uid"
+    Crm_Campaigns ||--|{ Crm_CampaignSources : "CampaignUid_to_Uid"
+    Crm_CampaignSources ||--|{ Crm_CampaignItems : "CampaignSourceUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DrawCodes : "ContractUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Activities : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Advices : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_AppointmentAssignments : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Complaints : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_CustomerLogins : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Customers : "ReferanceUid_to_Uid"
+    Crm_Customers ||--o{ Crm_DataAnalysisLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--|{ Crm_ETesisTerkinIntegrations : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Files : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_InternetSubeLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_OffsetLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Opportunities : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Opportunities : "CustomerUid1_to_Uid"
+    Crm_Customers ||--o{ Crm_SetOffLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Simulations : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_SmsLogs : "CustomerUid_to_Uid"
+    Crm_CustomerSources ||--|{ Crm_CampaignSources : "SourceUid_to_Uid"
+    Crm_CustomerSources ||--o{ Crm_Opportunities : "CustomerSourceUid_to_Uid"
+    Crm_Draws ||--o{ Crm_DrawCodes : "DrawUid_to_Uid"
+    Crm_Leads ||--o{ Crm_AppointmentAssignments : "LeadUid_to_Uid"
+    Crm_Leads ||--|{ Crm_Opportunities : "LeadUid_to_Uid"
+    Crm_Leads ||--o{ Crm_SmsLogs : "LeadUid_to_Uid"
+    Crm_Leads ||--o{ Crm_SmsVerificationCodes : "LeadUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_AppointmentAssignments : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Customers : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Draws : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_LeadForms : "OrganizationUid_to_Uid"
+    Crm_Portfolios ||--|{ Crm_Customers : "PortfolioUid_to_Uid"
+    Crm_Users ||--o{ Crm_AppointmentAssignments : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_MobilePhoneNumbers : "OwnerUid_to_Uid"

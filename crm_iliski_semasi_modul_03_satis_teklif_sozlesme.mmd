@@ -1,0 +1,350 @@
+%% CRM iliski semasi - Satis, Teklif ve Sozlesme
+%% Modul ID: modul_03_satis_teklif_sozlesme
+%% Uretim: 2026-02-12 11:23:30
+%% Not: Audit iliskileri filtrelendi (CreatedBy, DeletedBy, UpdatedBy)
+erDiagram
+    Crm_Activities {
+        uniqueidentifier Uid PK
+    }
+    Crm_Areas {
+        uniqueidentifier Uid PK
+    }
+    Crm_AssignedBidApprovers {
+        uniqueidentifier Uid PK
+        uniqueidentifier BidUid
+    }
+    Crm_BankLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_BidInstallments {
+        uniqueidentifier Uid PK
+        uniqueidentifier BidUid
+    }
+    Crm_Bids {
+        uniqueidentifier Uid PK
+    }
+    Crm_BranchCategories {
+        uniqueidentifier Uid PK
+    }
+    Crm_CashPriceIntervalRates {
+        uniqueidentifier Uid PK
+    }
+    Crm_ContractDocumentIssues {
+        uniqueidentifier Uid
+    }
+    Crm_ContractIBANs {
+        uniqueidentifier Uid PK
+    }
+    Crm_ContractLeavingLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_ContractLeavings {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_ContractProductDeliveryRange {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractProductUid
+    }
+    Crm_ContractProducts {
+        uniqueidentifier Uid PK
+    }
+    Crm_ContractRevisions {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedByUserUid
+        uniqueidentifier UpdatedByUserUid
+        uniqueidentifier DeletedByUserUid
+        uniqueidentifier ContractUid
+        uniqueidentifier FileUid
+        uniqueidentifier ControllerUid
+    }
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_ContractTemplate {
+        uniqueidentifier Uid PK
+        uniqueidentifier ProductUid
+    }
+    Crm_ContractTemplateVariables {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers {
+        uniqueidentifier Uid PK
+    }
+    Crm_CustomerSources {
+        uniqueidentifier Uid PK
+    }
+    Crm_DailyServicePricePaidLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_DataAnalysisLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Deliveries {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgageTypeUid
+        uniqueidentifier OffsettingContractUid
+    }
+    Crm_DeliveryCalls {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryDocumentApprovals {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryFiles {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryRanges {
+        uniqueidentifier Uid PK
+    }
+    Crm_Distraints {
+        uniqueidentifier Uid PK
+    }
+    Crm_DrawCodes {
+        uniqueidentifier Uid PK
+    }
+    Crm_ETesisTerkinContractIbans {
+        uniqueidentifier Uid PK
+        uniqueidentifier ETesisTerkinIntegrationUid
+        uniqueidentifier ContractIBANUid
+    }
+    Crm_ETesisTerkinIntegrations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Files {
+        uniqueidentifier Uid PK
+    }
+    Crm_GroupProducts {
+        uniqueidentifier Uid PK
+        uniqueidentifier GroupUid
+        uniqueidentifier ProductUid
+    }
+    Crm_Groups {
+        uniqueidentifier Uid PK
+    }
+    Crm_Guarantors {
+        uniqueidentifier Uid PK
+    }
+    Crm_Installments {
+        uniqueidentifier Uid PK
+    }
+    Crm_InvoiceLogoLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Leads {
+        uniqueidentifier Uid PK
+    }
+    Crm_LogoServiceLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Mortgages {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgageTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_NotaryLists {
+        uniqueidentifier Uid PK
+    }
+    Crm_Occupations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Opportunities {
+        uniqueidentifier Uid PK
+        uniqueidentifier CityUid
+        uniqueidentifier CustomerUid
+        uniqueidentifier LeadUid
+        uniqueidentifier PortfolioUid
+        uniqueidentifier CustomerSourceUid
+        uniqueidentifier CustomerUid1
+        uniqueidentifier OccupationUid
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Portfolios {
+        uniqueidentifier Uid PK
+    }
+    Crm_PosPayments {
+        uniqueidentifier Uid PK
+    }
+    Crm_PremiumContracts {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier PremiumUid
+        uniqueidentifier PremiumTimingUid
+    }
+    Crm_PremiumItems {
+        uniqueidentifier Uid PK
+        uniqueidentifier PremiumUid
+        uniqueidentifier PremiumContractUid
+        uniqueidentifier InstallmentUid
+        uniqueidentifier OwnerUid
+    }
+    Crm_Premiums {
+        uniqueidentifier Uid PK
+        uniqueidentifier OwnerUid
+        uniqueidentifier BranchCategoryUid
+        uniqueidentifier RoleUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier PremiumTimingGroupUid
+        uniqueidentifier PremiumUserTypeRateUid
+    }
+    Crm_PremiumTimingGroups {
+        uniqueidentifier Uid PK
+    }
+    Crm_PremiumTimings {
+        uniqueidentifier Uid PK
+        uniqueidentifier PremiumTimingGroupUid
+        uniqueidentifier ProductUid
+    }
+    Crm_PremiumUserTypeRates {
+        uniqueidentifier Uid PK
+    }
+    Crm_Products {
+        uniqueidentifier Uid PK
+        uniqueidentifier VariableIndexGroupUid
+    }
+    Crm_RepContracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_RepPointLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Roles {
+        uniqueidentifier Uid PK
+    }
+    Crm_ServiceConfigurationLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_ServiceConfigurations {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedByUserUid
+        uniqueidentifier UpdatedByUserUid
+        uniqueidentifier DeletedByUserUid
+    }
+    Crm_ServiceLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_ServiceOthers {
+        uniqueidentifier Uid
+    }
+    Crm_ServiceRateRanges {
+        uniqueidentifier Uid PK
+        uniqueidentifier ProductUid
+    }
+    Crm_Services {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedByUserUid
+        uniqueidentifier UpdatedByUserUid
+        uniqueidentifier DeletedByUserUid
+    }
+    Crm_Simulations {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+        uniqueidentifier OwnerUid
+        uniqueidentifier SimulationUid
+    }
+    Crm_SmsGroups {
+        uniqueidentifier Uid PK
+        uniqueidentifier SmsTemplateUid
+    }
+    Crm_SmsLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier SmsGroupUid
+        uniqueidentifier CustomerUid
+        uniqueidentifier ContractUid
+        uniqueidentifier LeadUid
+        uniqueidentifier OpportunityUid
+    }
+    Crm_SmsTemplates {
+        uniqueidentifier Uid PK
+    }
+    Crm_SustainabilityReports {
+        uniqueidentifier Uid PK
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+    }
+    Crm_VariableIndexGroups {
+        uniqueidentifier Uid PK
+    }
+    Crm_Areas ||--o{ Crm_Opportunities : "CityUid_to_Uid"
+    Crm_Bids ||--o{ Crm_AssignedBidApprovers : "BidUid_to_Uid"
+    Crm_Bids ||--o{ Crm_BidInstallments : "BidUid_to_Uid"
+    Crm_BranchCategories ||--|{ Crm_Premiums : "BranchCategoryUid_to_Uid"
+    Crm_ContractIBANs ||--|{ Crm_ETesisTerkinContractIbans : "ContractIBANUid_to_Uid"
+    Crm_ContractProducts ||--|{ Crm_ContractProductDeliveryRange : "ContractProductUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Activities : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_BankLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_ContractLeavingLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_ContractLeavings : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_ContractRevisions : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DataAnalysisLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Deliveries : "OffsettingContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DeliveryCalls : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_DeliveryDocumentApprovals : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_DeliveryFiles : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Distraints : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DrawCodes : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_ETesisTerkinIntegrations : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Files : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Guarantors : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_InvoiceLogoLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Mortgages : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_NotaryLists : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_PosPayments : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_PremiumContracts : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_RepContracts : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_RepPointLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_SmsLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_SustainabilityReports : "ContractUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Opportunities : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Opportunities : "CustomerUid1_to_Uid"
+    Crm_Customers ||--o{ Crm_Simulations : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_SmsLogs : "CustomerUid_to_Uid"
+    Crm_CustomerSources ||--o{ Crm_Opportunities : "CustomerSourceUid_to_Uid"
+    Crm_ETesisTerkinIntegrations ||--|{ Crm_ETesisTerkinContractIbans : "ETesisTerkinIntegrationUid_to_Uid"
+    Crm_Files ||--o{ Crm_ContractRevisions : "FileUid_to_Uid"
+    Crm_Groups ||--|{ Crm_GroupProducts : "GroupUid_to_Uid"
+    Crm_Installments ||--|{ Crm_PremiumItems : "InstallmentUid_to_Uid"
+    Crm_Leads ||--|{ Crm_Opportunities : "LeadUid_to_Uid"
+    Crm_Leads ||--o{ Crm_SmsLogs : "LeadUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_Deliveries : "MortgageTypeUid_to_Uid"
+    Crm_Occupations ||--o{ Crm_Opportunities : "OccupationUid_to_Uid"
+    Crm_Opportunities ||--o{ Crm_Activities : "OpportunityUid_to_Uid"
+    Crm_Opportunities ||--o{ Crm_SmsLogs : "OpportunityUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_Premiums : "OrganizationUid_to_Uid"
+    Crm_Portfolios ||--|{ Crm_Opportunities : "PortfolioUid_to_Uid"
+    Crm_PremiumContracts ||--|{ Crm_PremiumItems : "PremiumContractUid_to_Uid"
+    Crm_Premiums ||--o{ Crm_PremiumContracts : "PremiumUid_to_Uid"
+    Crm_Premiums ||--o{ Crm_PremiumItems : "PremiumUid_to_Uid"
+    Crm_PremiumTimingGroups ||--|{ Crm_Premiums : "PremiumTimingGroupUid_to_Uid"
+    Crm_PremiumTimingGroups ||--|{ Crm_PremiumTimings : "PremiumTimingGroupUid_to_Uid"
+    Crm_PremiumTimings ||--o{ Crm_PremiumContracts : "PremiumTimingUid_to_Uid"
+    Crm_PremiumUserTypeRates ||--o{ Crm_Premiums : "PremiumUserTypeRateUid_to_Uid"
+    Crm_Products ||--|{ Crm_CashPriceIntervalRates : "ProductUid_to_Uid"
+    Crm_Products ||--o{ Crm_ContractTemplate : "ProductUid_to_Uid"
+    Crm_Products ||--|{ Crm_DeliveryRanges : "ProductUid_to_Uid"
+    Crm_Products ||--|{ Crm_GroupProducts : "ProductUid_to_Uid"
+    Crm_Products ||--|{ Crm_PremiumTimings : "ProductUid_to_Uid"
+    Crm_Products ||--|{ Crm_ServiceRateRanges : "ProductUid_to_Uid"
+    Crm_Roles ||--|{ Crm_Premiums : "RoleUid_to_Uid"
+    Crm_Simulations ||--o{ Crm_Simulations : "SimulationUid_to_Uid"
+    Crm_SmsGroups ||--o{ Crm_SmsLogs : "SmsGroupUid_to_Uid"
+    Crm_SmsTemplates ||--o{ Crm_SmsGroups : "SmsTemplateUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "ControllerUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--|{ Crm_PremiumItems : "OwnerUid_to_Uid"
+    Crm_Users ||--|{ Crm_Premiums : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_ServiceConfigurations : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ServiceConfigurations : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ServiceConfigurations : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Services : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Services : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Services : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--|{ Crm_Simulations : "OwnerUid_to_Uid"
+    Crm_VariableIndexGroups ||--o{ Crm_Products : "VariableIndexGroupUid_to_Uid"

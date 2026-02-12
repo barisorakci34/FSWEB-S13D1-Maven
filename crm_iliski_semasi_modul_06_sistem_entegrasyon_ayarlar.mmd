@@ -1,0 +1,128 @@
+%% CRM iliski semasi - Sistem, Entegrasyon ve Ayarlar
+%% Modul ID: modul_06_sistem_entegrasyon_ayarlar
+%% Uretim: 2026-02-12 11:23:30
+%% Not: Audit iliskileri filtrelendi (CreatedBy, DeletedBy, UpdatedBy)
+erDiagram
+    Crm_AccountingCodes {
+        uniqueidentifier Uid PK
+    }
+    Crm_AllGroupInfo {
+        uniqueidentifier Uid
+    }
+    Crm_Announcement {
+        uniqueidentifier Uid PK
+    }
+    Crm_ApplicationConfiguration {
+        uniqueidentifier Uid PK
+    }
+    Crm_CodeExplanations {
+        int Uid PK
+    }
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers {
+        uniqueidentifier Uid PK
+    }
+    Crm_DataAnalysisLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+        uniqueidentifier ContractUid
+        uniqueidentifier OwnerUid
+    }
+    Crm_ETesisTerkinContractIbans {
+        uniqueidentifier Uid PK
+    }
+    Crm_ETesisTerkinIntegrations {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier CustomerUid
+    }
+    Crm_IntegrationApiLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedByUserUid
+        uniqueidentifier UpdatedByUserUid
+        uniqueidentifier DeletedByUserUid
+    }
+    Crm_IntegrationApiLogs250919 {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedByUserUid
+        uniqueidentifier UpdatedByUserUid
+        uniqueidentifier DeletedByUserUid
+    }
+    Crm_InternetSubeLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_MobileApplicationConfigurations {
+        uniqueidentifier Uid PK
+    }
+    Crm_MobileConfigurationSettings {
+        uniqueidentifier Uid PK
+    }
+    Crm_NaceCodes {
+        uniqueidentifier Uid PK
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Products {
+        uniqueidentifier Uid PK
+    }
+    Crm_ScoreCards {
+        uniqueidentifier Uid PK
+    }
+    Crm_SustainabilityFeatureValues {
+        uniqueidentifier Uid PK
+    }
+    Crm_SustainabilityReports {
+        uniqueidentifier Uid PK
+    }
+    Crm_TakbisCity {
+        uniqueidentifier Uid PK
+    }
+    Crm_TakbisHomeTown {
+        uniqueidentifier Uid PK
+    }
+    Crm_TakbisInsuranceCompanies {
+        uniqueidentifier Uid PK
+    }
+    Crm_TakbisTown {
+        uniqueidentifier Uid PK
+    }
+    Crm_tmpAllGroupInfo {
+        uniqueidentifier Uid PK
+    }
+    Crm_UnauthorizedProcessLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier OrganizationUid
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+    }
+    Crm_VariableIndexGroups {
+        uniqueidentifier Uid PK
+    }
+    Crm_VariableIndexs {
+        uniqueidentifier Uid PK
+        uniqueidentifier VariableIndexGroupUid
+    }
+    Crm_Contracts ||--o{ Crm_DataAnalysisLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_ETesisTerkinIntegrations : "ContractUid_to_Uid"
+    Crm_Customers ||--o{ Crm_DataAnalysisLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--|{ Crm_ETesisTerkinIntegrations : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_InternetSubeLogs : "CustomerUid_to_Uid"
+    Crm_ETesisTerkinIntegrations ||--|{ Crm_ETesisTerkinContractIbans : "ETesisTerkinIntegrationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_UnauthorizedProcessLogs : "OrganizationUid_to_Uid"
+    Crm_SustainabilityFeatureValues ||--o{ Crm_SustainabilityReports : "FeatureValueUid_to_Uid"
+    Crm_Users ||--o{ Crm_DataAnalysisLogs : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs250919 : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs250919 : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs250919 : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--|{ Crm_UnauthorizedProcessLogs : "UserUid_to_Uid"
+    Crm_VariableIndexGroups ||--o{ Crm_Products : "VariableIndexGroupUid_to_Uid"
+    Crm_VariableIndexGroups ||--o{ Crm_VariableIndexs : "VariableIndexGroupUid_to_Uid"

@@ -1,0 +1,99 @@
+%% Crm.Customers iliski semasi (1-hop FK)
+%% Uretim: 2026-02-12 12:24:57
+erDiagram
+    Crm_Customers {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedBy
+        uniqueidentifier DeletedBy
+        uniqueidentifier OrganizationUid
+        uniqueidentifier PortfolioUid
+        uniqueidentifier ReferanceUid
+        uniqueidentifier UpdatedBy
+    }
+    Crm_Activities {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_Advices {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_AppointmentAssignments {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_Complaints {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_CustomerLogins {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_DataAnalysisLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_ETesisTerkinIntegrations {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_Files {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_InternetSubeLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_OffsetLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_Opportunities {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+        uniqueidentifier CustomerUid1
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Portfolios {
+        uniqueidentifier Uid PK
+    }
+    Crm_SetOffLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_Simulations {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_SmsLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers ||--o{ Crm_Activities : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Advices : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_AppointmentAssignments : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Complaints : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_CustomerLogins : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Customers : "ReferanceUid_to_Uid"
+    Crm_Customers ||--o{ Crm_DataAnalysisLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--|{ Crm_ETesisTerkinIntegrations : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Files : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_InternetSubeLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_OffsetLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Opportunities : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Opportunities : "CustomerUid1_to_Uid"
+    Crm_Customers ||--o{ Crm_SetOffLogs : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Simulations : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_SmsLogs : "CustomerUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Customers : "OrganizationUid_to_Uid"
+    Crm_Portfolios ||--|{ Crm_Customers : "PortfolioUid_to_Uid"
+    Crm_Users ||--o{ Crm_Customers : "CreatedBy_to_Uid"
+    Crm_Users ||--o{ Crm_Customers : "DeletedBy_to_Uid"
+    Crm_Users ||--o{ Crm_Customers : "UpdatedBy_to_Uid"

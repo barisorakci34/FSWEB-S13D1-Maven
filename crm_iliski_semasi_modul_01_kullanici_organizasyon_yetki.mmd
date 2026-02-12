@@ -1,0 +1,534 @@
+%% CRM iliski semasi - Kullanici, Organizasyon ve Yetki
+%% Modul ID: modul_01_kullanici_organizasyon_yetki
+%% Uretim: 2026-02-12 11:23:30
+%% Not: Audit iliskileri filtrelendi (CreatedBy, DeletedBy, UpdatedBy)
+erDiagram
+    Crm_Activities {
+        uniqueidentifier Uid PK
+    }
+    Crm_ActivityRecords {
+        uniqueidentifier Uid PK
+    }
+    Crm_Advices {
+        uniqueidentifier Uid PK
+    }
+    Crm_ApplicationLoginLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_AppointmentAssignments {
+        uniqueidentifier Uid PK
+    }
+    Crm_Areas {
+        uniqueidentifier Uid PK
+        uniqueidentifier ParentUid
+    }
+    Crm_Authorities {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier RoleUid
+        uniqueidentifier ModuleAuthUid
+    }
+    Crm_BankDetails {
+        uniqueidentifier Uid PK
+    }
+    Crm_BranchCategories {
+        uniqueidentifier Uid PK
+    }
+    Crm_CampaignBranches {
+        uniqueidentifier Uid PK
+        uniqueidentifier CampaignUid
+        uniqueidentifier BranchUid
+    }
+    Crm_Campaigns {
+        uniqueidentifier Uid PK
+    }
+    Crm_ComplaintNotes {
+        uniqueidentifier Uid PK
+    }
+    Crm_Complaints {
+        uniqueidentifier Uid PK
+    }
+    Crm_ContractRevisions {
+        uniqueidentifier Uid PK
+    }
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_CostForms {
+        uniqueidentifier Uid PK
+        uniqueidentifier OwnerUid
+        uniqueidentifier CostTypeUid
+    }
+    Crm_CostItems {
+        uniqueidentifier Uid PK
+        uniqueidentifier CostFormUid
+        uniqueidentifier CostTypeUid
+    }
+    Crm_Costs {
+        uniqueidentifier Uid PK
+        uniqueidentifier CostTypeUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier OwnerUid
+    }
+    Crm_CostTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_CustomerLoginFaileds {
+        uniqueidentifier Uid PK
+    }
+    Crm_CustomerLogins {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+    }
+    Crm_CustomerLoginSmsFaileds {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers {
+        uniqueidentifier Uid PK
+    }
+    Crm_DataAnalysisLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Debits {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryEmployees {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryPayments {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryWorkAdvances {
+        uniqueidentifier Uid PK
+    }
+    Crm_Draws {
+        uniqueidentifier Uid PK
+    }
+    Crm_Firms {
+        uniqueidentifier Uid PK
+    }
+    Crm_GroupProducts {
+        uniqueidentifier Uid PK
+    }
+    Crm_Groups {
+        uniqueidentifier Uid PK
+        uniqueidentifier ClosedBy
+    }
+    Crm_Holidays {
+        uniqueidentifier Uid PK
+    }
+    Crm_IntegrationApiLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_IntegrationApiLogs250919 {
+        uniqueidentifier Uid PK
+    }
+    Crm_IssueHistories {
+        uniqueidentifier Uid PK
+    }
+    Crm_Issues {
+        uniqueidentifier Uid PK
+    }
+    Crm_ITSystemUserLogins {
+        uniqueidentifier Uid PK
+    }
+    Crm_LeadForms {
+        uniqueidentifier Uid PK
+    }
+    Crm_LoginFaileds {
+        uniqueidentifier Uid PK
+    }
+    Crm_Logins {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+    }
+    Crm_MobilePhoneNumbers {
+        uniqueidentifier Uid PK
+    }
+    Crm_ModuleAuths {
+        uniqueidentifier Uid PK
+        uniqueidentifier ModuleUid
+    }
+    Crm_Modules {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePledges {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgagePrePledges {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgagePledgeUid
+    }
+    Crm_Mortgages {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgageTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_Nationalities {
+        uniqueidentifier Uid PK
+    }
+    Crm_NotaryResults {
+        uniqueidentifier Uid PK
+    }
+    Crm_NotificationGroups {
+        uniqueidentifier Uid PK
+    }
+    Crm_NotificationGroupSubscriber {
+        uniqueidentifier Uid PK
+    }
+    Crm_Occupations {
+        uniqueidentifier Uid PK
+    }
+    Crm_OnlineUsers {
+        uniqueidentifier Uid PK
+    }
+    Crm_Opportunities {
+        uniqueidentifier Uid PK
+    }
+    Crm_OrganizationAreas {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+        uniqueidentifier AreaUid
+    }
+    Crm_OrganizationHistories {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+        uniqueidentifier ParentUid
+    }
+    Crm_OrganizationMonthlyTargets {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+        uniqueidentifier ParentUid
+        uniqueidentifier FirmUid
+        uniqueidentifier CountryUid
+        uniqueidentifier CityUid
+        uniqueidentifier TownUid
+        uniqueidentifier HomeTownUid
+        uniqueidentifier ManagerUid
+    }
+    Crm_Performances {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+    }
+    Crm_PerformancesTemp {
+        uniqueidentifier UserUid
+    }
+    Crm_Portfolios {
+        uniqueidentifier Uid PK
+        uniqueidentifier CreatedByUserUid
+        uniqueidentifier UpdatedByUserUid
+        uniqueidentifier DeletedByUserUid
+        uniqueidentifier OrganizationUid
+    }
+    Crm_PosPayments {
+        uniqueidentifier Uid PK
+    }
+    Crm_PremiumBranchRates {
+        uniqueidentifier Uid PK
+        uniqueidentifier BranchCategoryUid
+    }
+    Crm_PremiumItems {
+        uniqueidentifier Uid PK
+    }
+    Crm_Premiums {
+        uniqueidentifier Uid PK
+    }
+    Crm_PremiumUserTypeRates {
+        uniqueidentifier Uid PK
+        uniqueidentifier RoleUid
+    }
+    Crm_ProxyOrganizations {
+        uniqueidentifier Uid
+    }
+    Crm_QualityAnswers {
+        uniqueidentifier Uid PK
+    }
+    Crm_QualityForms {
+        uniqueidentifier Uid PK
+    }
+    Crm_QualityQuestions {
+        uniqueidentifier Uid PK
+    }
+    Crm_RepCampaigns {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepUid
+    }
+    Crm_RepContracts {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepUid
+        uniqueidentifier ContractUid
+    }
+    Crm_RepGifts {
+        uniqueidentifier Uid PK
+    }
+    Crm_RepIbans {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepUid
+    }
+    Crm_RepPaymentDetails {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepPaymentUid
+        uniqueidentifier RepPointLogUid
+    }
+    Crm_RepPaymentGroups {
+        uniqueidentifier Uid PK
+    }
+    Crm_RepPayments {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepUid
+    }
+    Crm_RepPointLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepPointUid
+        uniqueidentifier CustomerLoginUid
+        uniqueidentifier ContractUid
+        uniqueidentifier ActivityUid
+    }
+    Crm_RepPoints {
+        uniqueidentifier Uid PK
+    }
+    Crm_Reps {
+        uniqueidentifier Uid PK
+        uniqueidentifier PortfolioUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier ParentUid
+        uniqueidentifier CityUid
+        uniqueidentifier TownUid
+        uniqueidentifier OwnerUserUid
+    }
+    Crm_RestDays {
+        uniqueidentifier Uid PK
+    }
+    Crm_RiskTrackings {
+        uniqueidentifier Uid PK
+    }
+    Crm_Roles {
+        uniqueidentifier Uid PK
+    }
+    Crm_RoleTargets {
+        uniqueidentifier Uid PK
+        uniqueidentifier RoleUid
+    }
+    Crm_ServiceConfigurations {
+        uniqueidentifier Uid PK
+    }
+    Crm_Services {
+        uniqueidentifier Uid PK
+    }
+    Crm_Simulations {
+        uniqueidentifier Uid PK
+    }
+    Crm_SustainabilityFeatureValues {
+        uniqueidentifier Uid PK
+    }
+    Crm_SustainabilityReports {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier MortgagesUid
+        uniqueidentifier MortgagePledgeUid
+        uniqueidentifier FeatureValueUid
+        uniqueidentifier MortgageTypeUid
+    }
+    Crm_Tickets {
+        uniqueidentifier Uid PK
+    }
+    Crm_UnauthorizedProcessLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_UserHistories {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier RoleUid
+        uniqueidentifier PortfolioUid
+    }
+    Crm_UserLeaveDetails {
+        uniqueidentifier Uid PK
+    }
+    Crm_UserLeavePermission {
+        uniqueidentifier Uid
+    }
+    Crm_UserLeaves {
+        uniqueidentifier Uid PK
+    }
+    Crm_UserLogins {
+        uniqueidentifier Uid PK
+    }
+    Crm_UserPasswordHistories {
+        uniqueidentifier Uid PK
+    }
+    Crm_UserPortfolios {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid1
+        uniqueidentifier PortfolioUid
+    }
+    Crm_UserResponsibleBranches {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier RoleUid
+        uniqueidentifier BranchUid
+        uniqueidentifier OrganizationUid
+    }
+    Crm_UserRoles {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier RoleUid
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+        uniqueidentifier OrganizationUid
+    }
+    Crm_UserTargets {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+    }
+    Crm_Activities ||--o{ Crm_RepPointLogs : "ActivityUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Advices : "CityUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Advices : "TownUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Areas : "ParentUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Opportunities : "CityUid_to_Uid"
+    Crm_Areas ||--|{ Crm_OrganizationAreas : "AreaUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Organizations : "CityUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Organizations : "CountryUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Organizations : "HomeTownUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Organizations : "TownUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Reps : "CityUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Reps : "TownUid_to_Uid"
+    Crm_BranchCategories ||--|{ Crm_PremiumBranchRates : "BranchCategoryUid_to_Uid"
+    Crm_BranchCategories ||--|{ Crm_Premiums : "BranchCategoryUid_to_Uid"
+    Crm_Campaigns ||--|{ Crm_CampaignBranches : "CampaignUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_RepContracts : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_RepPointLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_SustainabilityReports : "ContractUid_to_Uid"
+    Crm_CostForms ||--|{ Crm_CostItems : "CostFormUid_to_Uid"
+    Crm_CostTypes ||--o{ Crm_CostForms : "CostTypeUid_to_Uid"
+    Crm_CostTypes ||--|{ Crm_CostItems : "CostTypeUid_to_Uid"
+    Crm_CostTypes ||--|{ Crm_Costs : "CostTypeUid_to_Uid"
+    Crm_CustomerLogins ||--o{ Crm_RepPointLogs : "CustomerLoginUid_to_Uid"
+    Crm_Customers ||--o{ Crm_CustomerLogins : "CustomerUid_to_Uid"
+    Crm_Firms ||--o{ Crm_Organizations : "FirmUid_to_Uid"
+    Crm_Groups ||--|{ Crm_GroupProducts : "GroupUid_to_Uid"
+    Crm_Groups ||--|{ Crm_NotaryResults : "GroupUid_to_Uid"
+    Crm_ModuleAuths ||--|{ Crm_Authorities : "ModuleAuthUid_to_Uid"
+    Crm_Modules ||--|{ Crm_ModuleAuths : "ModuleUid_to_Uid"
+    Crm_MortgagePledges ||--o{ Crm_MortgagePrePledges : "MortgagePledgeUid_to_Uid"
+    Crm_MortgagePledges ||--o{ Crm_SustainabilityReports : "MortgagePledgeUid_to_Uid"
+    Crm_Mortgages ||--|{ Crm_SustainabilityReports : "MortgagesUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_SustainabilityReports : "MortgageTypeUid_to_Uid"
+    Crm_Occupations ||--o{ Crm_Opportunities : "OccupationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_AppointmentAssignments : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_BankDetails : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_CampaignBranches : "BranchUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_Costs : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Customers : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_DeliveryEmployees : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Draws : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_IssueHistories : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Issues : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_LeadForms : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_OrganizationAreas : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_OrganizationHistories : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_OrganizationHistories : "ParentUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_OrganizationMonthlyTargets : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Organizations : "ParentUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_Portfolios : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_PosPayments : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_Premiums : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Reps : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_RiskTrackings : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_RiskTrackings : "RegionUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Tickets : "DepartmentUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_UnauthorizedProcessLogs : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_UserHistories : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_UserResponsibleBranches : "BranchUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_UserResponsibleBranches : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--|{ Crm_Users : "OrganizationUid_to_Uid"
+    Crm_Portfolios ||--|{ Crm_Customers : "PortfolioUid_to_Uid"
+    Crm_Portfolios ||--|{ Crm_Opportunities : "PortfolioUid_to_Uid"
+    Crm_Portfolios ||--o{ Crm_Reps : "PortfolioUid_to_Uid"
+    Crm_Portfolios ||--o{ Crm_UserHistories : "PortfolioUid_to_Uid"
+    Crm_Portfolios ||--|{ Crm_UserPortfolios : "PortfolioUid_to_Uid"
+    Crm_PremiumUserTypeRates ||--o{ Crm_Premiums : "PremiumUserTypeRateUid_to_Uid"
+    Crm_RepPayments ||--|{ Crm_RepPaymentDetails : "RepPaymentUid_to_Uid"
+    Crm_RepPointLogs ||--|{ Crm_RepPaymentDetails : "RepPointLogUid_to_Uid"
+    Crm_RepPoints ||--|{ Crm_RepPointLogs : "RepPointUid_to_Uid"
+    Crm_Reps ||--|{ Crm_NotificationGroupSubscriber : "RepUid_to_Uid"
+    Crm_Reps ||--|{ Crm_RepCampaigns : "RepUid_to_Uid"
+    Crm_Reps ||--|{ Crm_RepContracts : "RepUid_to_Uid"
+    Crm_Reps ||--|{ Crm_RepIbans : "RepUid_to_Uid"
+    Crm_Reps ||--|{ Crm_RepPayments : "RepUid_to_Uid"
+    Crm_Reps ||--o{ Crm_Reps : "ParentUid_to_Uid"
+    Crm_Roles ||--o{ Crm_Authorities : "RoleUid_to_Uid"
+    Crm_Roles ||--|{ Crm_Premiums : "RoleUid_to_Uid"
+    Crm_Roles ||--|{ Crm_PremiumUserTypeRates : "RoleUid_to_Uid"
+    Crm_Roles ||--|{ Crm_RoleTargets : "RoleUid_to_Uid"
+    Crm_Roles ||--|{ Crm_UserHistories : "RoleUid_to_Uid"
+    Crm_Roles ||--|{ Crm_UserResponsibleBranches : "RoleUid_to_Uid"
+    Crm_Roles ||--|{ Crm_UserRoles : "RoleUid_to_Uid"
+    Crm_SustainabilityFeatureValues ||--o{ Crm_SustainabilityReports : "FeatureValueUid_to_Uid"
+    Crm_Users ||--o{ Crm_Activities : "CanceledBy_to_Uid"
+    Crm_Users ||--o{ Crm_Activities : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Activities : "SuccessBy_to_Uid"
+    Crm_Users ||--|{ Crm_ActivityRecords : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_AppointmentAssignments : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Authorities : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ComplaintNotes : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Complaints : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "ControllerUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ContractRevisions : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--|{ Crm_CostForms : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Costs : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_DataAnalysisLogs : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Debits : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_DeliveryEmployees : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_DeliveryPayments : "DeliveryApporovalUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_DeliveryWorkAdvances : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Groups : "ClosedBy_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs250919 : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs250919 : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IntegrationApiLogs250919 : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IssueHistories : "AnswerBy_to_Uid"
+    Crm_Users ||--o{ Crm_IssueHistories : "DirectUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IssueHistories : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Issues : "AnswerBy_to_Uid"
+    Crm_Users ||--o{ Crm_Issues : "DirectUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Issues : "UserUid_to_Uid"
+    Crm_Users ||--|{ Crm_Logins : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_MobilePhoneNumbers : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_NotaryResults : "ApproveControllerUid_to_Uid"
+    Crm_Users ||--o{ Crm_NotificationGroups : "LastSenderUid_to_Uid"
+    Crm_Users ||--o{ Crm_Organizations : "ManagerUid_to_Uid"
+    Crm_Users ||--|{ Crm_Performances : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Portfolios : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Portfolios : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Portfolios : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--|{ Crm_PremiumItems : "OwnerUid_to_Uid"
+    Crm_Users ||--|{ Crm_Premiums : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_QualityAnswers : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_QualityForms : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_QualityQuestions : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Reps : "OwnerUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ServiceConfigurations : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ServiceConfigurations : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_ServiceConfigurations : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Services : "CreatedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Services : "DeletedByUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Services : "UpdatedByUserUid_to_Uid"
+    Crm_Users ||--|{ Crm_Simulations : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Tickets : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Tickets : "RequestingPersonUid_to_Uid"
+    Crm_Users ||--|{ Crm_UnauthorizedProcessLogs : "UserUid_to_Uid"
+    Crm_Users ||--|{ Crm_UserHistories : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_UserPortfolios : "UserUid1_to_Uid"
+    Crm_Users ||--|{ Crm_UserResponsibleBranches : "UserUid_to_Uid"
+    Crm_Users ||--|{ Crm_UserRoles : "UserUid_to_Uid"
+    Crm_Users ||--|{ Crm_UserTargets : "UserUid_to_Uid"

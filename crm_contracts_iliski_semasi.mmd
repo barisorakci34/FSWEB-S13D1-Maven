@@ -1,0 +1,126 @@
+%% Crm.Contracts iliski semasi (1-hop FK)
+%% Uretim: 2026-02-12 12:31:40
+erDiagram
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_Activities {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_BankLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_ContractLeavingLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_ContractLeavings {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_ContractRevisions {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_DataAnalysisLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Deliveries {
+        uniqueidentifier Uid PK
+        uniqueidentifier OffsettingContractUid
+    }
+    Crm_DeliveryCalls {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_DeliveryDocumentApprovals {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_DeliveryFiles {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Distraints {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_DrawCodes {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_ETesisTerkinIntegrations {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Files {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Guarantors {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_InvoiceLogoLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Mortgages {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_NotaryLists {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_PosPayments {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_PremiumContracts {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_RepContracts {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_RepPointLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_SmsLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_SustainabilityReports {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_Contracts ||--o{ Crm_Activities : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_BankLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_ContractLeavingLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_ContractLeavings : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_ContractRevisions : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DataAnalysisLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Deliveries : "OffsettingContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DeliveryCalls : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_DeliveryDocumentApprovals : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_DeliveryFiles : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Distraints : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DrawCodes : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_ETesisTerkinIntegrations : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Files : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Guarantors : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_InvoiceLogoLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Mortgages : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_NotaryLists : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_PosPayments : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_PremiumContracts : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_RepContracts : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_RepPointLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_SmsLogs : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_SustainabilityReports : "ContractUid_to_Uid"
