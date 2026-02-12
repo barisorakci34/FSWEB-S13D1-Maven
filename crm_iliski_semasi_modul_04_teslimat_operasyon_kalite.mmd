@@ -1,0 +1,327 @@
+%% CRM iliski semasi - Teslimat, Operasyon ve Kalite
+%% Modul ID: modul_04_teslimat_operasyon_kalite
+%% Uretim: 2026-02-12 11:23:30
+%% Not: Audit iliskileri filtrelendi (CreatedBy, DeletedBy, UpdatedBy)
+erDiagram
+    Crm_Activities {
+        uniqueidentifier Uid PK
+        uniqueidentifier ActivityTypeUid
+        uniqueidentifier ActivitySubTypeUid
+        uniqueidentifier SuccessBy
+        uniqueidentifier CanceledBy
+        uniqueidentifier CustomerUid
+        uniqueidentifier ContractUid
+        uniqueidentifier OwnerUid
+        uniqueidentifier OpportunityUid
+    }
+    Crm_ActivityRecords {
+        uniqueidentifier Uid PK
+        uniqueidentifier ActivityUid
+        uniqueidentifier OwnerUid
+    }
+    Crm_ActivityTypes {
+        uniqueidentifier Uid PK
+        uniqueidentifier ParentUid
+    }
+    Crm_Advices {
+        uniqueidentifier Uid PK
+        uniqueidentifier CityUid
+        uniqueidentifier TownUid
+        uniqueidentifier CustomerUid
+    }
+    Crm_Areas {
+        uniqueidentifier Uid PK
+    }
+    Crm_ComplaintHistories {
+        uniqueidentifier Uid PK
+    }
+    Crm_ComplaintNotes {
+        uniqueidentifier Uid PK
+        uniqueidentifier ComplaintUid
+        uniqueidentifier UserUid
+    }
+    Crm_Complaints {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+        uniqueidentifier UserUid
+    }
+    Crm_ComplaintsSubjectCategories {
+        uniqueidentifier Uid
+    }
+    Crm_ContractRevisions {
+        uniqueidentifier Uid PK
+    }
+    Crm_Contracts {
+        uniqueidentifier Uid PK
+    }
+    Crm_Customers {
+        uniqueidentifier Uid PK
+    }
+    Crm_DeliveryCallHistories {
+        uniqueidentifier Uid PK
+        uniqueidentifier DeliveryCallUid
+    }
+    Crm_DeliveryCallNotes {
+        uniqueidentifier Uid PK
+        uniqueidentifier DeliveryCallUid
+    }
+    Crm_DeliveryCalls {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_DeliveryDocumentApprovals {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier FileTypeUid
+        uniqueidentifier FileUid
+    }
+    Crm_DeliveryEmployees {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier OrganizationUid
+    }
+    Crm_DeliveryFiles {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+        uniqueidentifier FileTypeUid
+        uniqueidentifier FileUid
+    }
+    Crm_DeliveryPaymentLogs {
+        uniqueidentifier Uid
+    }
+    Crm_DeliveryPayments {
+        uniqueidentifier Uid PK
+        uniqueidentifier MortgageTypeUid
+        uniqueidentifier DeliveryApporovalUserUid
+    }
+    Crm_DeliveryRanges {
+        uniqueidentifier Uid PK
+        uniqueidentifier ProductUid
+    }
+    Crm_DeliveryWorkAdvances {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+    }
+    Crm_DeprivationInqueries {
+        uniqueidentifier Uid PK
+    }
+    Crm_Distraints {
+        uniqueidentifier Uid PK
+        uniqueidentifier ContractUid
+    }
+    Crm_DocumentReads {
+        uniqueidentifier Uid
+    }
+    Crm_Documents {
+        uniqueidentifier Uid PK
+    }
+    Crm_DrawCodes {
+        uniqueidentifier Uid PK
+    }
+    Crm_Files {
+        uniqueidentifier Uid PK
+        uniqueidentifier CustomerUid
+        uniqueidentifier ContractUid
+        uniqueidentifier DistraintUid
+        uniqueidentifier MortgageUid
+        uniqueidentifier InventoryUid
+    }
+    Crm_FileTypeCategories {
+        uniqueidentifier Uid PK
+    }
+    Crm_FileTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_Groups {
+        uniqueidentifier Uid PK
+    }
+    Crm_InternalFiles {
+        uniqueidentifier Uid PK
+    }
+    Crm_InternalFileTypeCategories {
+        uniqueidentifier Uid PK
+    }
+    Crm_InternalFileTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_Inventories {
+        uniqueidentifier Uid PK
+    }
+    Crm_IssueHistories {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier DirectUserUid
+        uniqueidentifier AnswerBy
+        uniqueidentifier IssueUid
+    }
+    Crm_Issues {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+        uniqueidentifier OrganizationUid
+        uniqueidentifier DirectUserUid
+        uniqueidentifier AnswerBy
+    }
+    Crm_LeadForms {
+        uniqueidentifier Uid PK
+    }
+    Crm_Mortgages {
+        uniqueidentifier Uid PK
+    }
+    Crm_MortgageTypes {
+        uniqueidentifier Uid PK
+    }
+    Crm_NotaryLists {
+        uniqueidentifier Uid PK
+        uniqueidentifier NotaryResultUid
+        uniqueidentifier ContractUid
+    }
+    Crm_NotaryResults {
+        uniqueidentifier Uid PK
+        uniqueidentifier GroupUid
+        uniqueidentifier ApproveControllerUid
+    }
+    Crm_NotDeliveredOnDeliveryDates {
+        uniqueidentifier Uid PK
+    }
+    Crm_NotificationGroups {
+        uniqueidentifier Uid PK
+        uniqueidentifier LastSenderUid
+    }
+    Crm_NotificationGroupSubscriber {
+        uniqueidentifier Uid PK
+        uniqueidentifier RepUid
+        uniqueidentifier GroupUid
+    }
+    Crm_NotificationLogs {
+        uniqueidentifier Uid PK
+        uniqueidentifier NotificationGroupUid
+    }
+    Crm_NotificationVariables {
+        uniqueidentifier Uid PK
+    }
+    Crm_Opportunities {
+        uniqueidentifier Uid PK
+    }
+    Crm_Organizations {
+        uniqueidentifier Uid PK
+    }
+    Crm_PlannedPeriodicDeliveryAmounts {
+        uniqueidentifier Uid PK
+    }
+    Crm_Products {
+        uniqueidentifier Uid PK
+    }
+    Crm_QualityAnswers {
+        uniqueidentifier Uid PK
+        uniqueidentifier QualityQuestionUid
+        uniqueidentifier QualityFormUid
+        uniqueidentifier ActivityUid
+        uniqueidentifier UserUid
+    }
+    Crm_QualityForms {
+        uniqueidentifier Uid PK
+        uniqueidentifier UserUid
+    }
+    Crm_QualityNotes {
+        uniqueidentifier Uid PK
+        uniqueidentifier QualityFormUid
+        uniqueidentifier ActivityUid
+    }
+    Crm_QualityQuestions {
+        uniqueidentifier Uid PK
+        uniqueidentifier QualityFormUid
+        uniqueidentifier UserUid
+    }
+    Crm_RepPointLogs {
+        uniqueidentifier Uid PK
+    }
+    Crm_Reps {
+        uniqueidentifier Uid PK
+    }
+    Crm_TicketHistories {
+        uniqueidentifier Uid PK
+        uniqueidentifier TicketUid
+    }
+    Crm_Tickets {
+        uniqueidentifier Uid PK
+        uniqueidentifier OwnerUid
+        uniqueidentifier DepartmentUid
+        uniqueidentifier RequestingPersonUid
+    }
+    Crm_Users {
+        uniqueidentifier Uid PK
+    }
+    Crm_Activities ||--|{ Crm_ActivityRecords : "ActivityUid_to_Uid"
+    Crm_Activities ||--o{ Crm_DrawCodes : "ActivityUid_to_Uid"
+    Crm_Activities ||--o{ Crm_LeadForms : "ActivityUid_to_Uid"
+    Crm_Activities ||--o{ Crm_QualityAnswers : "ActivityUid_to_Uid"
+    Crm_Activities ||--o{ Crm_QualityNotes : "ActivityUid_to_Uid"
+    Crm_Activities ||--o{ Crm_RepPointLogs : "ActivityUid_to_Uid"
+    Crm_ActivityTypes ||--o{ Crm_Activities : "ActivitySubTypeUid_to_Uid"
+    Crm_ActivityTypes ||--o{ Crm_Activities : "ActivityTypeUid_to_Uid"
+    Crm_ActivityTypes ||--o{ Crm_ActivityTypes : "ParentUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Advices : "CityUid_to_Uid"
+    Crm_Areas ||--o{ Crm_Advices : "TownUid_to_Uid"
+    Crm_Complaints ||--|{ Crm_ComplaintNotes : "ComplaintUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Activities : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_DeliveryCalls : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_DeliveryDocumentApprovals : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_DeliveryFiles : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_Distraints : "ContractUid_to_Uid"
+    Crm_Contracts ||--o{ Crm_Files : "ContractUid_to_Uid"
+    Crm_Contracts ||--|{ Crm_NotaryLists : "ContractUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Activities : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Advices : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Complaints : "CustomerUid_to_Uid"
+    Crm_Customers ||--o{ Crm_Files : "CustomerUid_to_Uid"
+    Crm_DeliveryCalls ||--|{ Crm_DeliveryCallHistories : "DeliveryCallUid_to_Uid"
+    Crm_DeliveryCalls ||--|{ Crm_DeliveryCallNotes : "DeliveryCallUid_to_Uid"
+    Crm_Distraints ||--o{ Crm_Files : "DistraintUid_to_Uid"
+    Crm_Files ||--o{ Crm_ContractRevisions : "FileUid_to_Uid"
+    Crm_Files ||--o{ Crm_DeliveryDocumentApprovals : "FileUid_to_Uid"
+    Crm_Files ||--o{ Crm_DeliveryFiles : "FileUid_to_Uid"
+    Crm_FileTypes ||--|{ Crm_DeliveryDocumentApprovals : "FileTypeUid_to_Uid"
+    Crm_FileTypes ||--o{ Crm_DeliveryFiles : "FileTypeUid_to_Uid"
+    Crm_Groups ||--|{ Crm_NotaryResults : "GroupUid_to_Uid"
+    Crm_Inventories ||--o{ Crm_Files : "InventoryUid_to_Uid"
+    Crm_Issues ||--o{ Crm_IssueHistories : "IssueUid_to_Uid"
+    Crm_Mortgages ||--o{ Crm_Files : "MortgageUid_to_Uid"
+    Crm_MortgageTypes ||--o{ Crm_DeliveryPayments : "MortgageTypeUid_to_Uid"
+    Crm_NotaryResults ||--|{ Crm_NotaryLists : "NotaryResultUid_to_Uid"
+    Crm_NotificationGroups ||--|{ Crm_NotificationGroupSubscriber : "GroupUid_to_Uid"
+    Crm_NotificationGroups ||--|{ Crm_NotificationLogs : "NotificationGroupUid_to_Uid"
+    Crm_Opportunities ||--o{ Crm_Activities : "OpportunityUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_DeliveryEmployees : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_IssueHistories : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Issues : "OrganizationUid_to_Uid"
+    Crm_Organizations ||--o{ Crm_Tickets : "DepartmentUid_to_Uid"
+    Crm_Products ||--|{ Crm_DeliveryRanges : "ProductUid_to_Uid"
+    Crm_QualityForms ||--o{ Crm_QualityAnswers : "QualityFormUid_to_Uid"
+    Crm_QualityForms ||--o{ Crm_QualityNotes : "QualityFormUid_to_Uid"
+    Crm_QualityForms ||--o{ Crm_QualityQuestions : "QualityFormUid_to_Uid"
+    Crm_QualityQuestions ||--o{ Crm_QualityAnswers : "QualityQuestionUid_to_Uid"
+    Crm_Reps ||--|{ Crm_NotificationGroupSubscriber : "RepUid_to_Uid"
+    Crm_Tickets ||--|{ Crm_TicketHistories : "TicketUid_to_Uid"
+    Crm_Users ||--o{ Crm_Activities : "CanceledBy_to_Uid"
+    Crm_Users ||--o{ Crm_Activities : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Activities : "SuccessBy_to_Uid"
+    Crm_Users ||--|{ Crm_ActivityRecords : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_ComplaintNotes : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Complaints : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_DeliveryEmployees : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_DeliveryPayments : "DeliveryApporovalUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_DeliveryWorkAdvances : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IssueHistories : "AnswerBy_to_Uid"
+    Crm_Users ||--o{ Crm_IssueHistories : "DirectUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_IssueHistories : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Issues : "AnswerBy_to_Uid"
+    Crm_Users ||--o{ Crm_Issues : "DirectUserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Issues : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_NotaryResults : "ApproveControllerUid_to_Uid"
+    Crm_Users ||--o{ Crm_NotificationGroups : "LastSenderUid_to_Uid"
+    Crm_Users ||--o{ Crm_QualityAnswers : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_QualityForms : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_QualityQuestions : "UserUid_to_Uid"
+    Crm_Users ||--o{ Crm_Tickets : "OwnerUid_to_Uid"
+    Crm_Users ||--o{ Crm_Tickets : "RequestingPersonUid_to_Uid"
