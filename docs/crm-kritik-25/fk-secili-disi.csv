@@ -1,0 +1,11 @@
+Constraint,SourceSchema,SourceTable,SourceColumns,TargetSchema,TargetTable,TargetColumns,DeleteAction,UpdateAction,TargetInScript
+FK_Files_Distraints_DistraintUid,Crm,Files,DistraintUid,Crm,Distraints,Uid,,,Yes
+FK_Inventories_InventoryTypes_InventoryTypeUid,Crm,Inventories,InventoryTypeUid,Crm,InventoryTypes,Uid,,,Yes
+FK_Opportunities_Occupations_OccupationUid,Crm,Opportunities,OccupationUid,Crm,Occupations,Uid,,,Yes
+FK_Organizations_Firms_FirmUid,Crm,Organizations,FirmUid,Crm,Firms,Uid,,,Yes
+FK_PremiumContracts_PremiumTimings_PremiumTimingUid,Crm,PremiumContracts,PremiumTimingUid,Crm,PremiumTimings,Uid,,,Yes
+FK_PremiumItems_Installments_InstallmentUid,Crm,PremiumItems,InstallmentUid,Crm,Installments,Uid,CASCADE,,Yes
+FK_Premiums_BranchCategories_BranchCategoryUid,Crm,Premiums,BranchCategoryUid,Crm,BranchCategories,Uid,CASCADE,,Yes
+FK_Premiums_PremiumTimingGroups_PremiumTimingGroupUid,Crm,Premiums,PremiumTimingGroupUid,Crm,PremiumTimingGroups,Uid,CASCADE,,Yes
+FK_Premiums_PremiumUserTypeRates_PremiumUserTypeRateUid,Crm,Premiums,PremiumUserTypeRateUid,Crm,PremiumUserTypeRates,Uid,,,Yes
+FK_Products_VariableIndexGroups_VariableIndexGroupUid,Crm,Products,VariableIndexGroupUid,Crm,VariableIndexGroups,Uid,,,Yes
