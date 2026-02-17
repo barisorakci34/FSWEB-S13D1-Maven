@@ -1,0 +1,348 @@
+source_table,target_table,fk_count,sample_source_columns
+Crm.Activities,Crm.ActivityTypes,2,"ActivitySubTypeUid, ActivityTypeUid"
+Crm.Activities,Crm.Contracts,1,ContractUid
+Crm.Activities,Crm.Customers,1,CustomerUid
+Crm.Activities,Crm.Opportunities,1,OpportunityUid
+Crm.Activities,Crm.Users,6,"CanceledBy, CreatedBy, DeletedBy, OwnerUid +2"
+Crm.ActivityRecords,Crm.Activities,1,ActivityUid
+Crm.ActivityRecords,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.ActivityTypes,Crm.ActivityTypes,1,ParentUid
+Crm.ActivityTypes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.AdForms,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Advices,Crm.Areas,2,"CityUid, TownUid"
+Crm.Advices,Crm.Customers,1,CustomerUid
+Crm.Advices,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Announcement,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.AppointmentAssignments,Crm.Customers,1,CustomerUid
+Crm.AppointmentAssignments,Crm.Leads,1,LeadUid
+Crm.AppointmentAssignments,Crm.Organizations,1,OrganizationUid
+Crm.AppointmentAssignments,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.Areas,Crm.Areas,1,ParentUid
+Crm.Areas,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.AssignedBidApprovers,Crm.Bids,1,BidUid
+Crm.AssignedBidApprovers,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Authorities,Crm.ModuleAuths,1,ModuleAuthUid
+Crm.Authorities,Crm.Roles,1,RoleUid
+Crm.Authorities,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.BankDetails,Crm.Banks,1,BankUid
+Crm.BankDetails,Crm.Organizations,1,OrganizationUid
+Crm.BankDetails,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.BankLogs,Crm.Contracts,1,ContractUid
+Crm.BankLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Banks,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.BidInstallments,Crm.Bids,1,BidUid
+Crm.BidInstallments,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.BranchCategories,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CampaignBranches,Crm.Campaigns,1,CampaignUid
+Crm.CampaignBranches,Crm.Organizations,1,BranchUid
+Crm.CampaignBranches,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CampaignItems,Crm.CampaignSources,1,CampaignSourceUid
+Crm.CampaignItems,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CampaignSources,Crm.Campaigns,1,CampaignUid
+Crm.CampaignSources,Crm.CustomerSources,1,SourceUid
+Crm.CampaignSources,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Campaigns,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CashPriceIntervalRates,Crm.Products,1,ProductUid
+Crm.CashPriceIntervalRates,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ComplaintNotes,Crm.Complaints,1,ComplaintUid
+Crm.ComplaintNotes,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.Complaints,Crm.Customers,1,CustomerUid
+Crm.Complaints,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.ContractLeavingLogs,Crm.Contracts,1,ContractUid
+Crm.ContractLeavingLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ContractLeavings,Crm.Contracts,1,ContractUid
+Crm.ContractLeavings,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ContractProductDeliveryRange,Crm.ContractProducts,1,ContractProductUid
+Crm.ContractProductDeliveryRange,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ContractProducts,Crm.Users,2,"CreatedBy, DeletedBy"
+Crm.ContractRevisions,Crm.Contracts,1,ContractUid
+Crm.ContractRevisions,Crm.Files,1,FileUid
+Crm.ContractRevisions,Crm.Users,4,"ControllerUid, CreatedByUserUid, DeletedByUserUid, UpdatedByUserUid"
+Crm.ContractTemplate,Crm.Products,1,ProductUid
+Crm.ContractTemplate,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ContractTemplateVariables,Crm.Users,2,"CreatedBy, DeletedBy"
+Crm.CostForms,Crm.CostTypes,1,CostTypeUid
+Crm.CostForms,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.CostItems,Crm.CostForms,1,CostFormUid
+Crm.CostItems,Crm.CostTypes,1,CostTypeUid
+Crm.CostItems,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CostTypes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Costs,Crm.CostTypes,1,CostTypeUid
+Crm.Costs,Crm.Organizations,1,OrganizationUid
+Crm.Costs,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.CustomerLoginFaileds,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CustomerLoginSmsFaileds,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CustomerLogins,Crm.Customers,1,CustomerUid
+Crm.CustomerLogins,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.CustomerSources,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Customers,Crm.Customers,1,ReferanceUid
+Crm.Customers,Crm.Organizations,1,OrganizationUid
+Crm.Customers,Crm.Portfolios,1,PortfolioUid
+Crm.Customers,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DailyServicePricePaidLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DataAnalysisLogs,Crm.Contracts,1,ContractUid
+Crm.DataAnalysisLogs,Crm.Customers,1,CustomerUid
+Crm.DataAnalysisLogs,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.Debits,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.Deliveries,Crm.Contracts,1,OffsettingContractUid
+Crm.Deliveries,Crm.MortgageTypes,1,MortgageTypeUid
+Crm.Deliveries,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DeliveryCallHistories,Crm.DeliveryCalls,1,DeliveryCallUid
+Crm.DeliveryCallHistories,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DeliveryCallNotes,Crm.DeliveryCalls,1,DeliveryCallUid
+Crm.DeliveryCallNotes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DeliveryCalls,Crm.Contracts,1,ContractUid
+Crm.DeliveryCalls,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DeliveryDocumentApprovals,Crm.Contracts,1,ContractUid
+Crm.DeliveryDocumentApprovals,Crm.FileTypes,1,FileTypeUid
+Crm.DeliveryDocumentApprovals,Crm.Files,1,FileUid
+Crm.DeliveryEmployees,Crm.Organizations,1,OrganizationUid
+Crm.DeliveryEmployees,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.DeliveryFiles,Crm.Contracts,1,ContractUid
+Crm.DeliveryFiles,Crm.FileTypes,1,FileTypeUid
+Crm.DeliveryFiles,Crm.Files,1,FileUid
+Crm.DeliveryFiles,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DeliveryPayments,Crm.MortgageTypes,1,MortgageTypeUid
+Crm.DeliveryPayments,Crm.Users,4,"CreatedBy, DeletedBy, DeliveryApporovalUserUid, UpdatedBy"
+Crm.DeliveryRanges,Crm.Products,1,ProductUid
+Crm.DeliveryRanges,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DeliveryWorkAdvances,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.Distraints,Crm.Contracts,1,ContractUid
+Crm.Distraints,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Documents,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.DrawCodes,Crm.Activities,1,ActivityUid
+Crm.DrawCodes,Crm.Contracts,1,ContractUid
+Crm.DrawCodes,Crm.Draws,1,DrawUid
+Crm.DrawCodes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Draws,Crm.Organizations,1,OrganizationUid
+Crm.Draws,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ETesisTerkinContractIbans,Crm.ContractIBANs,1,ContractIBANUid
+Crm.ETesisTerkinContractIbans,Crm.ETesisTerkinIntegrations,1,ETesisTerkinIntegrationUid
+Crm.ETesisTerkinContractIbans,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ETesisTerkinIntegrations,Crm.Contracts,1,ContractUid
+Crm.ETesisTerkinIntegrations,Crm.Customers,1,CustomerUid
+Crm.ETesisTerkinIntegrations,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.FileTypeCategories,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.FileTypes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Files,Crm.Contracts,1,ContractUid
+Crm.Files,Crm.Customers,1,CustomerUid
+Crm.Files,Crm.Distraints,1,DistraintUid
+Crm.Files,Crm.Inventories,1,InventoryUid
+Crm.Files,Crm.Mortgages,1,MortgageUid
+Crm.Files,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Firms,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.GroupProducts,Crm.Groups,1,GroupUid
+Crm.GroupProducts,Crm.Products,1,ProductUid
+Crm.GroupProducts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Groups,Crm.Users,4,"ClosedBy, CreatedBy, DeletedBy, UpdatedBy"
+Crm.Guarantors,Crm.Contracts,1,ContractUid
+Crm.Guarantors,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.IntegrationApiLogs,Crm.Users,3,"CreatedByUserUid, DeletedByUserUid, UpdatedByUserUid"
+Crm.IntegrationApiLogs250919,Crm.Users,3,"CreatedByUserUid, DeletedByUserUid, UpdatedByUserUid"
+Crm.InternetSubeLogs,Crm.Customers,1,CustomerUid
+Crm.InternetSubeLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Inventories,Crm.InventoryTypes,1,InventoryTypeUid
+Crm.Inventories,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.InventoryDebits,Crm.Debits,1,DebitUid
+Crm.InventoryDebits,Crm.Inventories,1,InventoryUid
+Crm.InventoryDebits,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.InventoryTypes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.InvoiceLogoLogs,Crm.Contracts,1,ContractUid
+Crm.InvoiceLogoLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.IssueHistories,Crm.Issues,1,IssueUid
+Crm.IssueHistories,Crm.Organizations,1,OrganizationUid
+Crm.IssueHistories,Crm.Users,6,"AnswerBy, CreatedBy, DeletedBy, DirectUserUid +2"
+Crm.Issues,Crm.Organizations,1,OrganizationUid
+Crm.Issues,Crm.Users,6,"AnswerBy, CreatedBy, DeletedBy, DirectUserUid +2"
+Crm.LeadForms,Crm.Activities,1,ActivityUid
+Crm.LeadForms,Crm.AdForms,1,AdFormUid
+Crm.LeadForms,Crm.Organizations,1,OrganizationUid
+Crm.LeadForms,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.LoginFaileds,Crm.Users,2,"CreatedBy, DeletedBy"
+Crm.Logins,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.LogoLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.LogoPayments,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.LogoServiceLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ManuelLeadForCallCenterQueues,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MobileApplicationConfigurations,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MobileConfigurationSettings,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MobilePhoneNumbers,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.ModuleAuths,Crm.Modules,1,ModuleUid
+Crm.ModuleAuths,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Modules,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MortgageCosts,Crm.Mortgages,1,MortgageUid
+Crm.MortgageCosts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MortgageInsurances,Crm.Mortgages,1,MortgageUid
+Crm.MortgageInsurances,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MortgageLogs,Crm.Mortgages,1,MortgageUid
+Crm.MortgageLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MortgagePledgeVehicleBrandModels,Crm.MortgagePledgeVehicleBrands,1,MortgagePledgeVehicleBrandUid
+Crm.MortgagePledgeVehicleBrandModels,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.MortgagePrePledges,Crm.MortgagePledges,1,MortgagePledgeUid
+Crm.MortgageTypes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Mortgages,Crm.Contracts,1,ContractUid
+Crm.Mortgages,Crm.MortgageTypes,1,MortgageTypeUid
+Crm.Mortgages,Crm.Mortgages,1,ParentUid
+Crm.Mortgages,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Nationalities,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.NotaryLists,Crm.Contracts,1,ContractUid
+Crm.NotaryLists,Crm.NotaryResults,1,NotaryResultUid
+Crm.NotaryLists,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.NotaryResults,Crm.Groups,1,GroupUid
+Crm.NotaryResults,Crm.Users,4,"ApproveControllerUid, CreatedBy, DeletedBy, UpdatedBy"
+Crm.NotificationGroupSubscriber,Crm.NotificationGroups,1,GroupUid
+Crm.NotificationGroupSubscriber,Crm.Reps,1,RepUid
+Crm.NotificationGroupSubscriber,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.NotificationGroups,Crm.Users,4,"CreatedBy, DeletedBy, LastSenderUid, UpdatedBy"
+Crm.NotificationLogs,Crm.NotificationGroups,1,NotificationGroupUid
+Crm.NotificationLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.NotificationVariables,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Occupations,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.OffsetLogs,Crm.Customers,1,CustomerUid
+Crm.OffsetLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.OnlineUsers,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Opportunities,Crm.Areas,1,CityUid
+Crm.Opportunities,Crm.CustomerSources,1,CustomerSourceUid
+Crm.Opportunities,Crm.Customers,2,"CustomerUid, CustomerUid1"
+Crm.Opportunities,Crm.Leads,1,LeadUid
+Crm.Opportunities,Crm.Occupations,1,OccupationUid
+Crm.Opportunities,Crm.Portfolios,1,PortfolioUid
+Crm.Opportunities,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.OrganizationAreas,Crm.Areas,1,AreaUid
+Crm.OrganizationAreas,Crm.Organizations,1,OrganizationUid
+Crm.OrganizationAreas,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.OrganizationHistories,Crm.Organizations,2,"OrganizationUid, ParentUid"
+Crm.OrganizationHistories,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.OrganizationMonthlyTargets,Crm.Organizations,1,OrganizationUid
+Crm.OrganizationMonthlyTargets,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Organizations,Crm.Areas,4,"CityUid, CountryUid, HomeTownUid, TownUid"
+Crm.Organizations,Crm.Firms,1,FirmUid
+Crm.Organizations,Crm.Organizations,1,ParentUid
+Crm.Organizations,Crm.Users,4,"CreatedBy, DeletedBy, ManagerUid, UpdatedBy"
+Crm.Performances,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.PlannedPeriodicDeliveryAmounts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Portfolios,Crm.Organizations,1,OrganizationUid
+Crm.Portfolios,Crm.Users,3,"CreatedByUserUid, DeletedByUserUid, UpdatedByUserUid"
+Crm.PosPayments,Crm.Contracts,1,ContractUid
+Crm.PosPayments,Crm.Organizations,1,OrganizationUid
+Crm.PosPayments,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.PostVirmanQueues,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.PremiumBranchRates,Crm.BranchCategories,1,BranchCategoryUid
+Crm.PremiumBranchRates,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.PremiumContracts,Crm.Contracts,1,ContractUid
+Crm.PremiumContracts,Crm.PremiumTimings,1,PremiumTimingUid
+Crm.PremiumContracts,Crm.Premiums,1,PremiumUid
+Crm.PremiumContracts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.PremiumItems,Crm.Installments,1,InstallmentUid
+Crm.PremiumItems,Crm.PremiumContracts,1,PremiumContractUid
+Crm.PremiumItems,Crm.Premiums,1,PremiumUid
+Crm.PremiumItems,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.PremiumTimingGroups,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.PremiumTimings,Crm.PremiumTimingGroups,1,PremiumTimingGroupUid
+Crm.PremiumTimings,Crm.Products,1,ProductUid
+Crm.PremiumTimings,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.PremiumUserTypeRates,Crm.Roles,1,RoleUid
+Crm.PremiumUserTypeRates,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Premiums,Crm.BranchCategories,1,BranchCategoryUid
+Crm.Premiums,Crm.Organizations,1,OrganizationUid
+Crm.Premiums,Crm.PremiumTimingGroups,1,PremiumTimingGroupUid
+Crm.Premiums,Crm.PremiumUserTypeRates,1,PremiumUserTypeRateUid
+Crm.Premiums,Crm.Roles,1,RoleUid
+Crm.Premiums,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.Products,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Products,Crm.VariableIndexGroups,1,VariableIndexGroupUid
+Crm.QualityAnswers,Crm.Activities,1,ActivityUid
+Crm.QualityAnswers,Crm.QualityForms,1,QualityFormUid
+Crm.QualityAnswers,Crm.QualityQuestions,1,QualityQuestionUid
+Crm.QualityAnswers,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.QualityForms,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.QualityNotes,Crm.Activities,1,ActivityUid
+Crm.QualityNotes,Crm.QualityForms,1,QualityFormUid
+Crm.QualityNotes,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.QualityQuestions,Crm.QualityForms,1,QualityFormUid
+Crm.QualityQuestions,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.RepCampaigns,Crm.Reps,1,RepUid
+Crm.RepContracts,Crm.Contracts,1,ContractUid
+Crm.RepContracts,Crm.Reps,1,RepUid
+Crm.RepContracts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepGifts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepIbans,Crm.Reps,1,RepUid
+Crm.RepIbans,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepPaymentDetails,Crm.RepPayments,1,RepPaymentUid
+Crm.RepPaymentDetails,Crm.RepPointLogs,1,RepPointLogUid
+Crm.RepPaymentDetails,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepPaymentGroups,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepPayments,Crm.Reps,1,RepUid
+Crm.RepPayments,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepPointLogs,Crm.Activities,1,ActivityUid
+Crm.RepPointLogs,Crm.Contracts,1,ContractUid
+Crm.RepPointLogs,Crm.CustomerLogins,1,CustomerLoginUid
+Crm.RepPointLogs,Crm.RepPoints,1,RepPointUid
+Crm.RepPointLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RepPoints,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Reps,Crm.Areas,2,"CityUid, TownUid"
+Crm.Reps,Crm.Organizations,1,OrganizationUid
+Crm.Reps,Crm.Portfolios,1,PortfolioUid
+Crm.Reps,Crm.Reps,1,ParentUid
+Crm.Reps,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUserUid, UpdatedBy"
+Crm.RestDays,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RiskTrackingCosts,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RiskTrackingLawyers,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RiskTrackings,Crm.Organizations,2,"OrganizationUid, RegionUid"
+Crm.RiskTrackings,Crm.RiskTrackingLawyers,1,RiskTrackingLawyerUid
+Crm.RiskTrackings,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.RoleTargets,Crm.Roles,1,RoleUid
+Crm.RoleTargets,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Roles,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.ServiceConfigurations,Crm.Users,3,"CreatedByUserUid, DeletedByUserUid, UpdatedByUserUid"
+Crm.ServiceRateRanges,Crm.Products,1,ProductUid
+Crm.ServiceRateRanges,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Services,Crm.Users,3,"CreatedByUserUid, DeletedByUserUid, UpdatedByUserUid"
+Crm.SetOffLogs,Crm.Customers,1,CustomerUid
+Crm.SetOffLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Simulations,Crm.Customers,1,CustomerUid
+Crm.Simulations,Crm.Simulations,1,SimulationUid
+Crm.Simulations,Crm.Users,4,"CreatedBy, DeletedBy, OwnerUid, UpdatedBy"
+Crm.SmsGroups,Crm.SmsTemplates,1,SmsTemplateUid
+Crm.SmsGroups,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.SmsLogs,Crm.Contracts,1,ContractUid
+Crm.SmsLogs,Crm.Customers,1,CustomerUid
+Crm.SmsLogs,Crm.Leads,1,LeadUid
+Crm.SmsLogs,Crm.Opportunities,1,OpportunityUid
+Crm.SmsLogs,Crm.SmsGroups,1,SmsGroupUid
+Crm.SmsLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.SmsTemplates,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.SmsVerificationCodes,Crm.Leads,1,LeadUid
+Crm.SmsVerificationCodes,Crm.Users,2,"DeletedBy, UpdatedBy"
+Crm.SustainabilityFeatureValues,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.SustainabilityReports,Crm.Contracts,1,ContractUid
+Crm.SustainabilityReports,Crm.MortgagePledges,1,MortgagePledgeUid
+Crm.SustainabilityReports,Crm.MortgageTypes,1,MortgageTypeUid
+Crm.SustainabilityReports,Crm.Mortgages,1,MortgagesUid
+Crm.SustainabilityReports,Crm.SustainabilityFeatureValues,1,FeatureValueUid
+Crm.SustainabilityReports,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.TicketHistories,Crm.Tickets,1,TicketUid
+Crm.TicketHistories,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.Tickets,Crm.Organizations,1,DepartmentUid
+Crm.Tickets,Crm.Users,5,"CreatedBy, DeletedBy, OwnerUid, RequestingPersonUid +1"
+Crm.UnauthorizedProcessLogs,Crm.Organizations,1,OrganizationUid
+Crm.UnauthorizedProcessLogs,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.UserHistories,Crm.Organizations,1,OrganizationUid
+Crm.UserHistories,Crm.Portfolios,1,PortfolioUid
+Crm.UserHistories,Crm.Roles,1,RoleUid
+Crm.UserHistories,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.UserPortfolios,Crm.Portfolios,1,PortfolioUid
+Crm.UserPortfolios,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid1"
+Crm.UserResponsibleBranches,Crm.Organizations,2,"BranchUid, OrganizationUid"
+Crm.UserResponsibleBranches,Crm.Roles,1,RoleUid
+Crm.UserResponsibleBranches,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.UserRoles,Crm.Roles,1,RoleUid
+Crm.UserRoles,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.UserTargets,Crm.Users,4,"CreatedBy, DeletedBy, UpdatedBy, UserUid"
+Crm.Users,Crm.Organizations,1,OrganizationUid
+Crm.Users,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.VariableIndexGroups,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.VariableIndexs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.VariableIndexs,Crm.VariableIndexGroups,1,VariableIndexGroupUid
+Crm.VirtualPosCommisions,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"
+Crm.VirtualPosLogs,Crm.Users,3,"CreatedBy, DeletedBy, UpdatedBy"

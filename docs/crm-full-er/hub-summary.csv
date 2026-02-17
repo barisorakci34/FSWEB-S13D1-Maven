@@ -1,0 +1,7 @@
+hub_table,incoming_fk_count,generated_pages
+Crm.Users,523,3
+Crm.Organizations,27,1
+Crm.Contracts,24,1
+Crm.Customers,16,1
+Crm.Areas,11,1
+Crm.Roles,7,1
