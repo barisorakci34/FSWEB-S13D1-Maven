@@ -1,0 +1,15 @@
+community_id,node_count,edge_count,top_degree_node
+1,29,38,Crm.Contracts
+2,20,24,Crm.Organizations
+3,19,27,Crm.Users
+4,19,24,Crm.Customers
+5,16,18,Crm.Premiums
+6,11,10,Crm.Products
+7,5,4,Crm.CampaignSources
+8,5,4,Crm.RepPointLogs
+9,4,4,Crm.CostTypes
+10,4,3,Crm.Inventories
+11,3,2,Crm.Bids
+12,3,2,Crm.NotificationGroups
+13,2,1,Crm.ContractProductDeliveryRange
+14,2,1,Crm.MortgagePledgeVehicleBrandModels
