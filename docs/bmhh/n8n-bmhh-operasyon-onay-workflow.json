@@ -1,0 +1,1177 @@
+{
+  "name": "BMHH Banka Yazi - Operasyon Onay ve Destek Surecleri",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "1",
+      "name": "Yeni Yazi Tetikleyici (15 dk)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1200,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "2",
+      "name": "Destek Surec Tetikleyici (Saatlik)",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1200,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "name": "baseUrl",
+              "type": "string",
+              "value": "https://bmhhtest.isyazilim.net"
+            },
+            {
+              "name": "userName",
+              "type": "string",
+              "value": "BMHH_USER_PLACEHOLDER"
+            },
+            {
+              "name": "password",
+              "type": "string",
+              "value": "BMHH_PASSWORD_PLACEHOLDER"
+            },
+            {
+              "name": "opsMail",
+              "type": "string",
+              "value": "operasyon@banka.com"
+            },
+            {
+              "name": "bizMail",
+              "type": "string",
+              "value": "hakemheyeti@banka.com"
+            },
+            {
+              "name": "xHourControl",
+              "type": "number",
+              "value": 4
+            },
+            {
+              "name": "approvalTimeoutHour",
+              "type": "number",
+              "value": 3
+            },
+            {
+              "name": "slaWarnHour",
+              "type": "number",
+              "value": 24
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "3",
+      "name": "Konfigurasyon",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -980,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json.baseUrl + '/BankApi/LoginBank'}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"userName\":\"{{$json.userName}}\",\"password\":\"{{$json.password}}\"}",
+        "options": {}
+      },
+      "id": "4",
+      "name": "Token Al (LoginBank)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -760,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.Token || $json.token}}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "5",
+      "name": "Token Geldi mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -560,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$item(0).$node['Konfigurasyon'].json.baseUrl + '/BankApi/BankService/GetApplicantPaginatedList'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.Token || $json.token}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"pageSize\":100}",
+        "options": {}
+      },
+      "id": "6",
+      "name": "Banka Basvuru Listele",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = this.getWorkflowStaticData('global');\nif (!staticData.seenApplicants) staticData.seenApplicants = {};\nif (!staticData.openApplicants) staticData.openApplicants = {};\nconst allowedStatuses = [40, 50, 80, 82, 121];\nconst applicants = $json.applicants || [];\nconst output = [];\nfor (const applicant of applicants) {\n  const applicantNo = String(applicant.applicantNumber);\n  if (!allowedStatuses.includes(Number(applicant.applicantStatus))) continue;\n  if (staticData.seenApplicants[applicantNo]) continue;\n  staticData.seenApplicants[applicantNo] = new Date().toISOString();\n  staticData.openApplicants[applicantNo] = {\n    applicantStatus: Number(applicant.applicantStatus),\n    bankResponseEndDate: applicant.bankResponseEndDate || null,\n    decisionTopic: applicant.decisionTopic || null,\n    approvalPending: true,\n    updatedAt: new Date().toISOString()\n  };\n  output.push({ json: applicant });\n}\nreturn output;"
+      },
+      "id": "7",
+      "name": "Yeni Yazilari Filtrele",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -120,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$items().length}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "larger"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "8",
+      "name": "Yeni Yazi Var mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        80,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1
+      },
+      "id": "9",
+      "name": "Her Basvuruyu Isle",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        280,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const cfg = $item(0).$node['Konfigurasyon'].json;\nconst applicant = $json;\nconst approvalDeadline = new Date(Date.now() + (Number(cfg.approvalTimeoutHour) * 60 * 60 * 1000)).toISOString();\nreturn [{\n  json: {\n    ...applicant,\n    opsMail: cfg.opsMail,\n    bizMail: cfg.bizMail,\n    approvalDeadline,\n    approvalWebhookHint: 'https://n8n.banka.com/webhook/bmhh-operasyon-onay'\n  }\n}];"
+      },
+      "id": "10",
+      "name": "Onay Icin Icerik Hazirla",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$json.opsMail}}",
+        "subject": "=BMHH yeni yazi operasyon onayi gerekiyor - Basvuru {{$json.applicantNo || $json.applicantNumber}}",
+        "emailType": "text",
+        "message": "=Yeni BMHH yazisi tespit edildi.\\nBasvuru No: {{$json.applicantNo || $json.applicantNumber}}\\nDurum: {{$json.applicantStatus}}\\nTalep: {{$json.request}}\\nSon cevap tarihi: {{$json.bankResponseEndDate}}\\n\\nOnay veya red kaydi icin entegrasyon noktasini kullanin: {{$json.approvalWebhookHint}}\\nOnay son zamani: {{$json.approvalDeadline}}"
+      },
+      "id": "11",
+      "name": "Operasyon Ekibine Mail (Onay Talebi)",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        760,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "amount": "={{$item(0).$node['Konfigurasyon'].json.approvalTimeoutHour}}",
+        "unit": "hours"
+      },
+      "id": "12",
+      "name": "Operasyon Onayi Bekle",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        980,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.approved === true || $json.approvalStatus === 'approved'}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "13",
+      "name": "Onaylandi mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1180,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{$item(0).$node['Konfigurasyon'].json.baseUrl + '/BankApi/BankService'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$item(0).$node['Token Al (LoginBank)'].json.Token || $item(0).$node['Token Al (LoginBank)'].json.token}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"applicantNumbers\":[{{$json.applicantNumber}}]}",
+        "options": {}
+      },
+      "id": "14",
+      "name": "Basvuru Isleme Alindi Bildir",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1390,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$item(0).$node['Konfigurasyon'].json.baseUrl + '/BankApi/BankService/GetApplicantDocuments'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$item(0).$node['Token Al (LoginBank)'].json.Token || $item(0).$node['Token Al (LoginBank)'].json.token}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"applicantNumber\":{{$json.applicantNumber}},\"requestDocumentCode\":1}",
+        "options": {}
+      },
+      "id": "15",
+      "name": "Basvuru Dokumanlarini Cek",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const docs = Array.isArray($json) ? $json : ($json.documents || []);\nconst hasDocuments = docs.length > 0;\nconst summary = {\n  applicantNumber: $item(0).$node['Onay Icin Icerik Hazirla'].json.applicantNumber,\n  applicantNo: $item(0).$node['Onay Icin Icerik Hazirla'].json.applicantNo,\n  docsComplete: hasDocuments,\n  docsCount: docs.length,\n  docs\n};\nreturn [{ json: summary }];"
+      },
+      "id": "16",
+      "name": "Dokuman Kontrolu",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1810,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.docsComplete}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "17",
+      "name": "Dokumanlar Tam mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2020,
+        -260
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$item(0).$node['Konfigurasyon'].json.baseUrl + '/BankApi/BankService/ApplicantsStatusCheck'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$item(0).$node['Token Al (LoginBank)'].json.Token || $item(0).$node['Token Al (LoginBank)'].json.token}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"applicantNumbers\":[{{$json.applicantNumber}}]}",
+        "options": {}
+      },
+      "id": "18",
+      "name": "Anlik Durum Sorgula",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2230,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const applicant = ($json.applicants || [])[0] || {};\nconst status = Number(applicant.applicantStatus || 0);\nconst decisionTopic = applicant.decisionTopic || '';\nconst isAdverse = status === 121 || (decisionTopic || '').toLowerCase().includes('aleyhine');\nconst staticData = this.getWorkflowStaticData('global');\nconst applicantNo = String(applicant.applicantNumber || $item(0).$node['Dokuman Kontrolu'].json.applicantNumber);\nif (!staticData.openApplicants) staticData.openApplicants = {};\nstaticData.openApplicants[applicantNo] = {\n  applicantStatus: status,\n  bankResponseEndDate: applicant.bankResponseEndDate || null,\n  decisionTopic,\n  approvalPending: false,\n  updatedAt: new Date().toISOString()\n};\nreturn [{ json: { ...applicant, isAdverse } }];"
+      },
+      "id": "19",
+      "name": "Durum Degerlendir",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2450,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.isAdverse}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "20",
+      "name": "Banka Aleyhine Karar mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2660,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$item(0).$node['Konfigurasyon'].json.baseUrl + '/BankApi/BankService/ApplicantClosingNotice'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$item(0).$node['Token Al (LoginBank)'].json.Token || $item(0).$node['Token Al (LoginBank)'].json.token}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"applicantNumber\":{{$json.applicantNumber}},\"message\":\"Banka islemi yapildi, kapatma bildirimi iletildi.\"}",
+        "options": {}
+      },
+      "id": "21",
+      "name": "Kapatma Bildirimi Gonder",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2870,
+        -420
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.bizMail}}",
+        "subject": "=BMHH Operasyon Bilgilendirme - Basvuru {{$json.applicantNo || $json.applicantNumber}}",
+        "emailType": "text",
+        "message": "=Basvuru islem adimi tamamlandi.\\nBasvuru: {{$json.applicantNo || $json.applicantNumber}}\\nDurum: {{$json.applicantStatus}}\\nAleyhine Karar: {{$json.isAdverse || false}}\\n\\nAkis normal ilerlemeye devam etti."
+      },
+      "id": "22",
+      "name": "Bilgilendirme Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        3080,
+        -340
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.opsMail}}",
+        "subject": "=BMHH Akis Durduruldu - Basvuru {{$json.applicantNo || $json.applicantNumber}}",
+        "emailType": "text",
+        "message": "=Operasyon onayi reddedildi veya sure asimina ugradi.\\nBasvuru: {{$json.applicantNo || $json.applicantNumber}}\\nAkis bu basvuru icin kesildi."
+      },
+      "id": "23",
+      "name": "Onay Red / Timeout Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1390,
+        -20
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.opsMail}}",
+        "subject": "=BMHH Eksik Dokuman - Basvuru {{$item(0).$node['Dokuman Kontrolu'].json.applicantNo || $item(0).$node['Dokuman Kontrolu'].json.applicantNumber}}",
+        "emailType": "text",
+        "message": "=Beklenen dokumanlar tamamlanmadi.\\nBasvuru: {{$item(0).$node['Dokuman Kontrolu'].json.applicantNo || $item(0).$node['Dokuman Kontrolu'].json.applicantNumber}}\\nAkis bu adimda kesildi ve manuel takip gerekli."
+      },
+      "id": "24",
+      "name": "Eksik Dokuman Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2230,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const cfg = $item(0).$node['Konfigurasyon'].json;\nconst now = new Date();\nconst hour = now.getHours();\nconst shouldRun = (hour % Number(cfg.xHourControl)) === 0;\nreturn [{ json: { shouldRun, hour, xHourControl: cfg.xHourControl } }];"
+      },
+      "id": "25",
+      "name": "X Saatlik Kontrol Kapisi",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -760,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.shouldRun}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "26",
+      "name": "Destek Kontrolleri Calissin mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -560,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$item(0).$node['Konfigurasyon'].json.baseUrl + '/BankApi/BankService/GetDocumentsTypesList'}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$item(0).$node['Token Al (LoginBank)'].json.Token || $item(0).$node['Token Al (LoginBank)'].json.token}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "27",
+      "name": "Servis Saglik Kontrolu",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -320,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{Array.isArray($json) ? $json.length : Object.keys($json || {}).length}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "larger"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "28",
+      "name": "Servis Saglikli mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -120,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const staticData = this.getWorkflowStaticData('global');\nconst cfg = $item(0).$node['Konfigurasyon'].json;\nconst warnHours = Number(cfg.slaWarnHour || 24);\nconst now = new Date();\nconst rows = [];\nfor (const [applicantNumber, row] of Object.entries(staticData.openApplicants || {})) {\n  const endDate = row.bankResponseEndDate ? new Date(row.bankResponseEndDate) : null;\n  const diffHour = endDate ? (endDate.getTime() - now.getTime()) / (1000 * 60 * 60) : null;\n  rows.push({\n    applicantNumber,\n    applicantStatus: row.applicantStatus,\n    approvalPending: Boolean(row.approvalPending),\n    bankResponseEndDate: row.bankResponseEndDate,\n    hoursToDeadline: diffHour,\n    critical: diffHour !== null && diffHour < 0,\n    warning: diffHour !== null && diffHour >= 0 && diffHour <= warnHours\n  });\n}\nconst criticalCount = rows.filter(r => r.critical).length;\nconst warningCount = rows.filter(r => r.warning).length;\nconst pendingApprovalCount = rows.filter(r => r.approvalPending).length;\nreturn [{ json: { rows, criticalCount, warningCount, pendingApprovalCount } }];"
+      },
+      "id": "29",
+      "name": "SLA ve Bekleyen Onay Kontrolu",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.criticalCount}}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "larger"
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "30",
+      "name": "Kritik Gecikme Var mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        280,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.opsMail}}",
+        "subject": "=BMHH Kritik SLA Gecikmesi",
+        "emailType": "text",
+        "message": "=Kritik SLA ihlali tespit edildi.\\nKritik adet: {{$json.criticalCount}}\\nDetaylar: {{$json.rows}}\\n\\nAkis kritik bildirim adiminda bekletildi."
+      },
+      "id": "31",
+      "name": "Kritik Eskalasyon Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        500,
+        360
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{$json.warningCount > 0 || $json.pendingApprovalCount > 0}}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "32",
+      "name": "Uyari veya Bekleyen Onay Var mi?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        500,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.opsMail}}",
+        "subject": "=BMHH Destek Kontrol Uyari Ozeti",
+        "emailType": "text",
+        "message": "=Uyari adedi: {{$json.warningCount}}\\nBekleyen operasyon onayi: {{$json.pendingApprovalCount}}\\n\\nTakip gerektiren kayitlar: {{$json.rows}}"
+      },
+      "id": "33",
+      "name": "Periyodik Uyari Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        720,
+        520
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.opsMail}}",
+        "subject": "=BMHH Servis Erisimi Sorunu",
+        "emailType": "text",
+        "message": "=GetDocumentsTypesList kontrolu basarisiz oldu. Destek sureci bu dongude durduruldu."
+      },
+      "id": "34",
+      "name": "Servis Sorunu Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        80,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "fromEmail": "noreply@banka.com",
+        "toEmail": "={{$item(0).$node['Konfigurasyon'].json.opsMail}}",
+        "subject": "=BMHH Token Alinamadi",
+        "emailType": "text",
+        "message": "=LoginBank adiminda token alinamadi. Tum BMHH akis adimlari durduruldu."
+      },
+      "id": "35",
+      "name": "Token Hata Maili",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -320,
+        180
+      ]
+    }
+  ],
+  "connections": {
+    "Yeni Yazi Tetikleyici (15 dk)": {
+      "main": [
+        [
+          {
+            "node": "Konfigurasyon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Destek Surec Tetikleyici (Saatlik)": {
+      "main": [
+        [
+          {
+            "node": "Konfigurasyon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Konfigurasyon": {
+      "main": [
+        [
+          {
+            "node": "Token Al (LoginBank)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "X Saatlik Kontrol Kapisi",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Al (LoginBank)": {
+      "main": [
+        [
+          {
+            "node": "Token Geldi mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Token Geldi mi?": {
+      "main": [
+        [
+          {
+            "node": "Banka Basvuru Listele",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Token Hata Maili",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Banka Basvuru Listele": {
+      "main": [
+        [
+          {
+            "node": "Yeni Yazilari Filtrele",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yeni Yazilari Filtrele": {
+      "main": [
+        [
+          {
+            "node": "Yeni Yazi Var mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Yeni Yazi Var mi?": {
+      "main": [
+        [
+          {
+            "node": "Her Basvuruyu Isle",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Her Basvuruyu Isle": {
+      "main": [
+        [
+          {
+            "node": "Onay Icin Icerik Hazirla",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Onay Icin Icerik Hazirla": {
+      "main": [
+        [
+          {
+            "node": "Operasyon Ekibine Mail (Onay Talebi)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operasyon Ekibine Mail (Onay Talebi)": {
+      "main": [
+        [
+          {
+            "node": "Operasyon Onayi Bekle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Operasyon Onayi Bekle": {
+      "main": [
+        [
+          {
+            "node": "Onaylandi mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Onaylandi mi?": {
+      "main": [
+        [
+          {
+            "node": "Basvuru Isleme Alindi Bildir",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Onay Red / Timeout Maili",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basvuru Isleme Alindi Bildir": {
+      "main": [
+        [
+          {
+            "node": "Basvuru Dokumanlarini Cek",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basvuru Dokumanlarini Cek": {
+      "main": [
+        [
+          {
+            "node": "Dokuman Kontrolu",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dokuman Kontrolu": {
+      "main": [
+        [
+          {
+            "node": "Dokumanlar Tam mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dokumanlar Tam mi?": {
+      "main": [
+        [
+          {
+            "node": "Anlik Durum Sorgula",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Eksik Dokuman Maili",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Anlik Durum Sorgula": {
+      "main": [
+        [
+          {
+            "node": "Durum Degerlendir",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Durum Degerlendir": {
+      "main": [
+        [
+          {
+            "node": "Banka Aleyhine Karar mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Banka Aleyhine Karar mi?": {
+      "main": [
+        [
+          {
+            "node": "Kapatma Bildirimi Gonder",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Bilgilendirme Maili",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kapatma Bildirimi Gonder": {
+      "main": [
+        [
+          {
+            "node": "Bilgilendirme Maili",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bilgilendirme Maili": {
+      "main": [
+        [
+          {
+            "node": "Her Basvuruyu Isle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Onay Red / Timeout Maili": {
+      "main": [
+        [
+          {
+            "node": "Her Basvuruyu Isle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eksik Dokuman Maili": {
+      "main": [
+        [
+          {
+            "node": "Her Basvuruyu Isle",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "X Saatlik Kontrol Kapisi": {
+      "main": [
+        [
+          {
+            "node": "Destek Kontrolleri Calissin mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Destek Kontrolleri Calissin mi?": {
+      "main": [
+        [
+          {
+            "node": "Servis Saglik Kontrolu",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Servis Saglik Kontrolu": {
+      "main": [
+        [
+          {
+            "node": "Servis Saglikli mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Servis Saglikli mi?": {
+      "main": [
+        [
+          {
+            "node": "SLA ve Bekleyen Onay Kontrolu",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Servis Sorunu Maili",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SLA ve Bekleyen Onay Kontrolu": {
+      "main": [
+        [
+          {
+            "node": "Kritik Gecikme Var mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Kritik Gecikme Var mi?": {
+      "main": [
+        [
+          {
+            "node": "Kritik Eskalasyon Maili",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Uyari veya Bekleyen Onay Var mi?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Uyari veya Bekleyen Onay Var mi?": {
+      "main": [
+        [
+          {
+            "node": "Periyodik Uyari Maili",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "bmhh-v1-ops-approval"
+}
