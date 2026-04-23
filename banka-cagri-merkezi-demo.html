@@ -1,0 +1,985 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Banka Çağrı Merkezi - Açık Bordo Tema</title>
+  <style>
+    :root {
+      --bg: #f6f2f4;
+      --panel: #ffffff;
+      --primary: #8b2f5f;
+      --primary-soft: #b45886;
+      --primary-dark: #6a2146;
+      --accent: #f2c8dd;
+      --text: #2c2330;
+      --muted: #756a7d;
+      --line: #e8dbe3;
+      --ok: #1f8a50;
+      --warn: #d98324;
+      --danger: #c43c3c;
+      --shadow: 0 10px 28px rgba(80, 34, 62, 0.12);
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background: linear-gradient(140deg, #f9f5f7 0%, #f3ebef 45%, #efe6ea 100%);
+    }
+
+    .top-strip {
+      height: 8px;
+      background: linear-gradient(90deg, #7a2450 0%, #9e3a6d 50%, #d781ad 100%);
+    }
+
+    header {
+      background: linear-gradient(120deg, var(--primary) 0%, var(--primary-soft) 100%);
+      color: #fff;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 30%, #ffffff 12%, #f3c8dd 60%, #cc7aa4 100%);
+      border: 2px solid rgba(255, 255, 255, 0.55);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      color: var(--primary-dark);
+      font-weight: 800;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .brand p {
+      margin: 0;
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      background: rgba(255, 255, 255, 0.22);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 6px;
+      vertical-align: middle;
+      background: #8cff9a;
+      box-shadow: 0 0 0 3px rgba(140, 255, 154, 0.2);
+    }
+
+    nav.main-nav {
+      border-top: 1px solid rgba(255, 255, 255, 0.35);
+      background: rgba(0, 0, 0, 0.1);
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+
+    .main-nav ul {
+      margin: 0 auto;
+      max-width: 1400px;
+      list-style: none;
+      padding: 0 14px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .main-nav button {
+      border: none;
+      background: transparent;
+      color: #fff;
+      padding: 12px 14px;
+      cursor: pointer;
+      font-weight: 600;
+      border-bottom: 3px solid transparent;
+      opacity: 0.92;
+    }
+
+    .main-nav button.active,
+    .main-nav button:hover {
+      border-bottom-color: #ffd1e6;
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .sub-nav-wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 10px 18px 2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sub-nav {
+      display: none;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .sub-nav.active {
+      display: flex;
+    }
+
+    .sub-nav button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--primary-dark);
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 0.83rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .sub-nav button:hover {
+      background: #fdf7fa;
+      border-color: #dcaec5;
+    }
+
+    .workspace {
+      max-width: 1400px;
+      margin: 12px auto 20px;
+      padding: 0 18px;
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 14px;
+      align-items: start;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      background: linear-gradient(90deg, #fdf1f7 0%, #fff 100%);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .panel-head h2,
+    .panel-head h3 {
+      margin: 0;
+      font-size: 0.95rem;
+      color: var(--primary-dark);
+    }
+
+    .panel-body {
+      padding: 14px;
+    }
+
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .kpi {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .kpi .label {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .kpi .value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+    }
+
+    .layout-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 8px 10px;
+      align-items: center;
+    }
+
+    .form-grid label {
+      font-size: 0.85rem;
+      color: #614d66;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #d8c4cf;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+      color: #372f3a;
+      background: #fff;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 64px;
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    button.btn {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-size: 0.86rem;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .btn-primary {
+      background: linear-gradient(120deg, var(--primary) 0%, var(--primary-soft) 100%);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #f9edf3;
+      color: var(--primary-dark);
+      border: 1px solid #e9cddc;
+    }
+
+    .btn-warn {
+      background: #fff3e7;
+      color: #9a4f00;
+      border: 1px solid #ffd4a8;
+    }
+
+    .badge {
+      border-radius: 999px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    .b-ok {
+      color: #0a7d42;
+      background: #e8fff1;
+      border: 1px solid #bdeed1;
+    }
+
+    .b-warn {
+      color: #9f5c0a;
+      background: #fff5e7;
+      border: 1px solid #f4d8b6;
+    }
+
+    .b-danger {
+      color: #9f2424;
+      background: #ffe9e9;
+      border: 1px solid #f2c1c1;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 720px;
+      font-size: 0.84rem;
+    }
+
+    th,
+    td {
+      text-align: left;
+      border-bottom: 1px solid #f0e5eb;
+      padding: 9px 10px;
+      vertical-align: middle;
+    }
+
+    th {
+      background: #fcf4f8;
+      color: #6b3c54;
+      font-size: 0.76rem;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .event {
+      border: 1px solid var(--line);
+      border-left: 4px solid #c76996;
+      border-radius: 10px;
+      padding: 9px 10px;
+      background: #fff;
+      font-size: 0.82rem;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .right-col {
+      position: sticky;
+      top: 100px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .kv {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      border-bottom: 1px dashed #e9dbe3;
+      padding: 7px 0;
+      font-size: 0.82rem;
+    }
+
+    .kv strong {
+      color: #5b495f;
+    }
+
+    .security-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .security-item {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 10px;
+      background: #fff;
+      font-size: 0.82rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footnote {
+      margin-top: 8px;
+      font-size: 0.75rem;
+      color: #836f88;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1080px) {
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .right-col {
+        position: static;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+
+      .layout-2,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-strip"></div>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-logo">BK</div>
+        <div>
+          <h1>BordoBank Çağrı Merkezi Operasyon Platformu</h1>
+          <p>Rollere göre yetki, güvenlik ve müşteri akış yönetimi</p>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="pill"><span class="status-dot"></span>Hat Durumu: Hazır</span>
+        <span class="pill">Agent: ZEYNEP GÖZDE S.K.</span>
+        <span class="pill">Kuyruk: Bireysel Müşteri</span>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <ul>
+        <li><button class="main-tab active" data-tab="operasyon">Operasyon</button></li>
+        <li><button class="main-tab" data-tab="yetki">Rol & Yetkilendirme</button></li>
+        <li><button class="main-tab" data-tab="parametre">Parametre Yönetimi</button></li>
+        <li><button class="main-tab" data-tab="guvenlik">Güvenlik Seviyesi</button></li>
+        <li><button class="main-tab" data-tab="raporlama">Raporlama</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="sub-nav-wrap">
+    <div id="sub-operasyon" class="sub-nav active">
+      <button>Çağrı Karşılama</button>
+      <button>Müşteri Arama</button>
+      <button>Kimlik Doğrulama</button>
+      <button>Sonuçlandırma</button>
+    </div>
+    <div id="sub-yetki" class="sub-nav">
+      <button>Rol Tanımları</button>
+      <button>Ekran Yetkileri</button>
+      <button>İşlem Yetkileri</button>
+      <button>Onay Akışları</button>
+    </div>
+    <div id="sub-parametre" class="sub-nav">
+      <button>Kuyruk Parametreleri</button>
+      <button>SLA Kuralları</button>
+      <button>Skorlama Eşiği</button>
+      <button>Bildirim Şablonları</button>
+    </div>
+    <div id="sub-guvenlik" class="sub-nav">
+      <button>Seviye Matrisleri</button>
+      <button>Ekran Erişim Kuralı</button>
+      <button>Risk Tetikleyiciler</button>
+      <button>Denetim Kayıtları</button>
+    </div>
+    <div id="sub-raporlama" class="sub-nav">
+      <button>Agent Performansı</button>
+      <button>Çağrı Adedi</button>
+      <button>Memnuniyet</button>
+      <button>Şikayet Dağılımı</button>
+    </div>
+  </section>
+
+  <main class="workspace">
+    <section>
+      <article id="tab-operasyon" class="panel">
+        <div class="panel-head">
+          <h2>Çağrı Operasyon Ekranı</h2>
+          <div class="btn-row">
+            <button id="simulateApiBtn" class="btn btn-primary">API'den Çağrı Verisi Çek</button>
+            <button id="simulateAttachBtn" class="btn btn-secondary">Attach Data Uygula</button>
+            <button class="btn btn-warn">Müşteriyi Beklemeye Al</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="kpi-row">
+            <div class="kpi"><span class="label">Aktif Çağrı Süresi</span><span class="value" id="kpiCallTime">00:02:12</span></div>
+            <div class="kpi"><span class="label">Günlük Çağrı</span><span class="value" id="kpiDailyCount">31</span></div>
+            <div class="kpi"><span class="label">Aynı Gün Arama</span><span class="value" id="kpiSameDay">0</span></div>
+            <div class="kpi"><span class="label">Açık Şikayet</span><span class="value" id="kpiComplaint">Yok</span></div>
+            <div class="kpi"><span class="label">Güvenlik Skoru</span><span class="value" id="kpiSecurity">Düşük</span></div>
+          </div>
+
+          <div class="layout-2">
+            <div class="panel">
+              <div class="panel-head"><h3>Müşteri Doğrulama & Çağrı Sonucu</h3></div>
+              <div class="panel-body">
+                <div class="form-grid">
+                  <label>Müşteri No</label><input id="customerNo" value="-" />
+                  <label>TCKN</label><input id="customerTc" value="-" />
+                  <label>Ad Soyad</label><input id="customerName" value="-" />
+                  <label>Müşteri Tipi</label><input id="customerType" value="-" />
+                  <label>Durum</label>
+                  <select>
+                    <option>Devam Ediyor</option>
+                    <option>Reddedildi</option>
+                    <option>Onaylandı</option>
+                    <option>Müşteri Vazgeçti</option>
+                  </select>
+                  <label>Alt Durum</label>
+                  <select>
+                    <option>Lütfen seçiniz</option>
+                    <option>Şikayet kaydı açıldı</option>
+                    <option>Kimlik doğrulama başarısız</option>
+                    <option>Sahtecilik şüphesi</option>
+                    <option>Teknik sorun</option>
+                  </select>
+                  <label>Agent Notu</label>
+                  <textarea placeholder="Görüşme notlarını giriniz..."></textarea>
+                </div>
+                <div class="btn-row" style="margin-top: 10px;">
+                  <button class="btn btn-primary">Görüşmeyi Bitir</button>
+                  <button class="btn btn-secondary">Sonraki Adım</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-head"><h3>Çağrı Güvenlik Seviyesi (Ekran Bazlı)</h3></div>
+              <div class="panel-body security-list">
+                <div class="security-item"><span>Kimlik Doğrulama Ekranı</span><span class="badge b-ok">Seviye 1</span></div>
+                <div class="security-item"><span>Kart/Şifre İşlemleri</span><span class="badge b-warn">Seviye 2</span></div>
+                <div class="security-item"><span>Limit Arttırma & IBAN Değişikliği</span><span class="badge b-danger">Seviye 3</span></div>
+                <div class="security-item"><span>Yatırım Talimatları</span><span class="badge b-warn">Seviye 2</span></div>
+                <div class="security-item"><span>Hesap Kapatma / Kritik İşlemler</span><span class="badge b-danger">Seviye 3</span></div>
+              </div>
+              <p class="footnote">
+                Not: Güvenlik seviyesi yükseldikçe ek doğrulama zorunlu hale gelir (OTP, biyometrik oran, risk onayı).
+              </p>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h3>Canlı İşlem Akışı ve Erişim Denetimi</h3></div>
+            <div class="panel-body">
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>İşlem Adımı</th>
+                      <th>Gerekli Rol</th>
+                      <th>Güvenlik Seviyesi</th>
+                      <th>Agent Yetkisi</th>
+                      <th>Durum</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Müşteri Karşılama</td>
+                      <td>Agent / Supervisor</td>
+                      <td>Seviye 1</td>
+                      <td>Yetkili</td>
+                      <td><span class="badge b-ok">Tamamlandı</span></td>
+                    </tr>
+                    <tr>
+                      <td>Kimlik Doğrulama</td>
+                      <td>Agent</td>
+                      <td>Seviye 2</td>
+                      <td>Yetkili</td>
+                      <td><span class="badge b-ok">Başarılı</span></td>
+                    </tr>
+                    <tr>
+                      <td>Riskli İşlem Başlatma</td>
+                      <td>Supervisor Onayı</td>
+                      <td>Seviye 3</td>
+                      <td>Kısıtlı</td>
+                      <td><span class="badge b-warn">Onay Bekliyor</span></td>
+                    </tr>
+                    <tr>
+                      <td>Şikayet Kaydı Oluşturma</td>
+                      <td>Agent</td>
+                      <td>Seviye 1</td>
+                      <td>Yetkili</td>
+                      <td><span class="badge b-ok">Açılabilir</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="timeline">
+                <div class="event"><strong>09:42:13</strong> - API çağrısından müşteri profili başarıyla yüklendi.</div>
+                <div class="event"><strong>09:42:27</strong> - Aynı gün arama sayısı kontrol edildi: <span id="logSameDay">0</span></div>
+                <div class="event"><strong>09:42:31</strong> - Şikayet geçmişi tarandı: <span id="logComplaint">kayıt yok</span></div>
+                <div class="event"><strong>09:43:02</strong> - Güvenlik seviyesi işlemlere göre dinamik güncellendi.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="tab-yetki" class="panel hidden">
+        <div class="panel-head">
+          <h2>Rol ve Yetkilendirme Yönetimi</h2>
+          <div class="btn-row">
+            <button class="btn btn-primary">Yeni Rol Ekle</button>
+            <button class="btn btn-secondary">Yetkileri Kopyala</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Rol</th>
+                  <th>Erişebildiği Ekranlar</th>
+                  <th>İşlem Yetkisi</th>
+                  <th>Güvenlik Limiti</th>
+                  <th>Durum</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Agent</td>
+                  <td>Çağrı Karşılama, Müşteri Arama, Şikayet Kaydı</td>
+                  <td>Oku / Yaz</td>
+                  <td>Seviye 2</td>
+                  <td><span class="badge b-ok">Aktif</span></td>
+                </tr>
+                <tr>
+                  <td>Senior Agent</td>
+                  <td>Agent ekranları + Limit Değişiklik Talebi</td>
+                  <td>Oku / Yaz / İlet</td>
+                  <td>Seviye 2+</td>
+                  <td><span class="badge b-ok">Aktif</span></td>
+                </tr>
+                <tr>
+                  <td>Supervisor</td>
+                  <td>Tüm Operasyon + Onay Ekranları</td>
+                  <td>Tam Yetki</td>
+                  <td>Seviye 3</td>
+                  <td><span class="badge b-ok">Aktif</span></td>
+                </tr>
+                <tr>
+                  <td>Risk İzleme</td>
+                  <td>Güvenlik, Risk, Sahtecilik Paneli</td>
+                  <td>Denetle / Bloke Et</td>
+                  <td>Seviye 3</td>
+                  <td><span class="badge b-warn">Kısıtlı</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article id="tab-parametre" class="panel hidden">
+        <div class="panel-head">
+          <h2>Parametre Yönetim Ekranı</h2>
+          <div class="btn-row">
+            <button class="btn btn-primary">Parametre Kaydet</button>
+            <button class="btn btn-secondary">Varsayılanları Yükle</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="grid-3">
+            <div class="panel">
+              <div class="panel-head"><h3>Kuyruk Parametreleri</h3></div>
+              <div class="panel-body form-grid">
+                <label>Max Bekleme (sn)</label><input value="45" />
+                <label>Öncelikli Müşteri Ağırlığı</label><input value="1.6" />
+                <label>Tekrar Arama Eşiği</label><input value="3" />
+                <label>Mesai Başlangıç</label><input value="09:00" />
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h3>SLA ve Servis Kuralları</h3></div>
+              <div class="panel-body form-grid">
+                <label>İlk Yanıt SLA</label><input value="20 sn" />
+                <label>Ortalama Görüşme Süresi</label><input value="04:30" />
+                <label>Kritik İşlem SLA</label><input value="60 sn" />
+                <label>Otomatik Eskalasyon</label>
+                <select><option>Açık</option><option>Kapalı</option></select>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-head"><h3>Risk Parametreleri</h3></div>
+              <div class="panel-body form-grid">
+                <label>Risk Puan Eşiği</label><input value="70" />
+                <label>Biyometrik Min. Oran</label><input value="%92" />
+                <label>Şüpheli Arama Frekansı</label><input value="5/24s" />
+                <label>Seviye 3 Zorunlu OTP</label>
+                <select><option>Evet</option><option>Hayır</option></select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="tab-guvenlik" class="panel hidden">
+        <div class="panel-head">
+          <h2>Güvensiz Seviye / Ekran Erişim Yönetimi</h2>
+          <div class="btn-row">
+            <button class="btn btn-primary">Yeni Kural</button>
+            <button class="btn btn-secondary">Kural Test Et</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Risk Durumu</th>
+                  <th>Çağrı Güvenlik Seviyesi</th>
+                  <th>Engellenecek Ekranlar</th>
+                  <th>Açık Ekranlar</th>
+                  <th>Aksiyon</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Normal</td>
+                  <td>Seviye 1</td>
+                  <td>Yok</td>
+                  <td>Tüm temel ekranlar</td>
+                  <td><span class="badge b-ok">Serbest</span></td>
+                </tr>
+                <tr>
+                  <td>Orta Risk</td>
+                  <td>Seviye 2</td>
+                  <td>Kart limit artırım, adres güncelleme</td>
+                  <td>Müşteri arama, şikayet, bilgilendirme</td>
+                  <td><span class="badge b-warn">Kısıtlı</span></td>
+                </tr>
+                <tr>
+                  <td>Yüksek Risk</td>
+                  <td>Seviye 3</td>
+                  <td>Tüm finansal hareket ekranları</td>
+                  <td>Sadece doğrulama + supervisor onayı</td>
+                  <td><span class="badge b-danger">Bloke</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </article>
+
+      <article id="tab-raporlama" class="panel hidden">
+        <div class="panel-head"><h2>Raporlama ve Operasyon Özeti</h2></div>
+        <div class="panel-body">
+          <div class="kpi-row">
+            <div class="kpi"><span class="label">Günlük Cevaplanan Çağrı</span><span class="value">1,247</span></div>
+            <div class="kpi"><span class="label">Ortalama Bekleme</span><span class="value">00:00:41</span></div>
+            <div class="kpi"><span class="label">SLA Uyum</span><span class="value">%96.4</span></div>
+            <div class="kpi"><span class="label">Şikayet Oranı</span><span class="value">%3.1</span></div>
+            <div class="kpi"><span class="label">Riskli Çağrı</span><span class="value">%1.8</span></div>
+          </div>
+          <p class="muted">
+            Bu ekran demo amaçlıdır; gerçek ortamda grafikler ve anlık veri API üzerinden beslenecek şekilde entegre edilir.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <aside class="right-col">
+      <article class="panel">
+        <div class="panel-head">
+          <h3>Müşteri Özet Kartı (Canlı)</h3>
+          <span class="badge b-ok" id="verifyState">Doğrulama Bekleniyor</span>
+        </div>
+        <div class="panel-body">
+          <div class="kv"><strong>Ad Soyad</strong><span id="sumName">-</span></div>
+          <div class="kv"><strong>Müşteri No</strong><span id="sumNo">-</span></div>
+          <div class="kv"><strong>TCKN</strong><span id="sumTc">-</span></div>
+          <div class="kv"><strong>Müşteri Segmenti</strong><span id="sumSegment">-</span></div>
+          <div class="kv"><strong>Şube</strong><span id="sumBranch">-</span></div>
+          <div class="kv"><strong>Bu Akışta Arama</strong><span id="sumFlowCalls">0</span></div>
+          <div class="kv"><strong>Aynı Gün Arama</strong><span id="sumDailyCalls">0</span></div>
+          <div class="kv"><strong>Açık Şikayet Kaydı</strong><span id="sumComplaint">Yok</span></div>
+          <div class="kv"><strong>Son Arama Nedeni</strong><span id="sumLastReason">-</span></div>
+          <div class="kv"><strong>Risk Etiketi</strong><span id="sumRisk"><span class="badge b-ok">Normal</span></span></div>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-head"><h3>API / Attach Data Kontrol</h3></div>
+        <div class="panel-body">
+          <p class="muted" style="margin-top: 0;">
+            Çağrı geldiğinde veriler API veya attach data ile bu panelde birleştirilir.
+          </p>
+          <div class="btn-row">
+            <button id="loadApiMini" class="btn btn-primary">API Profili</button>
+            <button id="loadAttachMini" class="btn btn-secondary">Attach Bilgisi</button>
+          </div>
+          <div class="timeline">
+            <div class="event">API: Demografik bilgiler, segment, ürün ilişkisi</div>
+            <div class="event">Attach: Son arama nedeni, şikayet flag, aynı gün arama adedi</div>
+          </div>
+        </div>
+      </article>
+    </aside>
+  </main>
+
+  <script>
+    const mainTabs = document.querySelectorAll(".main-tab");
+    const subNavMap = {
+      operasyon: document.getElementById("sub-operasyon"),
+      yetki: document.getElementById("sub-yetki"),
+      parametre: document.getElementById("sub-parametre"),
+      guvenlik: document.getElementById("sub-guvenlik"),
+      raporlama: document.getElementById("sub-raporlama")
+    };
+
+    const contentMap = {
+      operasyon: document.getElementById("tab-operasyon"),
+      yetki: document.getElementById("tab-yetki"),
+      parametre: document.getElementById("tab-parametre"),
+      guvenlik: document.getElementById("tab-guvenlik"),
+      raporlama: document.getElementById("tab-raporlama")
+    };
+
+    mainTabs.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        mainTabs.forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const tab = btn.dataset.tab;
+
+        Object.values(subNavMap).forEach((el) => el.classList.remove("active"));
+        Object.values(contentMap).forEach((el) => el.classList.add("hidden"));
+        subNavMap[tab].classList.add("active");
+        contentMap[tab].classList.remove("hidden");
+      });
+    });
+
+    const apiData = {
+      customerNo: "10066910946",
+      tc: "17987654320",
+      fullName: "Özge Karadağ Çiftçi",
+      type: "Bireysel",
+      segment: "Premium",
+      branch: "1466 - BATI ATAŞEHİR ŞUBESİ",
+      flowCalls: 2,
+      sameDayCalls: 4,
+      complaint: "Var (1 Açık Kayıt)",
+      lastReason: "Mükerrer kayıt kontrolü",
+      security: "Orta",
+      verification: "Kimlik doğrulandı"
+    };
+
+    const attachData = {
+      flowCalls: 3,
+      sameDayCalls: 5,
+      complaint: "Var (2 Açık Kayıt)",
+      lastReason: "Düşük görüntü kalitesi şikayeti",
+      security: "Yüksek",
+      verification: "Ek OTP gerekli"
+    };
+
+    function updateSummary(data) {
+      if (data.customerNo) {
+        document.getElementById("customerNo").value = data.customerNo;
+        document.getElementById("sumNo").textContent = data.customerNo;
+      }
+      if (data.tc) {
+        document.getElementById("customerTc").value = data.tc;
+        document.getElementById("sumTc").textContent = data.tc;
+      }
+      if (data.fullName) {
+        document.getElementById("customerName").value = data.fullName;
+        document.getElementById("sumName").textContent = data.fullName;
+      }
+      if (data.type) {
+        document.getElementById("customerType").value = data.type;
+      }
+      if (data.segment) {
+        document.getElementById("sumSegment").textContent = data.segment;
+      }
+      if (data.branch) {
+        document.getElementById("sumBranch").textContent = data.branch;
+      }
+
+      if (typeof data.flowCalls === "number") {
+        document.getElementById("sumFlowCalls").textContent = data.flowCalls;
+      }
+      if (typeof data.sameDayCalls === "number") {
+        document.getElementById("sumDailyCalls").textContent = data.sameDayCalls;
+        document.getElementById("kpiSameDay").textContent = data.sameDayCalls;
+        document.getElementById("logSameDay").textContent = data.sameDayCalls;
+      }
+      if (data.complaint) {
+        document.getElementById("sumComplaint").textContent = data.complaint;
+        document.getElementById("kpiComplaint").textContent = data.complaint.includes("Yok") ? "Yok" : "Var";
+        document.getElementById("logComplaint").textContent = data.complaint.toLowerCase();
+      }
+      if (data.lastReason) {
+        document.getElementById("sumLastReason").textContent = data.lastReason;
+      }
+      if (data.security) {
+        document.getElementById("kpiSecurity").textContent = data.security;
+        const risk = document.getElementById("sumRisk");
+        if (data.security === "Yüksek") {
+          risk.innerHTML = '<span class="badge b-danger">Yüksek Risk</span>';
+        } else if (data.security === "Orta") {
+          risk.innerHTML = '<span class="badge b-warn">Orta Risk</span>';
+        } else {
+          risk.innerHTML = '<span class="badge b-ok">Normal</span>';
+        }
+      }
+      if (data.verification) {
+        const verifyEl = document.getElementById("verifyState");
+        verifyEl.textContent = data.verification;
+        verifyEl.className = "badge " + (data.verification.includes("OTP") ? "b-warn" : "b-ok");
+      }
+    }
+
+    document.getElementById("simulateApiBtn").addEventListener("click", () => updateSummary(apiData));
+    document.getElementById("simulateAttachBtn").addEventListener("click", () => updateSummary(attachData));
+    document.getElementById("loadApiMini").addEventListener("click", () => updateSummary(apiData));
+    document.getElementById("loadAttachMini").addEventListener("click", () => updateSummary(attachData));
+  </script>
+</body>
+</html>
