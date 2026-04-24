@@ -1317,13 +1317,8 @@
     function hasSecurityClearance(screenId) {
       if (!isCustomerRepresentative() || CALL_EXCEPTION_SCREENS.has(screenId)) return true;
       const required = securityByScreen[screenId] || "D2";
-      const requiredRank = SECURITY_RANK[required] ?? SECURITY_RANK.D2;
-      const bestRank = (currentCallSecurityLevels || []).reduce((minRank, level) => {
-        const rank = SECURITY_RANK[level];
-        if (rank === undefined) return minRank;
-        return Math.min(minRank, rank);
-      }, SECURITY_RANK.D2);
-      return bestRank <= requiredRank;
+      const selectedLevels = new Set(currentCallSecurityLevels || []);
+      return selectedLevels.has(required);
     }
 
     function ensureActionMatrixForRole(role) {
