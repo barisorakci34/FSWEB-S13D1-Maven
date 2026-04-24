@@ -1,0 +1,2106 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İktisat Katılım Bankası CRM - Demo</title>
+  <style>
+    :root {
+      --bordo: #6b1a2a;
+      --bordo-dark: #4a0f1c;
+      --bordo-mid: #8b2535;
+      --bordo-light: #b03a4a;
+      --bordo-pale: #d4606e;
+      --bordo-ghost: #f9ecee;
+      --gold: #c9a227;
+      --cream: #faf5f0;
+      --text-main: #1a0509;
+      --text-muted: #6b3040;
+      --green: #22c55e;
+      --orange: #f59e0b;
+      --gray: #6b7280;
+      --blue: #1d4ed8;
+      --red: #b91c1c;
+      --red-bg: #fee2e2;
+      --green-bg: #e6f5ee;
+      --orange-bg: #fff0e0;
+      --blue-bg: #eff6ff;
+      --shadow: 0 2px 8px rgba(107, 26, 42, 0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: Georgia, serif; }
+    body { background: #f3eaec; color: var(--text-main); font-size: 13px; height: 100vh; overflow: hidden; }
+
+    /* TOPBAR */
+    #topbar {
+      background: var(--bordo-dark);
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      gap: 8px;
+      border-bottom: 2px solid var(--gold);
+      position: relative;
+      z-index: 50;
+    }
+    .logo { font-size: 14px; font-weight: bold; color: var(--gold); letter-spacing: .4px; white-space: nowrap; }
+    .agent-info { display: flex; align-items: center; gap: 6px; margin-left: 12px; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .45; } }
+    .agent-name { color: #f9d8dc; font-size: 12px; }
+    .role-badge { background: var(--gold); color: var(--bordo-dark); font-size: 10px; font-weight: bold; padding: 2px 7px; border-radius: 3px; }
+    .spacer { flex: 1; }
+
+    .topbar-right { display: flex; gap: 6px; align-items: center; position: relative; }
+    .call-timer {
+      background: var(--bordo);
+      border: 1px solid var(--bordo-light);
+      color: #f9d8dc;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      padding: 3px 10px;
+      border-radius: 4px;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .btn-sm {
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: none;
+      font-size: 11px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #fff;
+    }
+    .btn-end { background: var(--gold); color: var(--bordo-dark); }
+
+    #role-switcher {
+      background: var(--bordo-mid);
+      border: 1px solid var(--bordo-light);
+      color: white;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 11px;
+      min-width: 150px;
+    }
+
+    /* READY */
+    .ready-wrap { position: relative; }
+    #ready-trigger { min-width: 145px; text-align: left; }
+    #ready-trigger.status-ready { background: var(--green); }
+    #ready-trigger.status-warn { background: var(--orange); }
+    #ready-trigger.status-logout { background: var(--gray); }
+
+    .ready-menu {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 220px;
+      max-height: 300px;
+      overflow-y: auto;
+      background: #fff;
+      border: 1px solid #e8d4d8;
+      border-top: 2px solid var(--bordo);
+      box-shadow: var(--shadow);
+      border-radius: 0 0 8px 8px;
+      z-index: 900;
+    }
+    .ready-wrap.open .ready-menu { display: block; }
+    .ready-item {
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #f2e7ea;
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 12px;
+      background: #fff;
+      color: var(--text-main);
+      cursor: pointer;
+    }
+    .ready-item:hover { background: var(--bordo-ghost); color: var(--bordo); }
+
+    /* NAV */
+    #mainnav {
+      background: var(--bordo);
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid var(--bordo-mid);
+      overflow: visible;
+      position: relative;
+      z-index: 40;
+      white-space: nowrap;
+    }
+
+    .nav-item {
+      position: relative;
+      padding: 0 13px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      color: #f9d8dc;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background .15s;
+      flex-shrink: 0;
+      user-select: none;
+    }
+    .nav-item:hover, .nav-item.active { background: var(--bordo-mid); color: #fff; }
+    .nav-item.active::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 2px;
+      background: var(--gold);
+    }
+    .nav-item.disabled { opacity: .45; pointer-events: none; }
+
+    .has-menu .submenu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 220px;
+      background: var(--bordo-dark);
+      border-top: 2px solid var(--gold);
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 12px 24px rgba(0,0,0,.3);
+      z-index: 1100;
+      overflow: hidden;
+    }
+    .has-menu:hover .submenu { display: block; }
+
+    .submenu-item {
+      padding: 10px 14px;
+      color: #fff;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      font-size: 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .submenu-item:last-child { border-bottom: none; }
+    .submenu-item:hover { background: var(--bordo-mid); }
+    .submenu-item.disabled { opacity: .45; pointer-events: none; }
+
+    /* LAYOUT */
+    #main {
+      display: flex;
+      height: calc(100vh - 74px - 44px);
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    /* LEFT CUSTOMER PANEL */
+    #customer-panel {
+      width: 290px;
+      min-width: 290px;
+      background: #fff;
+      border-right: 1px solid #e8d4d8;
+      overflow-y: auto;
+      flex-shrink: 0;
+    }
+    .cp-header {
+      background: var(--bordo);
+      color: #fff;
+      padding: 8px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .incoming {
+      background: var(--gold);
+      color: var(--bordo-dark);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 2px;
+      font-weight: bold;
+      display: none;
+    }
+    .cp-avatar {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--bordo-ghost);
+      border: 2px solid var(--bordo-pale);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 19px; font-weight: bold; color: var(--bordo);
+      margin: 12px auto 6px;
+    }
+    .cp-name { text-align: center; font-weight: bold; font-size: 14px; color: var(--bordo-dark); }
+    .cp-sub { text-align: center; font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+
+    .cp-section { padding: 8px 10px; border-top: 1px solid #f0e8ea; }
+    .cp-section-title { font-size: 10px; font-weight: bold; color: var(--bordo-pale); text-transform: uppercase; letter-spacing: .7px; margin-bottom: 4px; }
+    .cp-row { display: flex; justify-content: space-between; align-items: center; font-size: 11px; padding: 2px 0; gap: 8px; }
+    .cp-label { color: var(--text-muted); }
+    .cp-val { font-weight: 600; text-align: right; }
+
+    .alert-badge, .info-badge, .security-badge {
+      border-radius: 6px; padding: 6px 8px; font-size: 11px; margin: 6px 10px;
+      display: none; align-items: center; gap: 6px;
+    }
+    .alert-badge { background: var(--red-bg); border: 1px solid #fecaca; color: var(--red); }
+    .info-badge { background: var(--orange-bg); border: 1px solid #fed7aa; color: #c2610c; }
+    .security-badge { background: var(--blue-bg); border: 1px solid #bfdbfe; color: var(--blue); font-weight: bold; }
+
+    /* CENTER */
+    #center { flex: 1; background: var(--cream); overflow-y: auto; }
+    .screen { display: none; padding: 14px; }
+    .screen.active { display: block; }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e8d4d8;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-header {
+      background: var(--bordo-ghost);
+      border-bottom: 1px solid #e8d4d8;
+      padding: 9px 14px;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--bordo);
+    }
+    .card-body { padding: 12px 14px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+
+    .field-group { margin-bottom: 8px; }
+    .field-label { font-size: 11px; color: var(--text-muted); margin-bottom: 4px; display: block; }
+    .field-input { width: 100%; padding: 7px 10px; border: 1px solid #e8d4d8; border-radius: 4px; font-size: 12px; background: #fff; color: var(--text-main); }
+
+    .btn { padding: 7px 14px; border-radius: 5px; border: none; cursor: pointer; font-size: 12px; font-weight: bold; }
+    .btn-primary { background: var(--bordo); color: #fff; }
+    .btn-secondary { background: #fff; color: var(--bordo); border: 1px solid var(--bordo-pale); }
+    .btn-danger { background: #b91c1c; color: #fff; }
+
+    .btn:disabled,
+    .btn-sm:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+    .disabled-action {
+      opacity: .45 !important;
+      cursor: not-allowed !important;
+    }
+
+    .chip { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .chip-green { background: var(--green-bg); color: #1e7a4e; }
+    .chip-blue { background: var(--blue-bg); color: var(--blue); }
+    .chip-orange { background: var(--orange-bg); color: #c2610c; }
+    .chip-red { background: var(--red-bg); color: var(--red); }
+
+    .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .data-table th { background: var(--bordo-ghost); color: var(--bordo); text-align: left; padding: 7px 10px; border-bottom: 1px solid #e8d4d8; font-size: 11px; }
+    .data-table td { padding: 7px 10px; border-bottom: 1px solid #f5ecee; vertical-align: middle; }
+
+    .inline-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .mini-input { width: 100%; padding: 6px 8px; border: 1px solid #e8d4d8; border-radius: 4px; font-size: 12px; }
+
+    .param-accordion-item {
+      border: 1px solid #ead6da;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,.03);
+    }
+    .param-accordion-header {
+      width: 100%;
+      background: linear-gradient(to right, #faf1f3, #fff);
+      color: var(--bordo);
+      border: none;
+      text-align: left;
+      padding: 11px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .param-accordion-body {
+      display: none;
+      padding: 12px;
+      border-top: 1px solid #f0e8ea;
+      background: #fff;
+    }
+    .param-accordion-item.open .param-accordion-body { display: block; }
+
+    .param-editor-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid #f0e8ea;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #fcfafb;
+    }
+
+    #role-create-panel,
+    #user-form-panel {
+      display: none;
+      margin-top: 10px;
+      border: 1px solid #ead6da;
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    .role-screen-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 6px 10px;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .perm-btn { width: 26px; height: 26px; border-radius: 4px; border: none; cursor: pointer; font-weight: bold; }
+    .perm-yes { background: #dcfce7; color: #15803d; }
+    .perm-no { background: #f3f4f6; color: #6b7280; }
+
+    .customer-result-card {
+      border: 1px solid #ead6da;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .action-group {
+      border: 1px solid #ead6da;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      background: #fff;
+      padding: 6px 10px;
+    }
+    .action-group summary {
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      color: var(--bordo);
+      user-select: none;
+    }
+
+    /* CALL MODAL */
+    #call-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(74,15,28,.7);
+      z-index: 1200;
+      align-items: center;
+      justify-content: center;
+    }
+    #call-modal.show { display: flex; }
+    .call-modal-box {
+      background: #fff;
+      border-radius: 12px;
+      border: 3px solid var(--gold);
+      padding: 24px 28px;
+      min-width: 340px;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+    }
+    .call-modal-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+    #warning-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(74,15,28,.58);
+      z-index: 1250;
+      align-items: center;
+      justify-content: center;
+    }
+    #warning-modal.show { display: flex; }
+    .warning-modal-box {
+      background: #fff;
+      border-radius: 10px;
+      border: 2px solid var(--bordo-pale);
+      min-width: 300px;
+      max-width: 460px;
+      padding: 18px 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.25);
+    }
+    .warning-modal-title { color: var(--bordo); font-weight: bold; font-size: 14px; margin-bottom: 6px; }
+    .warning-modal-actions { margin-top: 10px; text-align: right; }
+
+    /* NOTIF */
+    #notif {
+      position: fixed;
+      top: 50px;
+      right: 12px;
+      z-index: 1300;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 340px;
+    }
+    .notif-item {
+      background: var(--bordo-dark);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 3px solid var(--gold);
+      box-shadow: 0 4px 12px rgba(0,0,0,.3);
+      font-size: 12px;
+    }
+
+    /* BOTTOM */
+    #bottom-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; }
+    #bottom-tabs-bar {
+      height: 44px;
+      background: var(--bordo-dark);
+      border-top: 2px solid var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0 10px;
+      overflow-x: auto;
+    }
+    .bottom-tab-btn {
+      border: 1px solid var(--bordo-light);
+      background: var(--bordo);
+      color: #f9d8dc;
+      font-size: 12px;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .bottom-tab-btn.active { background: var(--gold); color: var(--bordo-dark); border-color: var(--gold); font-weight: bold; }
+
+    #bottom-panel {
+      display: none;
+      position: fixed;
+      left: 0; right: 0; bottom: 44px;
+      height: 220px;
+      background: #fff;
+      border-top: 2px solid #e8d4d8;
+      box-shadow: 0 -8px 20px rgba(0,0,0,.15);
+      padding: 10px 12px;
+      overflow-y: auto;
+    }
+    #bottom-panel.open { display: block; }
+    .panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; color: var(--bordo); font-weight: bold; font-size: 13px; }
+    .close-panel-btn { border: none; background: #f3e3e6; color: var(--bordo); font-size: 12px; cursor: pointer; border-radius: 4px; padding: 4px 8px; }
+    .bottom-panel-content { display: none; }
+    .bottom-panel-content.active { display: block; }
+    .branch-item { padding: 8px 10px; border: 1px solid #eee; border-radius: 6px; margin-bottom: 6px; background: #fafafa; }
+    .link-list a { color: var(--blue); text-decoration: none; display: block; margin-bottom: 5px; font-size: 12px; }
+
+    @media (max-width: 1200px) {
+      #customer-panel { width: 240px; min-width: 240px; }
+      .grid-3, .grid-4, .role-screen-list { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="notif"></div>
+
+  <div id="call-modal">
+    <div class="call-modal-box">
+      <div style="font-size:34px;">📞</div>
+      <h3 style="margin:8px 0 5px; color:var(--bordo);">Gelen Çağrı</h3>
+      <div id="modal-caller" style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">0531 982 36 82 • Emirhan Bayraktar</div>
+      <div class="field-group" style="margin:8px 0; text-align:left;">
+        <label class="field-label">Güvenlik Seviyesi (çoklu seçim)</label>
+        <select id="modal-security-select" class="field-input" multiple size="7" onchange="updateModalSecurityPreview()">
+          <option value="A">A</option>
+          <option value="B">B</option>
+          <option value="B2" selected>B2</option>
+          <option value="C">C</option>
+          <option value="C2">C2</option>
+          <option value="D">D</option>
+          <option value="D2">D2</option>
+        </select>
+      </div>
+      <div id="modal-security" class="chip chip-blue">Güvenlik Seviyeleri: B2</div>
+      <div style="margin-top:10px; font-size:11px; color:var(--text-muted);">Seçilen seviyeye göre ekran erişimi uygulanır.</div>
+      <div class="call-modal-actions">
+        <button class="btn btn-primary" data-action="call-accept" onclick="acceptCall()">✓ Cevapla</button>
+        <button class="btn btn-danger" data-action="call-reject" onclick="rejectCall()">✗ Reddet</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="warning-modal">
+    <div class="warning-modal-box">
+      <div class="warning-modal-title" id="warning-modal-title">Uyarı</div>
+      <div id="warning-modal-message" style="font-size:12px; color:var(--text-main); line-height:1.5;"></div>
+      <div class="warning-modal-actions">
+        <button class="btn btn-primary" onclick="closeWarningModal()">Tamam</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="topbar">
+    <div class="logo">⬡ İKTİSAT KATILIM BANKASI</div>
+    <div class="agent-info">
+      <div class="status-dot" id="status-dot"></div>
+      <span class="agent-name">Barış Orakcı</span>
+      <span class="role-badge" id="role-badge">MÜŞTERİ TEMSİLCİSİ</span>
+    </div>
+    <div class="spacer"></div>
+    <div class="topbar-right">
+      <div class="call-timer" id="call-timer">00:00</div>
+
+      <div class="ready-wrap" id="ready-wrap">
+        <button class="btn-sm status-ready" id="ready-trigger" onclick="toggleReadyMenu(event)">● Hazır ▾</button>
+        <div class="ready-menu" id="ready-menu"></div>
+      </div>
+
+      <select id="role-switcher" onchange="changeRole(this.value)"></select>
+      <button class="btn-sm btn-end" data-action="simulate-call" onclick="simulateCall()">📞 Çağrı Simüle Et</button>
+    </div>
+  </div>
+
+  <div id="mainnav">
+    <div class="nav-item active" data-screen="kayip-calinti" onclick="switchScreen('kayip-calinti')">Kayıp/Çalıntı</div>
+
+    <div class="nav-item has-menu" data-screen="musteri" onclick="switchScreen('musteri')">
+      Müşteri
+      <div class="submenu">
+        <div class="submenu-item" data-screen="musteri-arama" onclick="switchScreenFromSubmenu(event, 'musteri-arama')">Müşteri Arama</div>
+      </div>
+    </div>
+
+    <div class="nav-item has-menu" data-screen="hesaplar" onclick="switchScreen('hesaplar')">
+      Hesaplar
+      <div class="submenu">
+        <div class="submenu-item" data-screen="hesap-ac" onclick="switchScreenFromSubmenu(event, 'hesap-ac')">Hesap Aç</div>
+        <div class="submenu-item" data-screen="hesap-listele" onclick="switchScreenFromSubmenu(event, 'hesap-listele')">Hesap Listele</div>
+        <div class="submenu-item" data-screen="hesap-bloke" onclick="switchScreenFromSubmenu(event, 'hesap-bloke')">Bloke</div>
+        <div class="submenu-item" data-screen="hesap-kisit" onclick="switchScreenFromSubmenu(event, 'hesap-kisit')">Kısıt</div>
+        <div class="submenu-item" data-screen="hesap-ekstre" onclick="switchScreenFromSubmenu(event, 'hesap-ekstre')">Ekstre Gönderimi</div>
+      </div>
+    </div>
+
+    <div class="nav-item" data-screen="kartlar" onclick="switchScreen('kartlar')">Kartlar</div>
+    <div class="nav-item" data-screen="finansman" onclick="switchScreen('finansman')">Finansman</div>
+
+    <div class="nav-item has-menu" data-screen="transferler" onclick="switchScreen('transferler')">
+      Transferler
+      <div class="submenu">
+        <div class="submenu-item" data-screen="transfer-havale" onclick="switchScreenFromSubmenu(event, 'transfer-havale')">Havale</div>
+        <div class="submenu-item" data-screen="transfer-viman" onclick="switchScreenFromSubmenu(event, 'transfer-viman')">Viman</div>
+        <div class="submenu-item" data-screen="transfer-eft" onclick="switchScreenFromSubmenu(event, 'transfer-eft')">EFT</div>
+        <div class="submenu-item" data-screen="transfer-fast" onclick="switchScreenFromSubmenu(event, 'transfer-fast')">Fast</div>
+      </div>
+    </div>
+
+    <div class="nav-item" data-screen="odemeler" onclick="switchScreen('odemeler')">Ödemeler</div>
+    <div class="nav-item" data-screen="kampanyalar" onclick="switchScreen('kampanyalar')">Kampanyalar</div>
+
+    <div class="nav-item has-menu" data-screen="sikayet-talep" onclick="switchScreen('sikayet-talep')">
+      Şikayet & Talep
+      <div class="submenu">
+        <div class="submenu-item" data-screen="sikayet-yeni" onclick="switchScreenFromSubmenu(event, 'sikayet-yeni')">Yeni Şikayet</div>
+        <div class="submenu-item" data-screen="sikayet-gecmis" onclick="switchScreenFromSubmenu(event, 'sikayet-gecmis')">Geçmiş Kayıtlar</div>
+      </div>
+    </div>
+
+    <div class="nav-item" data-screen="raporlar" onclick="switchScreen('raporlar')">Raporlar</div>
+
+    <div class="nav-item has-menu" data-screen="ayarlar">
+      Ayarlar ▾
+      <div class="submenu">
+        <div class="submenu-item" data-screen="kullanicilar" onclick="switchScreenFromSubmenu(event, 'kullanicilar')">Kullanıcılar</div>
+        <div class="submenu-item" data-screen="sistem-parametreleri" onclick="switchScreenFromSubmenu(event, 'sistem-parametreleri')">Sistem Parametreleri</div>
+        <div class="submenu-item" data-screen="rol-yonetimi" onclick="switchScreenFromSubmenu(event, 'rol-yonetimi')">Rol Yönetimi</div>
+        <div class="submenu-item" data-screen="guvenlik-seviyeleri" onclick="switchScreenFromSubmenu(event, 'guvenlik-seviyeleri')">Güvenlik Seviyeleri</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="main">
+    <aside id="customer-panel">
+      <div class="cp-header">
+        MÜŞTERİ KARTI
+        <span id="call-badge" class="incoming">AKTİF ÇAĞRI</span>
+      </div>
+
+      <div id="cp-empty" style="padding:18px 10px; text-align:center;">
+        <div style="font-size:34px; opacity:.35;">👤</div>
+        <div style="color:var(--text-muted);">Çağrı bekleniyor...</div>
+        <div style="color:var(--text-muted); margin-top:4px;">Müşteri bilgileri çağrı geldiğinde otomatik yüklenecektir.</div>
+      </div>
+
+      <div id="cp-loaded" style="display:none;">
+        <div class="cp-avatar" id="cp-avatar">EB</div>
+        <div class="cp-name" id="cp-name">Emirhan Bayraktar</div>
+        <div class="cp-sub" id="cp-sub">TC: 10066910946 • Bireysel</div>
+
+        <div class="alert-badge" id="cp-alert">⚠ Şikayet Kaydı Mevcut</div>
+        <div class="info-badge" id="cp-today-calls">📞 Bugün 5 kez aradı</div>
+        <div class="security-badge" id="cp-security">🔐 Çağrı Güvenlik Seviyesi: B2</div>
+
+        <div class="cp-section">
+          <div class="cp-section-title">Temel Bilgiler</div>
+          <div class="cp-row"><span class="cp-label">Yaş</span><span class="cp-val" id="cp-age">29</span></div>
+          <div class="cp-row"><span class="cp-label">Meslek</span><span class="cp-val" id="cp-job">Mühendis</span></div>
+          <div class="cp-row"><span class="cp-label">Şube</span><span class="cp-val" id="cp-branch">Batı Ataşehir</span></div>
+          <div class="cp-row"><span class="cp-label">Telefon</span><span class="cp-val" id="cp-phone">0531 982 36 82</span></div>
+          <div class="cp-row"><span class="cp-label">Doğum Tarihi</span><span class="cp-val" id="cp-dob">04.01.1997</span></div>
+        </div>
+
+        <div class="cp-section">
+          <div class="cp-section-title">Çağrı Analizi</div>
+          <div class="cp-row"><span class="cp-label">Bugün Arama Sayısı</span><span class="cp-val" id="cp-today-count">5</span></div>
+          <div class="cp-row"><span class="cp-label">FCR (aynı konu arama)</span><span class="cp-val" id="cp-fcr">2</span></div>
+          <div class="cp-row"><span class="cp-label">Açık Şikayet Sayısı</span><span class="cp-val" id="cp-open-complaints">3</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <main id="center">
+      <section class="screen active" id="screen-kayip-calinti">
+        <div class="card"><div class="card-header">🚨 Kayıp / Çalıntı</div><div class="card-body">Kayıp/çalıntı işlem ekranı.</div></div>
+      </section>
+
+      <section class="screen" id="screen-musteri">
+        <div class="card">
+          <div class="card-header">👤 Müşteri</div>
+          <div class="card-body">Müşteri üst menüsünden <strong>Müşteri Arama</strong> alt menüsünü kullanabilirsiniz.</div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-musteri-arama">
+        <div class="card">
+          <div class="card-header">🔎 Müşteri Arama</div>
+          <div class="card-body">
+            <div class="grid-3">
+              <div class="field-group">
+                <label class="field-label">Müşteri Numarası</label>
+                <input class="field-input" id="cs-customer-no" placeholder="Örn: 7891234" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">TC Kimlik Numarası</label>
+                <input class="field-input" id="cs-tckn" placeholder="11 haneli TCKN" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Vergi Kimlik Numarası</label>
+                <input class="field-input" id="cs-vkn" placeholder="10 haneli VKN" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Cep Telefonu</label>
+                <input class="field-input" id="cs-phone" placeholder="05XX XXX XX XX" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Ad</label>
+                <input class="field-input" id="cs-name" placeholder="Ad" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Soyad</label>
+                <input class="field-input" id="cs-surname" placeholder="Soyad" />
+              </div>
+            </div>
+
+            <div class="inline-row">
+              <button class="btn btn-primary" data-action="customer-query" onclick="searchCustomers()">Sorgula</button>
+              <button class="btn btn-secondary" data-action="customer-clear" onclick="clearCustomerSearch()">Temizle</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" id="customer-search-results-card" style="display:none;">
+          <div class="card-header">Müşteri Sonuçları</div>
+          <div class="card-body" id="customer-search-results"></div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-hesaplar">
+        <div class="card"><div class="card-header">🏦 Hesaplar</div><div class="card-body">Hesaplar menüsünden alt işlemleri seçiniz.</div></div>
+      </section>
+      <section class="screen" id="screen-hesap-ac"><div class="card"><div class="card-header">➕ Hesap Aç</div><div class="card-body">Hesap açma formu.</div></div></section>
+      <section class="screen" id="screen-hesap-listele"><div class="card"><div class="card-header">📋 Hesap Listele</div><div class="card-body">Mevcut hesaplar listesi.</div></div></section>
+      <section class="screen" id="screen-hesap-bloke"><div class="card"><div class="card-header">⛔ Hesap Bloke</div><div class="card-body">Hesap bloke işlemleri.</div></div></section>
+      <section class="screen" id="screen-hesap-kisit"><div class="card"><div class="card-header">🛑 Hesap Kısıt</div><div class="card-body">Hesap kısıt işlemleri.</div></div></section>
+      <section class="screen" id="screen-hesap-ekstre"><div class="card"><div class="card-header">📨 Ekstre Gönderimi</div><div class="card-body">Ekstre gönderim işlemleri.</div></div></section>
+
+      <section class="screen" id="screen-kartlar">
+        <div class="card">
+          <div class="card-header">💳 Kartlar</div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Kart No</th>
+                  <th>Kart Tipi</th>
+                  <th>Son Kullanma</th>
+                  <th>Limit</th>
+                  <th>Durum</th>
+                  <th>İşlemler</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>**** **** **** 3421</td>
+                  <td>Banka Kartı (Debit)</td>
+                  <td>05/2027</td>
+                  <td>100.000</td>
+                  <td><span class="chip chip-green">Aktif</span></td>
+                  <td>
+                    <div class="inline-row">
+                      <button class="btn btn-secondary" style="padding:4px 8px;" data-action="card-close">Kapat</button>
+                      <button class="btn btn-secondary" style="padding:4px 8px;" data-action="card-edit">Düzenle</button>
+                      <button class="btn btn-secondary" style="padding:4px 8px;" data-action="card-pin">Şifre</button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-finansman">
+        <div class="card">
+          <div class="card-header">📈 Finansman</div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Finansman No</th>
+                  <th>Ürün Adı</th>
+                  <th>Kalan Anapara Riski</th>
+                  <th>Defter Hesabı</th>
+                  <th>Finansman Tarihi</th>
+                  <th>Vade Tarihi</th>
+                  <th>Durum</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>FN-2024-000984</td>
+                  <td>İhtiyaç Finansmanı</td>
+                  <td>74.250 ₺</td>
+                  <td>320.01.0045</td>
+                  <td>12.01.2024</td>
+                  <td>12.01.2028</td>
+                  <td><span class="chip chip-green">Aktif</span></td>
+                </tr>
+                <tr>
+                  <td>FN-2023-000455</td>
+                  <td>Taşıt Finansmanı</td>
+                  <td>152.000 ₺</td>
+                  <td>320.01.0088</td>
+                  <td>01.09.2023</td>
+                  <td>01.09.2027</td>
+                  <td><span class="chip chip-blue">Yapılandırılmış</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-transferler"><div class="card"><div class="card-header">💸 Transferler</div><div class="card-body">Transfer menüsünden alt işlemleri seçiniz.</div></div></section>
+      <section class="screen" id="screen-transfer-havale"><div class="card"><div class="card-header">🏦 Havale</div><div class="card-body">Havale işlemleri ekranı.</div></div></section>
+      <section class="screen" id="screen-transfer-viman"><div class="card"><div class="card-header">🔁 Viman</div><div class="card-body">Viman işlemleri ekranı.</div></div></section>
+      <section class="screen" id="screen-transfer-eft"><div class="card"><div class="card-header">🌐 EFT</div><div class="card-body">EFT işlemleri ekranı.</div></div></section>
+      <section class="screen" id="screen-transfer-fast"><div class="card"><div class="card-header">⚡ Fast</div><div class="card-body">Fast işlemleri ekranı.</div></div></section>
+
+      <section class="screen" id="screen-odemeler"><div class="card"><div class="card-header">🧾 Ödemeler</div><div class="card-body">Ödemeler ekranı.</div></div></section>
+      <section class="screen" id="screen-kampanyalar"><div class="card"><div class="card-header">🎯 Kampanyalar</div><div class="card-body">Kampanyalar ekranı.</div></div></section>
+
+      <section class="screen" id="screen-sikayet-talep">
+        <div class="card"><div class="card-header">📋 Şikayet & Talep</div><div class="card-body">Alt menüden <strong>Yeni Şikayet</strong> veya <strong>Geçmiş Kayıtlar</strong> seçebilirsiniz.</div></div>
+      </section>
+
+      <section class="screen" id="screen-sikayet-yeni">
+        <div class="card">
+          <div class="card-header">🆕 Yeni Şikayet</div>
+          <div class="card-body">
+            <div class="grid-2">
+              <div class="field-group">
+                <label class="field-label">Şikayet Kategorisi</label>
+                <select class="field-input">
+                  <option>Kart İşlemleri</option>
+                  <option>Hesap İşlemleri</option>
+                  <option>Transfer</option>
+                  <option>Şifre / Güvenlik</option>
+                  <option>Ücret / Komisyon</option>
+                  <option>Diğer</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label class="field-label">Şikayet Alt Kategorisi</label>
+                <input class="field-input" placeholder="Alt kategori giriniz" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Müşteri Numarası</label>
+                <input class="field-input" placeholder="Müşteri no" />
+              </div>
+              <div class="field-group">
+                <label class="field-label">Telefon Numarası</label>
+                <input class="field-input" placeholder="05XX XXX XX XX" />
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label">Şikayet Açıklaması</label>
+              <textarea class="field-input" style="min-height:90px; resize:vertical;" placeholder="Şikayet detayını giriniz..."></textarea>
+            </div>
+            <div class="inline-row">
+              <button class="btn btn-primary" data-action="complaint-save" onclick="showNotif('Yeni şikayet kaydedildi.')">Kaydet</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-sikayet-gecmis">
+        <div class="card">
+          <div class="card-header">📜 Geçmiş Kayıtlar</div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead>
+                <tr><th>Tarih</th><th>Ref No</th><th>Kategori</th><th>Alt Kategori</th><th>Durum</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>23.04.2026</td><td>2026-0041</td><td>Kart İşlemleri</td><td>Kart Limiti</td><td><span class="chip chip-orange">Açık</span></td></tr>
+                <tr><td>20.04.2026</td><td>2026-0022</td><td>Transfer</td><td>EFT Gecikmesi</td><td><span class="chip chip-green">Kapalı</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-raporlar">
+        <div class="card">
+          <div class="card-header">📊 Raporlar</div>
+          <div class="card-body">
+            <div class="grid-4" style="margin-bottom:12px;">
+              <div class="card" style="margin:0; box-shadow:none; text-align:center; padding:12px;"><div style="font-size:28px; color:#6b1a2a; font-weight:bold;">248</div><div style="font-size:12px; color:#6b3040;">Bugünkü Çağrı</div></div>
+              <div class="card" style="margin:0; box-shadow:none; text-align:center; padding:12px;"><div style="font-size:28px; color:#1e7a4e; font-weight:bold;">4:18</div><div style="font-size:12px; color:#6b3040;">Ort. Konuşma</div></div>
+              <div class="card" style="margin:0; box-shadow:none; text-align:center; padding:12px;"><div style="font-size:28px; color:#c2610c; font-weight:bold;">%91</div><div style="font-size:12px; color:#6b3040;">Memnuniyet</div></div>
+              <div class="card" style="margin:0; box-shadow:none; text-align:center; padding:12px;"><div style="font-size:28px; color:#1d4ed8; font-weight:bold;">12</div><div style="font-size:12px; color:#6b3040;">Aktif Temsilci</div></div>
+            </div>
+
+            <table class="data-table">
+              <thead>
+                <tr><th>Temsilci</th><th>Çağrı</th><th>Ort. Süre</th><th>Çözüm Oranı</th><th>Memnuniyet</th><th>Durum</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Zeynep G.S.K.</td><td>42</td><td>4:32</td><td><span class="chip chip-green">%95</span></td><td>4.8/5</td><td><span class="chip chip-green">Hazır</span></td></tr>
+                <tr><td>Mehmet Aktaş</td><td>38</td><td>5:10</td><td><span class="chip chip-orange">%82</span></td><td>4.2/5</td><td><span class="chip chip-blue">Çağrıda</span></td></tr>
+                <tr><td>Ayşe Kaya</td><td>51</td><td>3:45</td><td><span class="chip chip-green">%97</span></td><td>4.9/5</td><td><span class="chip chip-green">Hazır</span></td></tr>
+                <tr><td>Can Demir</td><td>29</td><td>6:22</td><td><span class="chip chip-red">%71</span></td><td>3.8/5</td><td><span class="chip chip-orange">Mola</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-kullanicilar">
+        <div class="card">
+          <div class="card-header">👥 Kullanıcılar</div>
+          <div class="card-body">
+            <div class="inline-row" style="justify-content:space-between;margin-bottom:10px;">
+              <div style="font-size:12px;color:var(--text-muted);">Mevcut kullanıcı listesi</div>
+              <button class="btn btn-primary" data-action="user-add" onclick="openUserCreateForm()">+ Ekle</button>
+            </div>
+
+            <table class="data-table">
+              <thead><tr><th>Ad</th><th>Soyad</th><th>Mail</th><th>Rol</th><th>İşlem</th></tr></thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+
+            <div id="user-form-panel">
+              <div class="inline-row" style="justify-content:space-between;margin-bottom:8px;">
+                <strong id="user-form-title">Yeni Kullanıcı</strong>
+              </div>
+              <div class="grid-2">
+                <div class="field-group"><label class="field-label">Kullanıcı Adı</label><input class="field-input" id="new-user-name" placeholder="Ad" /></div>
+                <div class="field-group"><label class="field-label">Kullanıcı Soyad</label><input class="field-input" id="new-user-surname" placeholder="Soyad" /></div>
+                <div class="field-group"><label class="field-label">Mail</label><input class="field-input" id="new-user-mail" placeholder="mail@ikb.com" /></div>
+                <div class="field-group"><label class="field-label">Rol</label><select class="field-input" id="new-user-role"></select></div>
+              </div>
+              <div class="inline-row">
+                <button class="btn btn-primary" id="user-save-btn" data-action="user-save" onclick="saveUserForm()">Kaydet</button>
+                <button class="btn btn-secondary" data-action="user-cancel" onclick="toggleUserForm(false)">Vazgeç</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-sistem-parametreleri">
+        <div class="card">
+          <div class="card-header">⚙ Sistem Parametreleri</div>
+          <div class="card-body">
+            <div class="param-accordion-item" id="acc-agentstate">
+              <button class="param-accordion-header" onclick="toggleParamSection('acc-agentstate')">AGENTSTATE <span>▾</span></button>
+              <div class="param-accordion-body">
+                <div id="agentstate-editor"></div>
+                <div class="inline-row" style="margin-top:8px;">
+                  <button class="btn btn-secondary" data-action="params-add" onclick="addAgentState()">+ Değer Ekle</button>
+                  <button class="btn btn-primary" data-action="params-save" onclick="saveAgentStates()">Kaydet</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="param-accordion-item" id="acc-subeler">
+              <button class="param-accordion-header" onclick="toggleParamSection('acc-subeler')">Şubeler <span>▾</span></button>
+              <div class="param-accordion-body">
+                <div id="branches-editor"></div>
+                <div class="inline-row" style="margin-top:8px;">
+                  <button class="btn btn-secondary" data-action="params-add" onclick="addBranch()">+ Şube Ekle</button>
+                  <button class="btn btn-primary" data-action="params-save" onclick="saveBranches()">Kaydet</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="param-accordion-item" id="acc-links">
+              <button class="param-accordion-header" onclick="toggleParamSection('acc-links')">Faydalı Linkler <span>▾</span></button>
+              <div class="param-accordion-body">
+                <div id="links-editor"></div>
+                <div class="inline-row" style="margin-top:8px;">
+                  <button class="btn btn-secondary" data-action="params-add" onclick="addLink()">+ Link Ekle</button>
+                  <button class="btn btn-primary" data-action="params-save" onclick="saveLinks()">Kaydet</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-rol-yonetimi">
+        <div class="card">
+          <div class="card-header">👥 Rol Yönetimi (✓ var, ✗ yok)</div>
+          <div class="card-body">
+            <div class="inline-row" style="justify-content:space-between;margin-bottom:10px;">
+              <div style="font-size:12px;color:var(--text-muted);">Rol bazlı ekran yetki matrisi</div>
+              <button class="btn btn-primary" data-action="role-add" onclick="toggleRoleCreatePanel()">+ Rol Ekle</button>
+            </div>
+
+            <div id="role-create-panel">
+              <div class="field-group">
+                <label class="field-label">Rol Adı</label>
+                <input class="field-input" id="new-role-name" placeholder="Örn: Eğitim Koçu" />
+              </div>
+              <label class="field-label">Yetkili Ekranlar</label>
+              <div class="role-screen-list" id="new-role-screen-list"></div>
+              <div class="inline-row">
+                <button class="btn btn-primary" data-action="role-save" onclick="saveNewRole()">Rolü Kaydet</button>
+                <button class="btn btn-secondary" data-action="role-cancel" onclick="toggleRoleCreatePanel(false)">Vazgeç</button>
+              </div>
+            </div>
+
+            <div style="overflow-x:auto;">
+              <table class="data-table">
+                <thead id="role-matrix-head"></thead>
+                <tbody id="role-matrix-body"></tbody>
+              </table>
+            </div>
+
+            <div style="overflow-x:auto; margin-top:12px;">
+              <div style="font-size:12px;color:var(--text-muted); margin-bottom:6px;">Rol bazlı buton yetki matrisi</div>
+              <table class="data-table">
+                <thead id="role-action-matrix-head"></thead>
+                <tbody id="role-action-matrix-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-guvenlik-seviyeleri">
+        <div class="card">
+          <div class="card-header">🛡 Güvenlik Seviyeleri</div>
+          <div class="card-body">
+            <table class="data-table">
+              <thead><tr><th>Ekran</th><th>Güvenlik Seviyesi</th><th>Önizleme</th></tr></thead>
+              <tbody id="security-level-body"></tbody>
+            </table>
+            <div class="inline-row" style="margin-top:10px;">
+              <button class="btn btn-primary" data-action="security-save" onclick="saveSecurityLevels()">Güvenlik Seviyelerini Kaydet</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div id="bottom-dock">
+    <div id="bottom-panel">
+      <div class="panel-head">
+        <span id="bottom-panel-title">Alt Menü</span>
+        <button class="close-panel-btn" onclick="closeBottomPanel()">Kapat ✕</button>
+      </div>
+
+      <div class="bottom-panel-content" id="panel-duyurular">
+        <ul style="padding-left:18px; line-height:1.8;">
+          <li>FAST bakım penceresi 02:00 - 03:00.</li>
+          <li>Yeni müşteri kampanyası ay sonuna kadar geçerli.</li>
+          <li>Çağrı sınıflandırma ekranı güncellendi.</li>
+        </ul>
+      </div>
+
+      <div class="bottom-panel-content" id="panel-subeler">
+        <div style="margin-bottom:8px;">
+          <input id="branch-filter" class="field-input" placeholder="Şube adı / il / adres filtrele..." oninput="renderBranches()" />
+        </div>
+        <div id="branch-list"></div>
+      </div>
+
+      <div class="bottom-panel-content" id="panel-ucretler">
+        <table class="data-table">
+          <thead><tr><th>Hizmet</th><th>Ücret</th><th>Periyot</th></tr></thead>
+          <tbody>
+            <tr><td>Havale (mobil)</td><td>₺4,25</td><td>İşlem başı</td></tr>
+            <tr><td>EFT</td><td>₺8,50</td><td>İşlem başı</td></tr>
+            <tr><td>Kredi Kartı Yıllık Ücret</td><td>₺790,00</td><td>Yıllık</td></tr>
+            <tr><td>Hesap İşletim Ücreti</td><td>₺0,00</td><td>Aylık</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bottom-panel-content" id="panel-kurlar">
+        <table class="data-table">
+          <thead><tr><th>Para Birimi</th><th>Alış</th><th>Satış</th></tr></thead>
+          <tbody>
+            <tr><td>USD/TRY</td><td>32,1050</td><td>32,3150</td></tr>
+            <tr><td>EUR/TRY</td><td>34,7200</td><td>34,9800</td></tr>
+            <tr><td>GBP/TRY</td><td>40,6200</td><td>40,9800</td></tr>
+            <tr><td>ALTIN (gr)</td><td>2.430,50</td><td>2.456,20</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bottom-panel-content" id="panel-linkler">
+        <div class="link-list" id="links-list"></div>
+      </div>
+    </div>
+
+    <div id="bottom-tabs-bar">
+      <button class="bottom-tab-btn" data-panel="duyurular" onclick="openBottomPanel('duyurular')">Duyurular</button>
+      <button class="bottom-tab-btn" data-panel="subeler" onclick="openBottomPanel('subeler')">Şubeler</button>
+      <button class="bottom-tab-btn" data-panel="ucretler" onclick="openBottomPanel('ucretler')">Ürün ve Hizmet Ücretleri</button>
+      <button class="bottom-tab-btn" data-panel="kurlar" onclick="openBottomPanel('kurlar')">Günlük Kurlar</button>
+      <button class="bottom-tab-btn" data-panel="linkler" onclick="openBottomPanel('linkler')">Faydalı Linkler</button>
+    </div>
+  </div>
+
+  <script>
+    const ACTION_PERMISSIONS = {
+      "customer-query": ["Müşteri temsilcisi", "Takım Lideri", "Kaliteci", "Süpervizor"],
+      "customer-clear": ["Müşteri temsilcisi", "Takım Lideri", "Kaliteci", "Süpervizor"],
+      "customer-open": ["Müşteri temsilcisi", "Takım Lideri", "Kaliteci", "Süpervizor"],
+      "customer-edit": ["Takım Lideri", "Süpervizor"],
+      "complaint-save": ["Müşteri temsilcisi", "Takım Lideri", "Süpervizor"],
+      "card-close": ["Müşteri temsilcisi", "Takım Lideri", "Süpervizor"],
+      "card-edit": ["Takım Lideri", "Süpervizor"],
+      "card-pin": ["Müşteri temsilcisi", "Takım Lideri", "Süpervizor"],
+
+      "user-add": ["Süpervizor"],
+      "user-edit": ["Süpervizor"],
+      "user-save": ["Süpervizor"],
+      "user-cancel": ["Süpervizor"],
+
+      "params-add": ["Süpervizor"],
+      "params-save": ["Süpervizor"],
+
+      "role-add": ["Süpervizor"],
+      "role-save": ["Süpervizor"],
+      "role-cancel": ["Süpervizor"],
+      "role-toggle": ["Süpervizor"],
+      "role-toggle-action": ["Süpervizor"],
+
+      "security-save": ["Süpervizor"]
+    };
+
+    function canDo(action) {
+      if (!action) return true;
+      const roleActions = actionPermissionMatrix[currentRole] || {};
+      if (Object.prototype.hasOwnProperty.call(roleActions, action)) return !!roleActions[action];
+      if (!ACTION_PERMISSIONS[action]) return true;
+      return ACTION_PERMISSIONS[action].includes(currentRole);
+    }
+
+    function applyActionPermissions(scope = document) {
+      scope.querySelectorAll("[data-action]").forEach(el => {
+        const action = el.getAttribute("data-action");
+        const allowed = canDo(action);
+        if ("disabled" in el) el.disabled = !allowed;
+        el.classList.toggle("disabled-action", !allowed);
+        if (!allowed) el.title = "Bu işlem için yetkiniz yok";
+        else el.removeAttribute("title");
+      });
+    }
+
+    const SECURITY_OPTIONS = ["A", "B", "B2", "C", "C2", "D", "D2"];
+    const ALL_SCREENS = [
+      "kayip-calinti","musteri","musteri-arama",
+      "hesaplar","hesap-ac","hesap-listele","hesap-bloke","hesap-kisit","hesap-ekstre",
+      "kartlar","finansman",
+      "transferler","transfer-havale","transfer-viman","transfer-eft","transfer-fast",
+      "odemeler","kampanyalar",
+      "sikayet-talep","sikayet-yeni","sikayet-gecmis",
+      "raporlar",
+      "kullanicilar","sistem-parametreleri","rol-yonetimi","guvenlik-seviyeleri"
+    ];
+    const SCREEN_LABELS = {
+      "kayip-calinti":"Kayıp/Çalıntı","musteri":"Müşteri","musteri-arama":"Müşteri Arama",
+      "hesaplar":"Hesaplar","hesap-ac":"Hesap Aç","hesap-listele":"Hesap Listele","hesap-bloke":"Bloke","hesap-kisit":"Kısıt","hesap-ekstre":"Ekstre Gönderimi",
+      "kartlar":"Kartlar","finansman":"Finansman",
+      "transferler":"Transferler","transfer-havale":"Havale","transfer-viman":"Viman","transfer-eft":"EFT","transfer-fast":"Fast",
+      "odemeler":"Ödemeler","kampanyalar":"Kampanyalar",
+      "sikayet-talep":"Şikayet & Talep","sikayet-yeni":"Yeni Şikayet","sikayet-gecmis":"Geçmiş Kayıtlar",
+      "raporlar":"Raporlar",
+      "kullanicilar":"Kullanıcılar","sistem-parametreleri":"Sistem Parametreleri","rol-yonetimi":"Rol Yönetimi","guvenlik-seviyeleri":"Güvenlik Seviyeleri"
+    };
+
+    const ACTION_CATALOG = [
+      { id: "customer-query", screen: "musteri-arama", label: "Sorgula" },
+      { id: "customer-clear", screen: "musteri-arama", label: "Temizle" },
+      { id: "customer-open", screen: "musteri-arama", label: "Müşteri Aç" },
+      { id: "customer-edit", screen: "musteri-arama", label: "Müşteri Düzenle" },
+      { id: "card-close", screen: "kartlar", label: "Kart Kapat" },
+      { id: "card-edit", screen: "kartlar", label: "Kart Düzenle" },
+      { id: "card-pin", screen: "kartlar", label: "Kart Şifre" },
+      { id: "complaint-save", screen: "sikayet-yeni", label: "Şikayet Kaydet" },
+      { id: "user-add", screen: "kullanicilar", label: "Kullanıcı Ekle" },
+      { id: "user-edit", screen: "kullanicilar", label: "Kullanıcı Düzenle" },
+      { id: "user-save", screen: "kullanicilar", label: "Kullanıcı Kaydet" },
+      { id: "user-cancel", screen: "kullanicilar", label: "Kullanıcı Vazgeç" },
+      { id: "params-add", screen: "sistem-parametreleri", label: "Parametre Ekle" },
+      { id: "params-save", screen: "sistem-parametreleri", label: "Parametre Kaydet" },
+      { id: "role-add", screen: "rol-yonetimi", label: "Rol Ekle" },
+      { id: "role-save", screen: "rol-yonetimi", label: "Rol Kaydet" },
+      { id: "role-cancel", screen: "rol-yonetimi", label: "Rol Vazgeç" },
+      { id: "security-save", screen: "guvenlik-seviyeleri", label: "Güvenlik Kaydet" }
+    ];
+    const ACTIONS_BY_SCREEN = ALL_SCREENS.reduce((acc, screen) => {
+      acc[screen] = ACTION_CATALOG.filter(action => action.screen === screen);
+      return acc;
+    }, {});
+
+    const parentNavMap = {
+      "musteri-arama":"musteri",
+      "hesap-ac":"hesaplar","hesap-listele":"hesaplar","hesap-bloke":"hesaplar","hesap-kisit":"hesaplar","hesap-ekstre":"hesaplar",
+      "transfer-havale":"transferler","transfer-viman":"transferler","transfer-eft":"transferler","transfer-fast":"transferler",
+      "sikayet-yeni":"sikayet-talep","sikayet-gecmis":"sikayet-talep",
+      "kullanicilar":"ayarlar","sistem-parametreleri":"ayarlar","rol-yonetimi":"ayarlar","guvenlik-seviyeleri":"ayarlar"
+    };
+
+    let roles = ["Müşteri temsilcisi","Takım Lideri","Kaliteci","Süpervizor"];
+    let currentRole = roles[0];
+    let actionPermissionMatrix = {};
+    let isCallActive = false;
+    let currentCallSecurityLevels = ["B2"];
+    const CALL_EXCEPTION_SCREENS = new Set(["kayip-calinti"]);
+    const SECURITY_RANK = Object.fromEntries(SECURITY_OPTIONS.map((level, idx) => [level, idx]));
+
+    let systemParams = {
+      AGENTSTATE: ["Hazır","Mola","Yemek","Namaz","İhtiyaç","Toplantı","Eğitim","Sistemsel Sorun","Kesinti","Acw","Logout"],
+      SUBELER: [
+        { name: "Batı Ataşehir Şubesi", city: "İstanbul", address: "Yenisahra Mah. İnönü Cad. No:54 Ataşehir/İstanbul" },
+        { name: "Çankaya Şubesi", city: "Ankara", address: "Atatürk Bulvarı No:118 Çankaya/Ankara" },
+        { name: "Konak Şubesi", city: "İzmir", address: "Fevzipaşa Bulvarı No:23 Konak/İzmir" }
+      ],
+      FAYDALI_LINKLER: [
+        { title: "BDDK Mevzuat Portalı", url: "#" },
+        { title: "TCMB Güncel Duyurular", url: "#" },
+        { title: "İKB Eğitim Portalı", url: "#" }
+      ]
+    };
+
+    let users = [
+      { name: "Barış", surname: "Orakcı", mail: "baris.orakci@ikb.com", role: "Müşteri temsilcisi" },
+      { name: "Ece", surname: "Demir", mail: "ece.demir@ikb.com", role: "Takım Lideri" },
+      { name: "Mert", surname: "Yalçın", mail: "mert.yalcin@ikb.com", role: "Kaliteci" }
+    ];
+
+    const customers = [
+      {
+        customerNo: "7891234",
+        tckn: "10066910946",
+        vkn: "1234567890",
+        phone: "05319823682",
+        firstName: "Emirhan",
+        lastName: "Bayraktar",
+        customerType: "Bireysel",
+        workGroup: "Standart",
+        segmentPortfolio: "Altın Portföy",
+        status: "Aktif",
+        birthDate: "04.01.1997",
+        age: "29",
+        profession: "Mühendis",
+        branch: "Batı Ataşehir",
+        segment: "Altın",
+        openComplaints: 3,
+        todayCalls: 5,
+        fcrSameTopicCalls: 2
+      },
+      {
+        customerNo: "7895678",
+        tckn: "12345678901",
+        vkn: "9988776655",
+        phone: "05345556677",
+        firstName: "Ayşe",
+        lastName: "Kara",
+        customerType: "Tüzel",
+        workGroup: "KOBİ",
+        segmentPortfolio: "Gümüş Portföy",
+        status: "Aktif",
+        birthDate: "11.09.1992",
+        age: "34",
+        profession: "Öğretmen",
+        branch: "Çankaya",
+        segment: "Gümüş",
+        openComplaints: 1,
+        todayCalls: 2,
+        fcrSameTopicCalls: 1
+      }
+    ];
+
+    function buildPerm(excluded) {
+      return Object.fromEntries(ALL_SCREENS.map(s => [s, !excluded.includes(s)]));
+    }
+
+    let permissionMatrix = {
+      "Müşteri temsilcisi": buildPerm(["raporlar","kullanicilar","sistem-parametreleri","rol-yonetimi","guvenlik-seviyeleri"]),
+      "Takım Lideri": buildPerm(["kullanicilar","sistem-parametreleri","rol-yonetimi","guvenlik-seviyeleri"]),
+      "Kaliteci": buildPerm(["kullanicilar","sistem-parametreleri","rol-yonetimi","guvenlik-seviyeleri","transferler","transfer-havale","transfer-viman","transfer-eft","transfer-fast"]),
+      "Süpervizor": buildPerm([])
+    };
+
+    let securityByScreen = Object.fromEntries(ALL_SCREENS.map(s => [s, "B2"]));
+
+    let draftAgentStates = [...systemParams.AGENTSTATE];
+    let draftBranches = systemParams.SUBELER.map(x => ({...x}));
+    let draftLinks = systemParams.FAYDALI_LINKLER.map(x => ({...x}));
+
+    let currentReadyState = "Hazır";
+    let currentBottomPanel = null;
+    let seconds = 0;
+    let timerInterval = null;
+    let editingUserIndex = null;
+    let selectedCustomer = customers[0];
+
+    // ---------- Helpers ----------
+    function showNotif(message) {
+      const container = document.getElementById("notif");
+      const item = document.createElement("div");
+      item.className = "notif-item";
+      item.textContent = message;
+      container.appendChild(item);
+      setTimeout(() => item.remove(), 3200);
+    }
+
+    function showWarningModal(message, title = "Uyarı") {
+      document.getElementById("warning-modal-title").textContent = title;
+      document.getElementById("warning-modal-message").textContent = message;
+      document.getElementById("warning-modal").classList.add("show");
+    }
+
+    function closeWarningModal() {
+      document.getElementById("warning-modal").classList.remove("show");
+    }
+
+    function isCustomerRepresentative() {
+      return currentRole === "Müşteri temsilcisi";
+    }
+
+    function isCallRequiredScreen(screenId) {
+      return !CALL_EXCEPTION_SCREENS.has(screenId);
+    }
+
+    function hasSecurityClearance(screenId) {
+      if (!isCustomerRepresentative() || CALL_EXCEPTION_SCREENS.has(screenId)) return true;
+      const required = securityByScreen[screenId] || "D2";
+      const selectedLevels = new Set(currentCallSecurityLevels || []);
+      return selectedLevels.has(required);
+    }
+
+    function ensureActionMatrixForRole(role) {
+      if (!actionPermissionMatrix[role]) actionPermissionMatrix[role] = {};
+      ACTION_CATALOG.forEach(action => {
+        if (!Object.prototype.hasOwnProperty.call(actionPermissionMatrix[role], action.id)) {
+          const defaults = ACTION_PERMISSIONS[action.id];
+          if (Array.isArray(defaults)) actionPermissionMatrix[role][action.id] = defaults.includes(role);
+          else actionPermissionMatrix[role][action.id] = !!permissionMatrix[role]?.[action.screen];
+        }
+      });
+    }
+
+    function syncActionPermissionMatrix() {
+      roles.forEach(role => ensureActionMatrixForRole(role));
+    }
+
+    function setCallInactiveState() {
+      isCallActive = false;
+      clearInterval(timerInterval);
+      timerInterval = null;
+      seconds = 0;
+      document.getElementById("call-timer").textContent = "00:00";
+      document.getElementById("call-badge").style.display = "none";
+      document.getElementById("cp-loaded").style.display = "none";
+      document.getElementById("cp-empty").style.display = "block";
+      document.getElementById("cp-security").style.display = "none";
+    }
+
+    function getSelectedModalSecurityLevels() {
+      return [...document.querySelectorAll("#modal-security-select option:checked")].map(option => option.value);
+    }
+
+    function updateModalSecurityPreview() {
+      const levels = getSelectedModalSecurityLevels();
+      const display = levels.length ? levels.join(", ") : "Seçilmedi";
+      document.getElementById("modal-security").textContent = "Güvenlik Seviyeleri: " + display;
+    }
+
+    function formatPhone(phone) {
+      const d = (phone || "").replace(/\D/g, "");
+      if (d.length === 11) return `${d.slice(0,4)} ${d.slice(4,7)} ${d.slice(7,9)} ${d.slice(9,11)}`;
+      return phone;
+    }
+
+    function initials(first, last) {
+      return ((first?.[0] || "") + (last?.[0] || "")).toUpperCase();
+    }
+
+    function statusChip(status) {
+      const s = (status || "").toLowerCase();
+      if (s.includes("aktif")) return "chip-green";
+      if (s.includes("pasif")) return "chip-red";
+      return "chip-blue";
+    }
+
+    // ---------- Navigation ----------
+    function hasPermission(screen) {
+      return !!permissionMatrix[currentRole]?.[screen];
+    }
+
+    function updateNavAccessStyles() {
+      document.querySelectorAll("#mainnav .nav-item[data-screen]").forEach(el => {
+        const screen = el.getAttribute("data-screen");
+        if (ALL_SCREENS.includes(screen)) el.classList.toggle("disabled", !hasPermission(screen));
+      });
+      document.querySelectorAll(".submenu-item[data-screen]").forEach(el => {
+        const screen = el.getAttribute("data-screen");
+        el.classList.toggle("disabled", !hasPermission(screen));
+      });
+    }
+
+    function setActiveNav(screenId) {
+      document.querySelectorAll("#mainnav .nav-item").forEach(n => n.classList.remove("active"));
+      const navKey = parentNavMap[screenId] || screenId;
+      const target = document.querySelector(`#mainnav .nav-item[data-screen="${navKey}"]`);
+      if (target) target.classList.add("active");
+    }
+
+    function switchScreen(screenId) {
+      if (isCustomerRepresentative() && isCallRequiredScreen(screenId) && !isCallActive) {
+        showWarningModal("Çağrısız ekran açılmamaktadır");
+        return;
+      }
+
+      if (!hasPermission(screenId)) {
+        showNotif("Bu role göre bu ekrana yetkiniz yok.");
+        return;
+      }
+
+      if (isCustomerRepresentative() && isCallRequiredScreen(screenId) && !hasSecurityClearance(screenId)) {
+        const level = securityByScreen[screenId] || "D2";
+        showWarningModal(`Bu ekran için en az ${level} güvenlik seviyesi gereklidir.`);
+        return;
+      }
+
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const screen = document.getElementById("screen-" + screenId);
+      if (screen) screen.classList.add("active");
+      setActiveNav(screenId);
+      applyActionPermissions(document);
+    }
+
+    function switchScreenFromSubmenu(event, screenId) {
+      event.stopPropagation();
+      if (event.currentTarget.classList.contains("disabled")) return;
+      switchScreen(screenId);
+    }
+
+    // ---------- Role ----------
+    function renderRoleSwitcher() {
+      const sel = document.getElementById("role-switcher");
+      sel.innerHTML = roles.map(r => `<option value="${r}" ${r===currentRole ? "selected":""}>${r}</option>`).join("");
+
+      const userRoleSel = document.getElementById("new-user-role");
+      if (userRoleSel) userRoleSel.innerHTML = roles.map(r => `<option value="${r}">${r}</option>`).join("");
+    }
+
+    function changeRole(role) {
+      currentRole = role;
+      document.getElementById("role-badge").textContent = role.toUpperCase();
+      updateNavAccessStyles();
+
+      const active = document.querySelector(".screen.active")?.id?.replace("screen-","");
+      if (active && !hasPermission(active)) {
+        const firstAllowed = ALL_SCREENS.find(s => hasPermission(s)) || "kayip-calinti";
+        switchScreen(firstAllowed);
+      } else if (active && isCustomerRepresentative() && isCallRequiredScreen(active) && !isCallActive) {
+        switchScreen("kayip-calinti");
+      } else if (active && isCustomerRepresentative() && isCallRequiredScreen(active) && !hasSecurityClearance(active)) {
+        switchScreen("kayip-calinti");
+      }
+
+      applyActionPermissions(document);
+      showNotif("Aktif rol: " + role);
+    }
+
+    // ---------- Ready ----------
+    function readyClassByState(status) {
+      const lower = status.toLowerCase();
+      if (lower === "hazır" || lower === "hazir") return "status-ready";
+      if (lower === "logout") return "status-logout";
+      return "status-warn";
+    }
+
+    function toggleReadyMenu(e) {
+      e.stopPropagation();
+      document.getElementById("ready-wrap").classList.toggle("open");
+    }
+
+    function setReadyStatus(status, silent = false) {
+      currentReadyState = status;
+      const trigger = document.getElementById("ready-trigger");
+      const dot = document.getElementById("status-dot");
+
+      trigger.classList.remove("status-ready","status-warn","status-logout");
+      trigger.classList.add(readyClassByState(status));
+      trigger.textContent = "● " + status + " ▾";
+
+      const lower = status.toLowerCase();
+      dot.style.background = (lower === "hazır" || lower === "hazir") ? "#22c55e" : (lower === "logout" ? "#6b7280" : "#f59e0b");
+
+      document.getElementById("ready-wrap").classList.remove("open");
+      if (!silent) showNotif("Durum güncellendi: " + status);
+    }
+
+    function renderReadyMenu() {
+      const menu = document.getElementById("ready-menu");
+      menu.innerHTML = "";
+      systemParams.AGENTSTATE.forEach(state => {
+        const btn = document.createElement("button");
+        btn.className = "ready-item";
+        btn.textContent = state;
+        btn.onclick = () => setReadyStatus(state);
+        menu.appendChild(btn);
+      });
+      if (!systemParams.AGENTSTATE.includes(currentReadyState)) currentReadyState = systemParams.AGENTSTATE[0] || "Hazır";
+      setReadyStatus(currentReadyState, true);
+    }
+
+    // ---------- Call ----------
+    const securityLevels = ["A","B","B2","C","C2","D","D2"];
+
+    function simulateCall() {
+      const securitySelect = document.getElementById("modal-security-select");
+      [...securitySelect.options].forEach(option => {
+        option.selected = currentCallSecurityLevels.includes(option.value);
+      });
+      updateModalSecurityPreview();
+      document.getElementById("modal-caller").textContent = `${formatPhone(selectedCustomer.phone)} • ${selectedCustomer.firstName} ${selectedCustomer.lastName}`;
+      document.getElementById("call-modal").classList.add("show");
+    }
+
+    function acceptCall() {
+      currentCallSecurityLevels = getSelectedModalSecurityLevels();
+      if (!currentCallSecurityLevels.length) currentCallSecurityLevels = ["D2"];
+      isCallActive = true;
+      document.getElementById("call-modal").classList.remove("show");
+      document.getElementById("call-badge").style.display = "inline-block";
+      document.getElementById("cp-security").textContent = "🔐 Çağrı Güvenlik Seviyeleri: " + currentCallSecurityLevels.join(", ");
+      populateCustomerCard(selectedCustomer, true);
+
+      seconds = 0;
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        seconds++;
+        const m = String(Math.floor(seconds / 60)).padStart(2, "0");
+        const s = String(seconds % 60).padStart(2, "0");
+        document.getElementById("call-timer").textContent = m + ":" + s;
+      }, 1000);
+
+      const active = document.querySelector(".screen.active")?.id?.replace("screen-", "");
+      if (active && isCustomerRepresentative() && isCallRequiredScreen(active) && !hasSecurityClearance(active)) {
+        switchScreen("kayip-calinti");
+      }
+    }
+
+    function rejectCall() {
+      document.getElementById("call-modal").classList.remove("show");
+      setCallInactiveState();
+      showNotif("Çağrı reddedildi.");
+    }
+
+    // ---------- Customer card ----------
+    function populateCustomerCard(c, fromCall = false) {
+      if (!c) return;
+      selectedCustomer = c;
+
+      document.getElementById("cp-empty").style.display = "none";
+      document.getElementById("cp-loaded").style.display = "block";
+      document.getElementById("cp-alert").style.display = "flex";
+      document.getElementById("cp-today-calls").style.display = "flex";
+      document.getElementById("cp-security").style.display = fromCall ? "flex" : "none";
+
+      document.getElementById("cp-avatar").textContent = initials(c.firstName, c.lastName);
+      document.getElementById("cp-name").textContent = `${c.firstName} ${c.lastName}`;
+      document.getElementById("cp-sub").textContent = `TC: ${c.tckn} • ${c.customerType}`;
+      document.getElementById("cp-age").textContent = c.age;
+      document.getElementById("cp-job").textContent = c.profession;
+      document.getElementById("cp-branch").textContent = c.branch;
+      document.getElementById("cp-phone").textContent = formatPhone(c.phone);
+      document.getElementById("cp-dob").textContent = c.birthDate;
+      document.getElementById("cp-today-count").textContent = c.todayCalls;
+      document.getElementById("cp-fcr").textContent = c.fcrSameTopicCalls;
+      document.getElementById("cp-open-complaints").textContent = c.openComplaints;
+      document.getElementById("cp-today-calls").textContent = `📞 Bugün ${c.todayCalls} kez aradı`;
+    }
+
+    function populateCustomerCardByNo(customerNo) {
+      const c = customers.find(x => x.customerNo === customerNo);
+      if (!c) return;
+      selectedCustomer = c;
+
+      if (!isCallActive) {
+        showNotif("Aktif çağrı olmadığından müşteri kartı yüklenmedi.");
+        return;
+      }
+
+      populateCustomerCard(c, true);
+      showNotif("Müşteri kartı yüklendi: " + c.firstName + " " + c.lastName);
+    }
+
+    function editCustomer(customerNo) {
+      const c = customers.find(x => x.customerNo === customerNo);
+      if (!c) return;
+      showNotif(`Müşteri düzenleme açıldı: ${c.firstName} ${c.lastName}`);
+    }
+
+    // ---------- Müşteri Arama ----------
+    function searchCustomerRecords(filters) {
+      return customers.filter(c => {
+        if (filters.customerNo && !c.customerNo.includes(filters.customerNo)) return false;
+        if (filters.tckn && !c.tckn.includes(filters.tckn)) return false;
+        if (filters.vkn && !c.vkn.includes(filters.vkn)) return false;
+        if (filters.phone && !c.phone.includes(filters.phone.replace(/\D/g, ""))) return false;
+        if (filters.name && !c.firstName.toLowerCase().includes(filters.name)) return false;
+        if (filters.surname && !c.lastName.toLowerCase().includes(filters.surname)) return false;
+        return true;
+      });
+    }
+
+    function searchCustomers() {
+      const filters = {
+        customerNo: document.getElementById("cs-customer-no").value.trim(),
+        tckn: document.getElementById("cs-tckn").value.trim(),
+        vkn: document.getElementById("cs-vkn").value.trim(),
+        phone: document.getElementById("cs-phone").value.trim(),
+        name: document.getElementById("cs-name").value.trim().toLowerCase(),
+        surname: document.getElementById("cs-surname").value.trim().toLowerCase()
+      };
+
+      const hasAny = Object.values(filters).some(v => String(v).length > 0);
+      const results = hasAny ? searchCustomerRecords(filters) : customers;
+      renderCustomerSearchResults(results);
+      showNotif(results.length + " müşteri listelendi.");
+    }
+
+    function clearCustomerSearch() {
+      ["cs-customer-no","cs-tckn","cs-vkn","cs-phone","cs-name","cs-surname"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+      });
+      document.getElementById("customer-search-results-card").style.display = "none";
+      document.getElementById("customer-search-results").innerHTML = "";
+      showNotif("Arama alanları temizlendi.");
+    }
+
+    function renderCustomerSearchResults(list) {
+      const card = document.getElementById("customer-search-results-card");
+      const root = document.getElementById("customer-search-results");
+      card.style.display = "block";
+
+      if (!list.length) {
+        root.innerHTML = `<div style="color:var(--text-muted)">Eşleşen müşteri bulunamadı.</div>`;
+        return;
+      }
+
+      root.innerHTML = `
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Müşteri No</th>
+              <th>Adı Soyadı</th>
+              <th>Müşteri Tipi</th>
+              <th>Kimlik No / VKN</th>
+              <th>Çalışma Grubu</th>
+              <th>Segment Portföy</th>
+              <th>Müşteri Durumu</th>
+              <th>İşlemler</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${list.map(c => `
+              <tr>
+                <td>${c.customerNo}</td>
+                <td>${c.firstName} ${c.lastName}</td>
+                <td>${c.customerType}</td>
+                <td>${c.tckn} / ${c.vkn}</td>
+                <td>${c.workGroup}</td>
+                <td>${c.segmentPortfolio}</td>
+                <td><span class="chip ${statusChip(c.status)}">${c.status}</span></td>
+                <td>
+                  <div class="inline-row">
+                    <button class="btn btn-secondary" style="padding:4px 8px;" data-action="customer-open" onclick="populateCustomerCardByNo('${c.customerNo}')">Müşteri Aç</button>
+                    <button class="btn btn-secondary" style="padding:4px 8px;" data-action="customer-edit" onclick="editCustomer('${c.customerNo}')">Müşteri Düzenle</button>
+                  </div>
+                </td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      `;
+      applyActionPermissions(root);
+    }
+
+    // ---------- Users ----------
+    function renderUsersTable() {
+      const body = document.getElementById("users-table-body");
+      body.innerHTML = users.map((u, i) => `
+        <tr>
+          <td>${u.name}</td>
+          <td>${u.surname}</td>
+          <td>${u.mail}</td>
+          <td>${u.role}</td>
+          <td><button class="btn btn-secondary" style="padding:4px 10px;" data-action="user-edit" onclick="editUser(${i})">Düzenle</button></td>
+        </tr>
+      `).join("");
+
+      if (!users.length) {
+        body.innerHTML = `<tr><td colspan="5" style="color:var(--text-muted)">Kayıtlı kullanıcı yok.</td></tr>`;
+      }
+      applyActionPermissions(body);
+    }
+
+    function toggleUserForm(force) {
+      const panel = document.getElementById("user-form-panel");
+      if (typeof force === "boolean") panel.style.display = force ? "block" : "none";
+      else panel.style.display = panel.style.display === "block" ? "none" : "block";
+      applyActionPermissions(panel);
+    }
+
+    function openUserCreateForm() {
+      editingUserIndex = null;
+      document.getElementById("user-form-title").textContent = "Yeni Kullanıcı";
+      document.getElementById("user-save-btn").textContent = "Kaydet";
+      document.getElementById("new-user-name").value = "";
+      document.getElementById("new-user-surname").value = "";
+      document.getElementById("new-user-mail").value = "";
+      document.getElementById("new-user-role").value = roles[0];
+      toggleUserForm(true);
+    }
+
+    function editUser(index) {
+      const u = users[index];
+      if (!u) return;
+      editingUserIndex = index;
+
+      document.getElementById("user-form-title").textContent = "Kullanıcı Düzenle";
+      document.getElementById("user-save-btn").textContent = "Güncelle";
+      document.getElementById("new-user-name").value = u.name;
+      document.getElementById("new-user-surname").value = u.surname;
+      document.getElementById("new-user-mail").value = u.mail;
+      document.getElementById("new-user-role").value = u.role;
+      toggleUserForm(true);
+    }
+
+    function saveUserForm() {
+      const name = document.getElementById("new-user-name").value.trim();
+      const surname = document.getElementById("new-user-surname").value.trim();
+      const mail = document.getElementById("new-user-mail").value.trim();
+      const role = document.getElementById("new-user-role").value;
+
+      if (!name || !surname || !mail) {
+        showNotif("Ad, soyad ve mail zorunludur.");
+        return;
+      }
+
+      if (editingUserIndex === null) {
+        users.push({ name, surname, mail, role });
+        showNotif("Kullanıcı eklendi.");
+      } else {
+        users[editingUserIndex] = { name, surname, mail, role };
+        showNotif("Kullanıcı güncellendi.");
+      }
+
+      renderUsersTable();
+      toggleUserForm(false);
+      editingUserIndex = null;
+    }
+
+    // ---------- System Params ----------
+    function toggleParamSection(id) {
+      document.getElementById(id).classList.toggle("open");
+    }
+
+    function renderAgentStateEditor() {
+      const root = document.getElementById("agentstate-editor");
+      root.innerHTML = "";
+      draftAgentStates.forEach((st, i) => {
+        const row = document.createElement("div");
+        row.className = "param-editor-row";
+        row.innerHTML = `
+          <input class="mini-input" value="${st.replace(/"/g, "&quot;")}" oninput="draftAgentStates[${i}] = this.value" />
+          <button class="btn btn-danger" data-action="params-add" onclick="removeAgentState(${i})">Sil</button>
+        `;
+        root.appendChild(row);
+      });
+      applyActionPermissions(root);
+    }
+
+    function addAgentState() { draftAgentStates.push(""); renderAgentStateEditor(); }
+    function removeAgentState(i) { draftAgentStates.splice(i, 1); renderAgentStateEditor(); }
+
+    function saveAgentStates() {
+      const cleaned = [...new Set(draftAgentStates.map(x => x.trim()).filter(Boolean))];
+      if (!cleaned.length) return showNotif("AGENTSTATE boş olamaz.");
+      systemParams.AGENTSTATE = cleaned;
+      renderReadyMenu();
+      showNotif("AGENTSTATE kaydedildi.");
+    }
+
+    function renderBranchesEditor() {
+      const root = document.getElementById("branches-editor");
+      root.innerHTML = "";
+      draftBranches.forEach((b, i) => {
+        const row = document.createElement("div");
+        row.className = "param-editor-row";
+        row.innerHTML = `
+          <input class="mini-input" placeholder="Şube adı" value="${(b.name || "").replace(/"/g, "&quot;")}" oninput="draftBranches[${i}].name=this.value" />
+          <input class="mini-input" placeholder="İl" value="${(b.city || "").replace(/"/g, "&quot;")}" oninput="draftBranches[${i}].city=this.value" />
+          <input class="mini-input" placeholder="Adres" value="${(b.address || "").replace(/"/g, "&quot;")}" oninput="draftBranches[${i}].address=this.value" />
+          <button class="btn btn-danger" data-action="params-add" onclick="removeBranch(${i})">Sil</button>
+        `;
+        root.appendChild(row);
+      });
+      applyActionPermissions(root);
+    }
+
+    function addBranch() { draftBranches.push({ name: "", city: "", address: "" }); renderBranchesEditor(); }
+    function removeBranch(i) { draftBranches.splice(i, 1); renderBranchesEditor(); }
+
+    function saveBranches() {
+      systemParams.SUBELER = draftBranches.map(x => ({
+        name: (x.name || "").trim(),
+        city: (x.city || "").trim(),
+        address: (x.address || "").trim()
+      })).filter(x => x.name || x.city || x.address);
+      renderBranches();
+      showNotif("Şubeler kaydedildi.");
+    }
+
+    function renderLinksEditor() {
+      const root = document.getElementById("links-editor");
+      root.innerHTML = "";
+      draftLinks.forEach((l, i) => {
+        const row = document.createElement("div");
+        row.className = "param-editor-row";
+        row.innerHTML = `
+          <input class="mini-input" placeholder="Başlık" value="${(l.title || "").replace(/"/g, "&quot;")}" oninput="draftLinks[${i}].title=this.value" />
+          <input class="mini-input" placeholder="URL" value="${(l.url || "").replace(/"/g, "&quot;")}" oninput="draftLinks[${i}].url=this.value" />
+          <button class="btn btn-danger" data-action="params-add" onclick="removeLink(${i})">Sil</button>
+        `;
+        root.appendChild(row);
+      });
+      applyActionPermissions(root);
+    }
+
+    function addLink() { draftLinks.push({ title: "", url: "" }); renderLinksEditor(); }
+    function removeLink(i) { draftLinks.splice(i, 1); renderLinksEditor(); }
+
+    function saveLinks() {
+      systemParams.FAYDALI_LINKLER = draftLinks.map(x => ({
+        title: (x.title || "").trim(),
+        url: (x.url || "").trim() || "#"
+      })).filter(x => x.title);
+      renderUsefulLinks();
+      showNotif("Faydalı linkler kaydedildi.");
+    }
+
+    // ---------- Role Mgmt ----------
+    function toggleRoleCreatePanel(force) {
+      const panel = document.getElementById("role-create-panel");
+      if (typeof force === "boolean") panel.style.display = force ? "block" : "none";
+      else panel.style.display = panel.style.display === "block" ? "none" : "block";
+      if (panel.style.display === "block") renderRoleScreenCheckboxes();
+      applyActionPermissions(panel);
+    }
+
+    function renderRoleScreenCheckboxes() {
+      const root = document.getElementById("new-role-screen-list");
+      root.innerHTML = ALL_SCREENS.map(s => `<label><input type="checkbox" value="${s}" checked /> ${SCREEN_LABELS[s]}</label>`).join("");
+    }
+
+    function saveNewRole() {
+      const name = document.getElementById("new-role-name").value.trim();
+      if (!name) return showNotif("Rol adı zorunlu.");
+      if (roles.includes(name)) return showNotif("Bu rol zaten var.");
+
+      const selected = [...document.querySelectorAll("#new-role-screen-list input:checked")].map(i => i.value);
+      const perms = Object.fromEntries(ALL_SCREENS.map(s => [s, selected.includes(s)]));
+
+      roles.push(name);
+      permissionMatrix[name] = perms;
+      ensureActionMatrixForRole(name);
+      ACTION_CATALOG.filter(action => !perms[action.screen]).forEach(action => {
+        actionPermissionMatrix[name][action.id] = false;
+      });
+
+      renderRoleSwitcher();
+      renderRoleMatrix();
+      renderRoleActionMatrix();
+      updateNavAccessStyles();
+      document.getElementById("new-role-name").value = "";
+      toggleRoleCreatePanel(false);
+      showNotif("Yeni rol eklendi: " + name);
+    }
+
+    function renderRoleMatrix() {
+      const head = document.getElementById("role-matrix-head");
+      const body = document.getElementById("role-matrix-body");
+
+      head.innerHTML = `<tr><th>Ekran</th>${roles.map(r => `<th>${r}</th>`).join("")}</tr>`;
+      body.innerHTML = ALL_SCREENS.map(screen => {
+        const cells = roles.map(role => {
+          const allowed = !!permissionMatrix[role]?.[screen];
+          return `<td style="text-align:center;">
+            <button class="perm-btn ${allowed ? "perm-yes":"perm-no"} perm-toggle" data-action="role-toggle" data-role="${role}" data-screen="${screen}">
+              ${allowed ? "✓":"✗"}
+            </button>
+          </td>`;
+        }).join("");
+        return `<tr><td>${SCREEN_LABELS[screen]}</td>${cells}</tr>`;
+      }).join("");
+
+      document.querySelectorAll(".perm-toggle").forEach(btn => {
+        btn.onclick = () => {
+          if (btn.disabled) return;
+          const role = btn.dataset.role;
+          const screen = btn.dataset.screen;
+          permissionMatrix[role][screen] = !permissionMatrix[role][screen];
+
+          if (!permissionMatrix[role][screen]) {
+            ACTION_CATALOG.filter(a => a.screen === screen).forEach(a => {
+              actionPermissionMatrix[role][a.id] = false;
+            });
+          }
+
+          renderRoleMatrix();
+          renderRoleActionMatrix();
+          updateNavAccessStyles();
+        };
+      });
+
+      applyActionPermissions(body);
+    }
+
+    function renderRoleActionMatrix() {
+      const head = document.getElementById("role-action-matrix-head");
+      const body = document.getElementById("role-action-matrix-body");
+      if (!head || !body) return;
+
+      syncActionPermissionMatrix();
+      head.innerHTML = `<tr><th>Ekran / Buton</th>${roles.map(r => `<th>${r}</th>`).join("")}</tr>`;
+
+      let html = "";
+      ALL_SCREENS.forEach(screen => {
+        const actions = ACTIONS_BY_SCREEN[screen];
+        if (!actions.length) return;
+
+        html += `<tr><td colspan="${roles.length + 1}" style="background:#faf1f3;color:var(--bordo);font-weight:bold;">
+          <button class="btn btn-secondary action-group-toggle" style="padding:4px 8px;" data-screen="${screen}">▸ ${SCREEN_LABELS[screen]}</button>
+        </td></tr>`;
+
+        actions.forEach(action => {
+          const cells = roles.map(role => {
+            const allowed = !!actionPermissionMatrix[role]?.[action.id];
+            const screenAllowed = !!permissionMatrix[role]?.[screen];
+            return `<td style="text-align:center;">
+              <button class="perm-btn ${allowed ? "perm-yes":"perm-no"} perm-toggle-action" data-action="role-toggle-action" data-role="${role}" data-screen="${screen}" data-action-id="${action.id}" ${screenAllowed ? "" : 'disabled title="Önce ekran yetkisini açın"'}>
+                ${allowed ? "✓":"✗"}
+              </button>
+            </td>`;
+          }).join("");
+
+          html += `<tr class="action-detail-row" data-parent-screen="${screen}" style="display:none;">
+            <td style="padding-left:20px;">• ${action.label}</td>${cells}
+          </tr>`;
+        });
+      });
+
+      body.innerHTML = html;
+      document.querySelectorAll(".action-group-toggle").forEach(btn => {
+        btn.onclick = () => {
+          const screen = btn.dataset.screen;
+          const rows = document.querySelectorAll(`.action-detail-row[data-parent-screen="${screen}"]`);
+          const isCollapsed = btn.textContent.trim().startsWith("▸");
+          rows.forEach(row => { row.style.display = isCollapsed ? "table-row" : "none"; });
+          btn.textContent = `${isCollapsed ? "▾" : "▸"} ${SCREEN_LABELS[screen]}`;
+        };
+      });
+      document.querySelectorAll(".perm-toggle-action").forEach(btn => {
+        btn.onclick = () => {
+          if (btn.disabled) return;
+          const role = btn.dataset.role;
+          const actionId = btn.dataset.actionId;
+          actionPermissionMatrix[role][actionId] = !actionPermissionMatrix[role][actionId];
+          renderRoleActionMatrix();
+          applyActionPermissions(document);
+        };
+      });
+
+      applyActionPermissions(body);
+    }
+
+    // ---------- Security ----------
+    function renderSecurityLevels() {
+      const body = document.getElementById("security-level-body");
+      body.innerHTML = ALL_SCREENS.map(screen => {
+        const level = securityByScreen[screen] || "A";
+        return `
+          <tr>
+            <td>${SCREEN_LABELS[screen]}</td>
+            <td>
+              <select class="field-input security-select" data-screen="${screen}" style="width:90px;">
+                ${SECURITY_OPTIONS.map(s => `<option value="${s}" ${s===level ? "selected":""}>${s}</option>`).join("")}
+              </select>
+            </td>
+            <td>${SCREEN_LABELS[screen]} – <strong>${level}</strong></td>
+          </tr>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".security-select").forEach(sel => {
+        sel.onchange = () => { securityByScreen[sel.dataset.screen] = sel.value; };
+      });
+    }
+
+    function saveSecurityLevels() {
+      renderSecurityLevels();
+      showNotif("Güvenlik seviyeleri kaydedildi.");
+
+      const active = document.querySelector(".screen.active")?.id?.replace("screen-","");
+      if (active && isCustomerRepresentative() && isCallRequiredScreen(active) && isCallActive && !hasSecurityClearance(active)) {
+        switchScreen("kayip-calinti");
+        showWarningModal("Aktif çağrı güvenlik seviyesi bu ekran için yeterli olmadığı için Kayıp/Çalıntı ekranına yönlendirildiniz.");
+      }
+    }
+
+    // ---------- Bottom ----------
+    function openBottomPanel(panelKey) {
+      const panel = document.getElementById("bottom-panel");
+      if (currentBottomPanel === panelKey && panel.classList.contains("open")) return closeBottomPanel();
+
+      currentBottomPanel = panelKey;
+      panel.classList.add("open");
+
+      document.querySelectorAll(".bottom-tab-btn").forEach(btn => btn.classList.remove("active"));
+      const btn = document.querySelector('.bottom-tab-btn[data-panel="' + panelKey + '"]');
+      if (btn) btn.classList.add("active");
+
+      document.querySelectorAll(".bottom-panel-content").forEach(c => c.classList.remove("active"));
+      const content = document.getElementById("panel-" + panelKey);
+      if (content) content.classList.add("active");
+
+      const titles = {
+        duyurular: "Duyurular",
+        subeler: "Şubeler",
+        ucretler: "Ürün ve Hizmet Ücretleri",
+        kurlar: "Günlük Kurlar",
+        linkler: "Faydalı Linkler"
+      };
+      document.getElementById("bottom-panel-title").textContent = titles[panelKey] || "Alt Menü";
+    }
+
+    function closeBottomPanel() {
+      document.getElementById("bottom-panel").classList.remove("open");
+      document.querySelectorAll(".bottom-tab-btn").forEach(btn => btn.classList.remove("active"));
+      document.querySelectorAll(".bottom-panel-content").forEach(c => c.classList.remove("active"));
+      currentBottomPanel = null;
+    }
+
+    function renderBranches() {
+      const q = (document.getElementById("branch-filter")?.value || "").trim().toLowerCase();
+      const container = document.getElementById("branch-list");
+
+      const filtered = systemParams.SUBELER.filter(b =>
+        (b.name || "").toLowerCase().includes(q) ||
+        (b.city || "").toLowerCase().includes(q) ||
+        (b.address || "").toLowerCase().includes(q)
+      );
+
+      container.innerHTML = filtered.length
+        ? filtered.map(b => `
+            <div class="branch-item">
+              <div style="font-weight:bold; color:#6b1a2a;">${b.name || "-"} ${b.city ? "(" + b.city + ")" : ""}</div>
+              <div style="font-size:12px; color:#6b3040;">${b.address || "-"}</div>
+            </div>
+          `).join("")
+        : `<div style="color:var(--text-muted);">Filtreye uygun şube bulunamadı.</div>`;
+    }
+
+    function renderUsefulLinks() {
+      const root = document.getElementById("links-list");
+      root.innerHTML = systemParams.FAYDALI_LINKLER.map(l => `<a href="${l.url || "#"}">${l.title}</a>`).join("");
+      if (!root.innerHTML) root.innerHTML = `<span style="color:var(--text-muted);">Kayıtlı link yok.</span>`;
+    }
+
+    // ---------- Init ----------
+    function init() {
+      syncActionPermissionMatrix();
+      renderRoleSwitcher();
+      renderReadyMenu();
+      renderAgentStateEditor();
+      renderBranchesEditor();
+      renderLinksEditor();
+      renderUsersTable();
+      renderRoleMatrix();
+      renderRoleActionMatrix();
+      renderSecurityLevels();
+      renderBranches();
+      renderUsefulLinks();
+      setCallInactiveState();
+      updateModalSecurityPreview();
+      [...document.querySelectorAll("#modal-security-select option")].forEach(option => {
+        option.selected = currentCallSecurityLevels.includes(option.value);
+      });
+      changeRole(currentRole);
+      switchScreen("kayip-calinti");
+      applyActionPermissions(document);
+    }
+
+    document.addEventListener("click", (e) => {
+      if (!document.getElementById("ready-wrap").contains(e.target)) {
+        document.getElementById("ready-wrap").classList.remove("open");
+      }
+
+      if (e.target === document.getElementById("warning-modal")) {
+        closeWarningModal();
+      }
+    });
+
+    init();
+  </script>
+</body>
+</html>
