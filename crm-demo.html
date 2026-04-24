@@ -512,8 +512,8 @@
       <h3 style="margin:8px 0 5px; color:var(--bordo);">Gelen Çağrı</h3>
       <div id="modal-caller" style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">0531 982 36 82 • Emirhan Bayraktar</div>
       <div class="field-group" style="margin:8px 0; text-align:left;">
-        <label class="field-label">Güvenlik Seviyesi</label>
-        <select id="modal-security-select" class="field-input" onchange="updateModalSecurityPreview(this.value)">
+        <label class="field-label">Güvenlik Seviyesi (çoklu seçim)</label>
+        <select id="modal-security-select" class="field-input" multiple size="7" onchange="updateModalSecurityPreview()">
           <option value="A">A</option>
           <option value="B">B</option>
           <option value="B2" selected>B2</option>
@@ -523,7 +523,7 @@
           <option value="D2">D2</option>
         </select>
       </div>
-      <div id="modal-security" class="chip chip-blue">Güvenlik Seviyesi: B2</div>
+      <div id="modal-security" class="chip chip-blue">Güvenlik Seviyeleri: B2</div>
       <div style="margin-top:10px; font-size:11px; color:var(--text-muted);">Seçilen seviyeye göre ekran erişimi uygulanır.</div>
       <div class="call-modal-actions">
         <button class="btn btn-primary" data-action="call-accept" onclick="acceptCall()">✓ Cevapla</button>
@@ -1178,6 +1178,10 @@
       { id: "role-cancel", screen: "rol-yonetimi", label: "Rol Vazgeç" },
       { id: "security-save", screen: "guvenlik-seviyeleri", label: "Güvenlik Kaydet" }
     ];
+    const ACTIONS_BY_SCREEN = ALL_SCREENS.reduce((acc, screen) => {
+      acc[screen] = ACTION_CATALOG.filter(action => action.screen === screen);
+      return acc;
+    }, {});
 
     const parentNavMap = {
       "musteri-arama":"musteri",
@@ -1191,7 +1195,7 @@
     let currentRole = roles[0];
     let actionPermissionMatrix = {};
     let isCallActive = false;
-    let currentCallSecurity = "B2";
+    let currentCallSecurityLevels = ["B2"];
     const CALL_EXCEPTION_SCREENS = new Set(["kayip-calinti"]);
     const SECURITY_RANK = Object.fromEntries(SECURITY_OPTIONS.map((level, idx) => [level, idx]));
 
@@ -1314,8 +1318,12 @@
       if (!isCustomerRepresentative() || CALL_EXCEPTION_SCREENS.has(screenId)) return true;
       const required = securityByScreen[screenId] || "D2";
       const requiredRank = SECURITY_RANK[required] ?? SECURITY_RANK.D2;
-      const currentRank = SECURITY_RANK[currentCallSecurity] ?? SECURITY_RANK.D2;
-      return currentRank <= requiredRank;
+      const bestRank = (currentCallSecurityLevels || []).reduce((minRank, level) => {
+        const rank = SECURITY_RANK[level];
+        if (rank === undefined) return minRank;
+        return Math.min(minRank, rank);
+      }, SECURITY_RANK.D2);
+      return bestRank <= requiredRank;
     }
 
     function ensureActionMatrixForRole(role) {
@@ -1345,8 +1353,14 @@
       document.getElementById("cp-security").style.display = "none";
     }
 
-    function updateModalSecurityPreview(level) {
-      document.getElementById("modal-security").textContent = "Güvenlik Seviyesi: " + level;
+    function getSelectedModalSecurityLevels() {
+      return [...document.querySelectorAll("#modal-security-select option:checked")].map(option => option.value);
+    }
+
+    function updateModalSecurityPreview() {
+      const levels = getSelectedModalSecurityLevels();
+      const display = levels.length ? levels.join(", ") : "Seçilmedi";
+      document.getElementById("modal-security").textContent = "Güvenlik Seviyeleri: " + display;
     }
 
     function formatPhone(phone) {
@@ -1495,18 +1509,21 @@
 
     function simulateCall() {
       const securitySelect = document.getElementById("modal-security-select");
-      securitySelect.value = currentCallSecurity;
-      updateModalSecurityPreview(securitySelect.value);
+      [...securitySelect.options].forEach(option => {
+        option.selected = currentCallSecurityLevels.includes(option.value);
+      });
+      updateModalSecurityPreview();
       document.getElementById("modal-caller").textContent = `${formatPhone(selectedCustomer.phone)} • ${selectedCustomer.firstName} ${selectedCustomer.lastName}`;
       document.getElementById("call-modal").classList.add("show");
     }
 
     function acceptCall() {
-      currentCallSecurity = document.getElementById("modal-security-select").value || "B2";
+      currentCallSecurityLevels = getSelectedModalSecurityLevels();
+      if (!currentCallSecurityLevels.length) currentCallSecurityLevels = ["D2"];
       isCallActive = true;
       document.getElementById("call-modal").classList.remove("show");
       document.getElementById("call-badge").style.display = "inline-block";
-      document.getElementById("cp-security").textContent = "🔐 Çağrı Güvenlik Seviyesi: " + currentCallSecurity;
+      document.getElementById("cp-security").textContent = "🔐 Çağrı Güvenlik Seviyeleri: " + currentCallSecurityLevels.join(", ");
       populateCustomerCard(selectedCustomer, true);
 
       seconds = 0;
@@ -1913,10 +1930,12 @@
 
       let html = "";
       ALL_SCREENS.forEach(screen => {
-        const actions = ACTION_CATALOG.filter(action => action.screen === screen);
+        const actions = ACTIONS_BY_SCREEN[screen];
         if (!actions.length) return;
 
-        html += `<tr><td colspan="${roles.length + 1}" style="background:#faf1f3;color:var(--bordo);font-weight:bold;">${SCREEN_LABELS[screen]}</td></tr>`;
+        html += `<tr><td colspan="${roles.length + 1}" style="background:#faf1f3;color:var(--bordo);font-weight:bold;">
+          <button class="btn btn-secondary action-group-toggle" style="padding:4px 8px;" data-screen="${screen}">▸ ${SCREEN_LABELS[screen]}</button>
+        </td></tr>`;
 
         actions.forEach(action => {
           const cells = roles.map(role => {
@@ -1929,11 +1948,22 @@
             </td>`;
           }).join("");
 
-          html += `<tr><td style="padding-left:20px;">• ${action.label}</td>${cells}</tr>`;
+          html += `<tr class="action-detail-row" data-parent-screen="${screen}" style="display:none;">
+            <td style="padding-left:20px;">• ${action.label}</td>${cells}
+          </tr>`;
         });
       });
 
       body.innerHTML = html;
+      document.querySelectorAll(".action-group-toggle").forEach(btn => {
+        btn.onclick = () => {
+          const screen = btn.dataset.screen;
+          const rows = document.querySelectorAll(`.action-detail-row[data-parent-screen="${screen}"]`);
+          const isCollapsed = btn.textContent.trim().startsWith("▸");
+          rows.forEach(row => { row.style.display = isCollapsed ? "table-row" : "none"; });
+          btn.textContent = `${isCollapsed ? "▾" : "▸"} ${SCREEN_LABELS[screen]}`;
+        };
+      });
       document.querySelectorAll(".perm-toggle-action").forEach(btn => {
         btn.onclick = () => {
           if (btn.disabled) return;
@@ -2056,8 +2086,10 @@
       renderBranches();
       renderUsefulLinks();
       setCallInactiveState();
-      updateModalSecurityPreview(currentCallSecurity);
-      document.getElementById("modal-security-select").value = currentCallSecurity;
+      updateModalSecurityPreview();
+      [...document.querySelectorAll("#modal-security-select option")].forEach(option => {
+        option.selected = currentCallSecurityLevels.includes(option.value);
+      });
       changeRole(currentRole);
       switchScreen("kayip-calinti");
       applyActionPermissions(document);
