@@ -4,6 +4,8 @@
 
 ![Uzaktan Müşteri Edinimi Akışı](docs/uzaktan-musteri-edinimi-akis.svg)
 
+[Draw.io dosyasını indir](docs/uzaktan-musteri-edinimi-akis.drawio)
+
 ### Proje Kurulumu
 
 Projeyi öncelikle forklayın ve clone edin.
