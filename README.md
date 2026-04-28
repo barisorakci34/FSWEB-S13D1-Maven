@@ -1,5 +1,9 @@
 # Introduction To Java :)
 
+## Uzaktan Müşteri Edinimi Akışı
+
+![Uzaktan Müşteri Edinimi Akışı](docs/uzaktan-musteri-edinimi-akis.svg)
+
 ### Proje Kurulumu
 
 Projeyi öncelikle forklayın ve clone edin.
