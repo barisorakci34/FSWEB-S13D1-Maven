@@ -1,5 +1,11 @@
 # Introduction To Java :)
 
+## Uzaktan Müşteri Edinimi Akışı
+
+![Uzaktan Müşteri Edinimi Akışı](docs/uzaktan-musteri-edinimi-akis.svg)
+
+[Draw.io dosyasını indir](https://raw.githubusercontent.com/barisorakci34/FSWEB-S13D1-Maven/refs/heads/cursor/flashy-u-flow-0ba3/docs/uzaktan-musteri-edinimi-akis.drawio)
+
 ### Proje Kurulumu
 
 Projeyi öncelikle forklayın ve clone edin.
