@@ -1,6 +1,6 @@
 # ITSM TKBB Gunluk OPS Otomasyon Analiz Notu
 
-Bu dokuman, `itsm_tkbb_daily_ops_flow.drawio` dosyasindaki akis icin analist ozeti ve uygulama kurallarini tarif eder.
+Bu dokuman, `itsm_tkbb_daily_ops_flow.drawio` dosyasindaki akis icin analist ozeti ve uygulama kurallarini tarif eder. Draw.io dosyasi iki sayfadan olusur: `01 Ana Akis` sade surec gorunumu, `02 Status ve Alert Matrisi` ise karar/status detaylarini icerir.
 
 ## Amac
 
