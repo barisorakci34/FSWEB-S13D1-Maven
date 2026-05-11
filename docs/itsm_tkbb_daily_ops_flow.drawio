@@ -1,0 +1,187 @@
+<mxfile host="app.diagrams.net" modified="2026-05-11T19:04:00.000Z" agent="Cursor Cloud Agent" version="24.7.17" type="device">
+  <diagram id="itsm-tkbb-daily-ops-flow" name="ITSM TKBB Gunluk OPS Akisi">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1320" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="ITSM - TKBB Banka Servisleri Gunluk Otomasyon ve OPS Yanit Akisi" style="rounded=1;whiteSpace=wrap;html=1;fontSize=20;fontStyle=1;fillColor=#1F4E79;fontColor=#FFFFFF;strokeColor=#17365D;" vertex="1" parent="1">
+          <mxGeometry x="20" y="20" width="1260" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_scheduler" value="ITSM Scheduler / Gunluk Job" style="swimlane;html=1;startSize=34;fillColor=#EAF2F8;strokeColor=#5DADE2;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="90" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_integration" value="Entegrasyon Servisi" style="swimlane;html=1;startSize=34;fillColor=#E8F8F5;strokeColor=#45B39D;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="90" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_tkbb" value="TKBB BankApi" style="swimlane;html=1;startSize=34;fillColor=#FEF9E7;strokeColor=#F4D03F;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="520" y="90" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_itsm" value="ITSM Kayit / Task / Servis" style="swimlane;html=1;startSize=34;fillColor=#FDEDEC;strokeColor=#EC7063;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="770" y="90" width="230" height="900" as="geometry" />
+        </mxCell>
+        <mxCell id="lane_ops" value="OPS Ekibi" style="swimlane;html=1;startSize=34;fillColor=#F4ECF7;strokeColor=#AF7AC5;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="90" width="260" height="900" as="geometry" />
+        </mxCell>
+
+        <mxCell id="start" value="Basla&lt;br&gt;Gunluk planli job&lt;br&gt;Orn: 08:00" style="ellipse;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#27AE60;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="60" y="140" width="150" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="load_config" value="Job parametrelerini oku&lt;br&gt;- ortam / endpoint&lt;br&gt;- SLA esikleri&lt;br&gt;- OPS dagitim listesi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5DADE2;" vertex="1" parent="1">
+          <mxGeometry x="45" y="240" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="read_open_tasks" value="Acik ITSM kayitlarini oku&lt;br&gt;Correlation key:&lt;br&gt;applicantNumber" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5DADE2;" vertex="1" parent="1">
+          <mxGeometry x="45" y="370" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="get_token" value="Token al&lt;br&gt;LoginBank&lt;br&gt;Bearer token sakla" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#45B39D;" vertex="1" parent="1">
+          <mxGeometry x="295" y="140" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="token_ok" value="Token / HTTP&lt;br&gt;basarili mi?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#B7950B;" vertex="1" parent="1">
+          <mxGeometry x="325" y="255" width="120" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="query_list" value="Basvuru listesini cek&lt;br&gt;BankService veya&lt;br&gt;GetApplicantPaginatedList" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#45B39D;" vertex="1" parent="1">
+          <mxGeometry x="295" y="380" width="180" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="status_sync" value="Acik tasklar icin durum sorgula&lt;br&gt;ApplicantsStatusCheck" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#45B39D;" vertex="1" parent="1">
+          <mxGeometry x="295" y="505" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="normalize" value="Normalize et ve tekillestir&lt;br&gt;- durum kodu&lt;br&gt;- son cevap tarihi&lt;br&gt;- beklenen dokuman&lt;br&gt;- onceki ITSM kaydi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#45B39D;" vertex="1" parent="1">
+          <mxGeometry x="295" y="620" width="180" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="needs_action" value="Durum OPS / ITSM&lt;br&gt;aksiyonu gerektiriyor mu?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#B7950B;" vertex="1" parent="1">
+          <mxGeometry x="315" y="770" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="sync_only" value="Sadece senkronize et&lt;br&gt;60/70/100/105/110/118/120/123&lt;br&gt;Kapat veya izlemeye al" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EBF5FB;strokeColor=#2E86C1;" vertex="1" parent="1">
+          <mxGeometry x="295" y="910" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api_login" value="POST&lt;br&gt;/BankApi/LoginBank" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F4D03F;" vertex="1" parent="1">
+          <mxGeometry x="545" y="140" width="180" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="api_list" value="GET / POST&lt;br&gt;/BankApi/BankService&lt;br&gt;/GetApplicantPaginatedList" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F4D03F;" vertex="1" parent="1">
+          <mxGeometry x="545" y="380" width="180" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="api_status" value="POST&lt;br&gt;/ApplicantsStatusCheck" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F4D03F;" vertex="1" parent="1">
+          <mxGeometry x="545" y="505" width="180" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="api_documents" value="POST&lt;br&gt;/GetApplicantDocuments&lt;br&gt;&gt;10 MB: /GetApplicantDocumentFile" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F4D03F;" vertex="1" parent="1">
+          <mxGeometry x="545" y="620" width="180" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="api_update" value="POST&lt;br&gt;/BankService&lt;br&gt;Bilgi guncelleme&lt;br&gt;message + documents" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F4D03F;" vertex="1" parent="1">
+          <mxGeometry x="545" y="745" width="180" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="api_close" value="POST&lt;br&gt;/ApplicantClosingNotice&lt;br&gt;121 karari icin islem bildirimi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F4D03F;" vertex="1" parent="1">
+          <mxGeometry x="545" y="870" width="180" height="85" as="geometry" />
+        </mxCell>
+
+        <mxCell id="integration_error" value="Entegrasyon hata kaydi&lt;br&gt;HTTP 400/401/403/404/500&lt;br&gt;resultCode 101/102/104&lt;br&gt;OPS teknik alert + retry log" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="795" y="140" width="180" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="create_task" value="Create / Update ITSM TKBB Task&lt;br&gt;Tekillik: applicantNumber&lt;br&gt;Basvuru no, statu, SLA, konu, karar" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EC7063;" vertex="1" parent="1">
+          <mxGeometry x="795" y="310" width="180" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="rules" value="Durum bazli alarm matrisi&lt;br&gt;40/50: Yeni basvuru - P3&lt;br&gt;80: Ek bilgi talebi - P2&lt;br&gt;82: Ara karar - P2/P1&lt;br&gt;121: Banka aleyhine karar - P1&lt;br&gt;122: Gecikmis bildirim - P1 eskalasyon" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FEF5E7;strokeColor=#D35400;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="795" y="455" width="180" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="attach_docs" value="Dokumanlari ITSM kaydina ekle&lt;br&gt;Basvuru dosyalari, beklenen belge tipi,&lt;br&gt;TKBB mesaji ve son cevap tarihi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EC7063;" vertex="1" parent="1">
+          <mxGeometry x="795" y="640" width="180" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="response_event" value="OPS yaniti ITSM uzerinden geldi&lt;br&gt;Response ready = Evet&lt;br&gt;Cevap metni + ekler dogrulanir" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#EC7063;" vertex="1" parent="1">
+          <mxGeometry x="795" y="770" width="180" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="response_type" value="Hangi servis&lt;br&gt;cagrilacak?" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FCF3CF;strokeColor=#B7950B;" vertex="1" parent="1">
+          <mxGeometry x="820" y="895" width="130" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="send_alert" value="OPS alert + e-posta&lt;br&gt;Mail icerigi:&lt;br&gt;basvuru no, statu, SLA,&lt;br&gt;ITSM linki, beklenen aksiyon" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AF7AC5;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="310" width="200" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="ops_work" value="OPS inceleme / is aksiyonu&lt;br&gt;- musteri/basvuru kontrolu&lt;br&gt;- karar aksiyonu&lt;br&gt;- belge hazirlama" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AF7AC5;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="485" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ops_response" value="OPS yanitini ITSM taskina girer&lt;br&gt;Cevap metni, dokumanlar,&lt;br&gt;servis tipi ve tamamlandi bilgisi" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AF7AC5;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="645" width="200" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="mail_escalation" value="SLA yaklasiyor / geciktiyse&lt;br&gt;tekrar mail + yonetici eskalasyonu&lt;br&gt;122: her kosulda P1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#C0392B;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="805" width="200" height="95" as="geometry" />
+        </mxCell>
+
+        <mxCell id="edge_start_config" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="start" target="load_config">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_config_tasks" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="load_config" target="read_open_tasks">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_tasks_token" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="read_open_tasks" target="get_token">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_token_api" value="kimlik dogrula" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="get_token" target="api_login">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_token_ok" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="get_token" target="token_ok">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_token_fail" value="Hayir" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#C0392B;fontColor=#C0392B;" edge="1" parent="1" source="token_ok" target="integration_error">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_token_success" value="Evet" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#27AE60;fontColor=#27AE60;" edge="1" parent="1" source="token_ok" target="query_list">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_query_api" value="liste cek" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="query_list" target="api_list">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_query_status" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="query_list" target="status_sync">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_status_api" value="mevcut tasklari guncelle" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="status_sync" target="api_status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_status_normalize" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="status_sync" target="normalize">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_normalize_action" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="normalize" target="needs_action">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_no_action" value="Hayir" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#2E86C1;fontColor=#2E86C1;" edge="1" parent="1" source="needs_action" target="sync_only">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_yes_task" value="Evet: 40/50/80/82/121/122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#27AE60;fontColor=#27AE60;" edge="1" parent="1" source="needs_action" target="create_task">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_task_rules" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="create_task" target="rules">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_rules_docs" value="dokuman gerekiyorsa" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="rules" target="attach_docs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_docs_api" value="dosya cek" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="attach_docs" target="api_documents">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_rules_alert" value="alert kurali" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#AF7AC5;" edge="1" parent="1" source="rules" target="send_alert">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_alert_work" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="send_alert" target="ops_work">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_work_response" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="ops_work" target="ops_response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_response_event" value="ITSM uzerinden yanit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#EC7063;" edge="1" parent="1" source="ops_response" target="response_event">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_event_type" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#666666;" edge="1" parent="1" source="response_event" target="response_type">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_type_update" value="80/82: bilgi + belge" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#27AE60;fontColor=#27AE60;" edge="1" parent="1" source="response_type" target="api_update">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_type_close" value="121: islem yapildi" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#27AE60;fontColor=#27AE60;" edge="1" parent="1" source="response_type" target="api_close">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge_sla_escalation" value="SLA riski / 122" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;strokeColor=#C0392B;fontColor=#C0392B;" edge="1" parent="1" source="rules" target="mail_escalation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
