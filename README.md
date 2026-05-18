@@ -1,5 +1,10 @@
 # Introduction To Java :)
 
+## TKBB Entegrasyon Çıktıları
+
+- [TKBB Hakem Heyeti Başvuru Sistemi analiz ve mimari dokümanı](docs/tkbb-complaint-architecture-analysis.md)
+- [TKBB şikayet listeleme ve kayıt açma basic ekran prototipi](prototypes/tkbb-complaints-basic-screen.html)
+
 ### Proje Kurulumu
 
 Projeyi öncelikle forklayın ve clone edin.
