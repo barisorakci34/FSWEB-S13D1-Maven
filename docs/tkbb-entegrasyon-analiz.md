@@ -293,4 +293,3 @@ Detay:
 - TKBB `123` donene kadar banka disina cikmis kayitlar `TKBB Bekleniyor` olarak kalir.
 - TKBB `123` dondugunde ticket kapatilir.
 - Tum API cagrilari, sonuc kodlari ve hata mesajlari ticket tarihcesinde izlenebilir.
-
