@@ -1,5 +1,12 @@
 # Introduction To Java :)
 
+## TKBB Entegrasyon Analizi
+
+TKBB Hakem Heyeti entegrasyonu icin hazirlanan analiz ve mimari dokumani:
+
+- [TKBB Entegrasyon Analizi ve Mimari Tasarim](docs/tkbb-entegrasyon-analiz.md)
+- [Basic Ticket Operasyon Ekrani](docs/tkbb-ticket-ekrani.html)
+
 ### Proje Kurulumu
 
 Projeyi öncelikle forklayın ve clone edin.
