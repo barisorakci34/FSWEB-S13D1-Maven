@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TKBB Şikayet Yönetimi - Basic Ekran</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --line: #dfe7f1;
+      --text: #1f2a37;
+      --muted: #64748b;
+      --primary: #1456f0;
+      --primary-dark: #0f3fb0;
+      --danger: #d92d20;
+      --warning: #b54708;
+      --success: #067647;
+      --soft-blue: #e8f0ff;
+      --soft-red: #fff1f0;
+      --soft-yellow: #fff7e6;
+      --soft-green: #ecfdf3;
+      font-family: Inter, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      background: #101828;
+      color: #ffffff;
+      padding: 28px 22px;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 32px;
+    }
+
+    .nav-item {
+      display: block;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .nav-item.active,
+    .nav-item:hover {
+      background: #1d2939;
+      color: #ffffff;
+    }
+
+    .main {
+      padding: 28px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .page-title {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .page-subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .sync-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px 16px;
+      min-width: 290px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    .sync-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .sync-card span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      display: block;
+      margin-top: 8px;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.5fr repeat(4, 1fr) auto;
+      gap: 12px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 11px 12px;
+      font: inherit;
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-secondary {
+      background: var(--soft-blue);
+      color: var(--primary-dark);
+    }
+
+    .btn-light {
+      background: #f8fafc;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1080px;
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475467;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge-blue {
+      background: var(--soft-blue);
+      color: var(--primary-dark);
+    }
+
+    .badge-yellow {
+      background: var(--soft-yellow);
+      color: var(--warning);
+    }
+
+    .badge-red {
+      background: var(--soft-red);
+      color: var(--danger);
+    }
+
+    .badge-green {
+      background: var(--soft-green);
+      color: var(--success);
+    }
+
+    .deadline {
+      font-weight: 800;
+    }
+
+    .deadline.danger {
+      color: var(--danger);
+    }
+
+    .deadline.warning {
+      color: var(--warning);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(15, 23, 42, 0.58);
+      z-index: 10;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(1040px, 100%);
+      max-height: 92vh;
+      overflow: auto;
+      background: #ffffff;
+      border-radius: 22px;
+      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.28);
+    }
+
+    .modal-header,
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .modal-footer {
+      border-top: 1px solid var(--line);
+      border-bottom: 0;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .detail-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .detail-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+      background: #fcfdff;
+    }
+
+    .detail-label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      font-weight: 800;
+    }
+
+    .section-title {
+      margin: 20px 0 10px;
+      font-size: 16px;
+    }
+
+    .document-list {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .document {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #ffffff;
+    }
+
+    .document-name {
+      font-weight: 800;
+    }
+
+    .document-meta {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .form-grid .wide {
+      grid-column: 1 / -1;
+    }
+
+    .hint {
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 12px;
+      color: #475467;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 980px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .page-header,
+      .modal-header,
+      .modal-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .stats,
+      .filters,
+      .detail-grid,
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid .wide {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand">Banka Operasyon</div>
+      <a class="nav-item active" href="#">TKBB Şikayetleri</a>
+      <a class="nav-item" href="#">Banka İç Süreçleri</a>
+      <a class="nav-item" href="#">Dokümanlar</a>
+      <a class="nav-item" href="#">Raporlar</a>
+      <a class="nav-item" href="#">Ayarlar</a>
+    </aside>
+
+    <main class="main">
+      <header class="page-header">
+        <div>
+          <h1 class="page-title">TKBB Hakem Heyeti Şikayetleri</h1>
+          <p class="page-subtitle">Günde iki kez çalışan görev ile TKBB'den alınan başvuruların operasyon ekranı.</p>
+        </div>
+        <div class="sync-card">
+          <strong>Son TKBB Senkronizasyonu</strong>
+          <span>Bugün 08:00 - başarılı. Sonraki çalışma 14:00.</span>
+        </div>
+      </header>
+
+      <section class="stats" aria-label="Özet">
+        <div class="stat">
+          <span class="stat-label">Toplam Başvuru</span>
+          <span class="stat-value">128</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Aksiyon Bekleyen</span>
+          <span class="stat-value">34</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Deadline Yaklaşan</span>
+          <span class="stat-value">9</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Banka Aleyhine Karar</span>
+          <span class="stat-value">3</span>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="filters" aria-label="Filtreler">
+          <input type="search" placeholder="Başvuru no, ad soyad veya TCKN ara">
+          <select>
+            <option>Statü: Tümü</option>
+            <option>40 - Gönderim Listesinde</option>
+            <option>80 - Ek Bilgi İsteniyor</option>
+            <option>121 - Banka Aleyhine Karar</option>
+          </select>
+          <select>
+            <option>Deadline: Tümü</option>
+            <option>Bugün</option>
+            <option>3 gün içinde</option>
+            <option>Geciken</option>
+          </select>
+          <select>
+            <option>Konu: Tümü</option>
+            <option>Kredi Kartı</option>
+            <option>Finansman</option>
+            <option>Hesap İşlemleri</option>
+          </select>
+          <select>
+            <option>Ekip: Tümü</option>
+            <option>Şikayet Yönetimi</option>
+            <option>Hukuk</option>
+            <option>Operasyon</option>
+          </select>
+          <button class="btn-primary">Filtrele</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Statü</th>
+                <th>Deadline</th>
+                <th>Konu</th>
+                <th>Ad Soyad</th>
+                <th>TCKN</th>
+                <th>Başvuru No</th>
+                <th>Senkronizasyon</th>
+                <th>Aksiyon</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="badge badge-blue">40 - Banka Gönderim</span></td>
+                <td><span class="deadline warning">22.05.2026</span></td>
+                <td>Kredi Kartı Ücret İtirazı</td>
+                <td>Ayşe Yılmaz</td>
+                <td>123*****890</td>
+                <td>2026/1452</td>
+                <td><span class="badge badge-green">Başarılı</span></td>
+                <td class="row-actions">
+                  <button class="btn-primary" data-open="create" data-case="2026/1452">Kayıt Aç</button>
+                  <button class="btn-secondary" data-open="detail" data-case="2026/1452">Detay</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-yellow">80 - Ek Bilgi İsteniyor</span></td>
+                <td><span class="deadline danger">19.05.2026</span></td>
+                <td>Finansman Erken Kapama</td>
+                <td>Mehmet Demir</td>
+                <td>456*****321</td>
+                <td>2026/1399</td>
+                <td><span class="badge badge-green">Başarılı</span></td>
+                <td class="row-actions">
+                  <button class="btn-primary" data-open="create" data-case="2026/1399">Kayıt Aç</button>
+                  <button class="btn-secondary" data-open="detail" data-case="2026/1399">Detay</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-red">121 - İşlem Bekliyor</span></td>
+                <td><span class="deadline danger">18.05.2026</span></td>
+                <td>Hesap İşlem Ücreti</td>
+                <td>Zeynep Kaya</td>
+                <td>789*****654</td>
+                <td>2026/1288</td>
+                <td><span class="badge badge-yellow">Uyarı</span></td>
+                <td class="row-actions">
+                  <button class="btn-primary" data-open="create" data-case="2026/1288">Kayıt Aç</button>
+                  <button class="btn-secondary" data-open="detail" data-case="2026/1288">Detay</button>
+                </td>
+              </tr>
+              <tr>
+                <td><span class="badge badge-green">123 - Kapanan</span></td>
+                <td><span class="deadline">-</span></td>
+                <td>POS İşlemi İtirazı</td>
+                <td>Ali Çelik</td>
+                <td>321*****987</td>
+                <td>2026/1190</td>
+                <td><span class="badge badge-green">Başarılı</span></td>
+                <td class="row-actions">
+                  <button class="btn-light" disabled>Kayıt Aç</button>
+                  <button class="btn-secondary" data-open="detail" data-case="2026/1190">Detay</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="caseModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="modalTitle">TKBB Başvuru Kaydı</h2>
+          <p class="page-subtitle" id="modalSubtitle">Başvuru ve doküman bilgileri</p>
+        </div>
+        <button class="btn-light" data-close type="button">Kapat</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="detail-grid">
+          <div class="detail-card">
+            <span class="detail-label">Başvuru No</span>
+            <span class="detail-value" id="caseNo">2026/1452</span>
+          </div>
+          <div class="detail-card">
+            <span class="detail-label">Statü</span>
+            <span class="detail-value">40 - Banka Gönderim Listesinde</span>
+          </div>
+          <div class="detail-card">
+            <span class="detail-label">Deadline</span>
+            <span class="detail-value">22.05.2026</span>
+          </div>
+          <div class="detail-card">
+            <span class="detail-label">Konu</span>
+            <span class="detail-value">Kredi Kartı Ücret İtirazı</span>
+          </div>
+          <div class="detail-card">
+            <span class="detail-label">Ad Soyad</span>
+            <span class="detail-value">Ayşe Yılmaz</span>
+          </div>
+          <div class="detail-card">
+            <span class="detail-label">TCKN</span>
+            <span class="detail-value">123*****890</span>
+          </div>
+        </div>
+
+        <h3 class="section-title">Başvuru Açıklaması</h3>
+        <div class="hint">
+          Müşteri, kredi kartı yıllık ücretinin iadesini talep etmektedir. TKBB tarafından bankadan cevap ve ilgili sözleşme dokümanları beklenmektedir.
+        </div>
+
+        <h3 class="section-title">Dokümanlar</h3>
+        <div class="document-list">
+          <div class="document">
+            <div>
+              <span class="document-name">Basvuru_Formu.pdf</span>
+              <span class="document-meta">Vatandaş başvuru belgesi - PDF - 1.2 MB</span>
+            </div>
+            <button class="btn-secondary" type="button">Görüntüle</button>
+          </div>
+          <div class="document">
+            <div>
+              <span class="document-name">Ekler.zip</span>
+              <span class="document-meta">Ek belge - ZIP - 12 MB, dosya servisi ile indirilecek</span>
+            </div>
+            <button class="btn-secondary" type="button">İndir</button>
+          </div>
+        </div>
+
+        <h3 class="section-title">Kayıt Aç / Aksiyon Seç</h3>
+        <div class="form-grid">
+          <label>
+            TKBB Başvuru Aksiyonu
+            <select id="tkbbAction">
+              <option value="">Seçiniz</option>
+              <option value="ack">İşleme Alındı Bildir - PUT /BankService</option>
+              <option value="info">Ek Bilgi / Doküman Gönder - POST /BankService</option>
+              <option value="status">Durum Sorgula - POST /ApplicantsStatusCheck</option>
+              <option value="close">Kapanış İşlem Bildir - POST /ApplicantClosingNotice</option>
+            </select>
+          </label>
+          <label>
+            Banka İçi Ekip
+            <select id="teamAction">
+              <option value="">Seçiniz</option>
+              <option>Şikayet Yönetimi</option>
+              <option>Hukuk</option>
+              <option>Operasyon</option>
+              <option>Ürün Sahibi</option>
+              <option>Müşteri İletişim Merkezi</option>
+              <option>Uyum/Risk</option>
+            </select>
+          </label>
+          <label class="wide">
+            Açıklama / Mesaj
+            <textarea placeholder="TKBB'ye gönderilecek mesaj veya banka iç süreç notu"></textarea>
+          </label>
+          <label>
+            Doküman Tipi
+            <select>
+              <option>Beklenen belge türü seçiniz</option>
+              <option>Sözleşme</option>
+              <option>İşlem dekontu</option>
+              <option>Müşteri cevap yazısı</option>
+            </select>
+          </label>
+          <label>
+            Dosya Yükle
+            <input type="file">
+          </label>
+        </div>
+
+        <div class="hint" id="actionHint">
+          TKBB aksiyonu seçilirse başvuru statüsüne göre ilgili TKBB API çağrısı hazırlanır. TKBB aksiyonu seçilmeden ekip seçilirse kayıt banka iç süreç sisteminde açılır.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-light" data-close type="button">Vazgeç</button>
+        <button class="btn-primary" type="button">Kaydı Oluştur</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById("caseModal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalSubtitle = document.getElementById("modalSubtitle");
+    const caseNo = document.getElementById("caseNo");
+    const actionHint = document.getElementById("actionHint");
+    const tkbbAction = document.getElementById("tkbbAction");
+    const teamAction = document.getElementById("teamAction");
+
+    document.querySelectorAll("[data-open]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const mode = button.dataset.open;
+        const selectedCase = button.dataset.case;
+        modalTitle.textContent = mode === "create" ? "Kayıt Aç" : "Başvuru Detayı";
+        modalSubtitle.textContent = mode === "create"
+          ? "TKBB aksiyonu veya banka iç ekip yönlendirmesi seçin."
+          : "Başvuru, doküman ve geçmiş bilgilerini görüntüleyin.";
+        caseNo.textContent = selectedCase;
+        modal.classList.add("is-open");
+      });
+    });
+
+    document.querySelectorAll("[data-close]").forEach((button) => {
+      button.addEventListener("click", () => modal.classList.remove("is-open"));
+    });
+
+    [tkbbAction, teamAction].forEach((field) => {
+      field.addEventListener("change", () => {
+        if (tkbbAction.value) {
+          actionHint.textContent = "Seçilen TKBB aksiyonuna göre backend ilgili BankApi endpoint'ini çağırır ve sonucu aksiyon geçmişine yazar.";
+          return;
+        }
+
+        if (teamAction.value) {
+          actionHint.textContent = "TKBB aksiyonu seçilmediği için başvuru yalnızca banka iç süreç sisteminde ilgili ekibe yönlendirilecektir.";
+          return;
+        }
+
+        actionHint.textContent = "TKBB aksiyonu seçilirse başvuru statüsüne göre ilgili TKBB API çağrısı hazırlanır. TKBB aksiyonu seçilmeden ekip seçilirse kayıt banka iç süreç sisteminde açılır.";
+      });
+    });
+  </script>
+</body>
+</html>
