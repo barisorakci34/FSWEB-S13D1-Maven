@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>TKBB Ticket Operasyon Ekrani</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --primary: #1d4ed8;
+      --primary-dark: #173a8a;
+      --text: #172033;
+      --muted: #6b7280;
+      --line: #dbe3ef;
+      --success: #15803d;
+      --warning: #b45309;
+      --danger: #b91c1c;
+      --wait: #4338ca;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: #fff;
+      padding: 24px 32px;
+    }
+
+    header h1 {
+      margin: 0 0 6px;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.86;
+    }
+
+    main {
+      padding: 24px 32px 40px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(160px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .card,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+    }
+
+    .card {
+      padding: 18px;
+    }
+
+    .card span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .card strong {
+      font-size: 28px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(640px, 1.5fr) minmax(360px, 0.9fr);
+      gap: 20px;
+    }
+
+    .panel {
+      overflow: hidden;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title h2 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, 1fr);
+      gap: 10px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfdff;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font: inherit;
+      background: #fff;
+      color: var(--text);
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 13px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-weight: 700;
+      background: #f8fafc;
+    }
+
+    tr.selected {
+      background: #eef5ff;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.wait {
+      background: #e0e7ff;
+      color: var(--wait);
+    }
+
+    .badge.action {
+      background: #fef3c7;
+      color: var(--warning);
+    }
+
+    .badge.closed {
+      background: #dcfce7;
+      color: var(--success);
+    }
+
+    .badge.late {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+
+    .detail-body {
+      padding: 20px;
+    }
+
+    .section {
+      margin-bottom: 22px;
+    }
+
+    .section h3 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      color: var(--primary-dark);
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .field {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fbfdff;
+    }
+
+    .field label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+
+    .field strong {
+      font-size: 14px;
+    }
+
+    .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .timeline li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 4px;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+
+    .timeline strong {
+      color: var(--text);
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 14px;
+      font-weight: 700;
+      cursor: default;
+    }
+
+    .primary {
+      color: #fff;
+      background: var(--primary);
+    }
+
+    .secondary {
+      color: var(--primary);
+      background: #e0ecff;
+    }
+
+    .danger {
+      color: #fff;
+      background: var(--danger);
+    }
+
+    .document-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .document-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .summary-grid,
+      .layout,
+      .filters {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TKBB Hakem Heyeti Ticket Operasyonu</h1>
+    <p>Gunde iki kez TKBB'den alinan basvurular, banka ici is akisina ticket olarak aktarilir.</p>
+  </header>
+
+  <main>
+    <section class="summary-grid" aria-label="Ozet metrikler">
+      <article class="card">
+        <span>Acik Ticket</span>
+        <strong>128</strong>
+      </article>
+      <article class="card">
+        <span>Banka Aksiyonu Bekleyen</span>
+        <strong>34</strong>
+      </article>
+      <article class="card">
+        <span>TKBB Bekleniyor</span>
+        <strong>82</strong>
+      </article>
+      <article class="card">
+        <span>Bugun Geciken</span>
+        <strong>6</strong>
+      </article>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-title">
+          <h2>Basvuru Ticket Listesi</h2>
+          <button class="secondary">TKBB'den Durum Yenile</button>
+        </div>
+
+        <div class="filters">
+          <input type="search" value="" placeholder="Basvuru no, TCKN veya musteri ara">
+          <select>
+            <option>Banka ici statü: Tümü</option>
+            <option>Banka Incelemede</option>
+            <option>TKBB Bekleniyor</option>
+            <option>Ek Bilgi Bekleniyor</option>
+            <option>Kapali</option>
+          </select>
+          <select>
+            <option>TKBB statü: Tümü</option>
+            <option>40 - Banka Gonderim Listesi</option>
+            <option>80 - Ek Bilgi Gonderim Listesi</option>
+            <option>121 - Bankaya Iletilen Karar</option>
+            <option>123 - Kapanan Basvuru</option>
+          </select>
+          <select>
+            <option>Son cevap tarihi</option>
+            <option>Bugun</option>
+            <option>3 gun icinde</option>
+            <option>Gecikenler</option>
+          </select>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Ticket</th>
+              <th>TKBB No</th>
+              <th>Musteri</th>
+              <th>Konu</th>
+              <th>Statü</th>
+              <th>Son Cevap</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="selected">
+              <td><strong>TCKBB-2026-0142</strong><br><span class="muted">Applicant: 845921</span></td>
+              <td>2026/287</td>
+              <td>Ayse Y.<br><span class="muted">123******10</span></td>
+              <td>Kredi karti itirazi</td>
+              <td><span class="badge action">Ek Bilgi Bekleniyor</span><br><span class="muted">TKBB 80</span></td>
+              <td>20.05.2026</td>
+            </tr>
+            <tr>
+              <td><strong>TCKBB-2026-0141</strong><br><span class="muted">Applicant: 845803</span></td>
+              <td>2026/281</td>
+              <td>Mehmet K.<br><span class="muted">987******44</span></td>
+              <td>Ucret/komisyon</td>
+              <td><span class="badge wait">TKBB Bekleniyor</span><br><span class="muted">TKBB 90</span></td>
+              <td>24.05.2026</td>
+            </tr>
+            <tr>
+              <td><strong>TCKBB-2026-0138</strong><br><span class="muted">Applicant: 845120</span></td>
+              <td>2026/270</td>
+              <td>Fatma A.<br><span class="muted">456******88</span></td>
+              <td>Finansman urunu</td>
+              <td><span class="badge late">Gecikmis Aksiyon</span><br><span class="muted">TKBB 122</span></td>
+              <td>17.05.2026</td>
+            </tr>
+            <tr>
+              <td><strong>TCKBB-2026-0125</strong><br><span class="muted">Applicant: 843990</span></td>
+              <td>2026/249</td>
+              <td>Hasan D.<br><span class="muted">321******77</span></td>
+              <td>Para transferi</td>
+              <td><span class="badge closed">Kapali</span><br><span class="muted">TKBB 123</span></td>
+              <td>-</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-title">
+          <h2>Ticket Detayi</h2>
+          <span class="badge action">Banka Aksiyonu</span>
+        </div>
+
+        <div class="detail-body">
+          <section class="section">
+            <h3>Basvuru Bilgileri</h3>
+            <div class="field-grid">
+              <div class="field">
+                <label>Basvuru No</label>
+                <strong>2026/287</strong>
+              </div>
+              <div class="field">
+                <label>Applicant Number</label>
+                <strong>845921</strong>
+              </div>
+              <div class="field">
+                <label>TKBB Statü</label>
+                <strong>80 - Ek Bilgi Gonderim Listesi</strong>
+              </div>
+              <div class="field">
+                <label>Banka Ici Statü</label>
+                <strong>Ek Bilgi Bekleniyor</strong>
+              </div>
+              <div class="field">
+                <label>Sorumlu Ekip</label>
+                <strong>Kredi Kartlari Operasyon</strong>
+              </div>
+              <div class="field">
+                <label>Son Cevap Tarihi</label>
+                <strong>20.05.2026</strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3>Talep ve TKBB Mesaji</h3>
+            <p class="muted">Musteri kredi karti ucret iadesi talep ediyor. TKBB ekstre ve sozlesme dokumanlarini bekliyor.</p>
+          </section>
+
+          <section class="section">
+            <h3>Beklenen / Gelen Dokumanlar</h3>
+            <ul class="document-list">
+              <li><span>Basvuru formu.pdf</span><strong>TKBB</strong></li>
+              <li><span>Ekstre.pdf</span><strong>Bekleniyor</strong></li>
+              <li><span>Urun sozlesmesi.pdf</span><strong>Bekleniyor</strong></li>
+            </ul>
+          </section>
+
+          <section class="section">
+            <h3>TKBB'ye Gonderilecek Cevap</h3>
+            <textarea>Sayin TKBB, ilgili basvuru incelenmis olup talep edilen dokumanlar ekte iletilmistir.</textarea>
+            <div class="actions" style="margin-top: 10px;">
+              <button class="secondary">Dokuman Ekle</button>
+              <button class="primary">Banka Basvuru Bilgi Guncelleme API'sine Gonder</button>
+              <button class="danger">Banka Aleyhine Karar Kapanis Bildirimi</button>
+            </div>
+          </section>
+
+          <section class="section">
+            <h3>Statü Tarihcesi</h3>
+            <ul class="timeline">
+              <li><strong>Ek bilgi talebi alindi</strong>18.05.2026 09:04 - TKBB status 80</li>
+              <li><strong>Ticket olusturuldu</strong>17.05.2026 16:02 - Import job</li>
+              <li><strong>Basvuru isleme alindi bildirildi</strong>17.05.2026 16:03 - resultCode 103</li>
+            </ul>
+          </section>
+        </div>
+      </aside>
+    </section>
+  </main>
+</body>
+</html>
